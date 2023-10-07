@@ -14,7 +14,7 @@ public class ActivityManagementApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ActivityManagementApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Ronaldo better than Messi!");
+        stage.setTitle("Ronaldo always better than Messi!");
         stage.setScene(scene);
         stage.show();
     }
