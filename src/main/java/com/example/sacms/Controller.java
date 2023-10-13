@@ -16,17 +16,13 @@ public class Controller {
 
     private Stage stage;
     private Scene scene;
-    @FXML
-    private Button splashScreenButton;
-
 
     @FXML
     protected void onSplashScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInOne.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
-        this.stage.setTitle("SignIn");
-        //this.scene.getStylesheets().add(this.getClass().getResource("mainstylesheet.css").toExternalForm());
+        this.stage.setTitle("Login");
         this.stage.setScene(this.scene);
         this.stage.show();
         this.stage.setResizable(false);
