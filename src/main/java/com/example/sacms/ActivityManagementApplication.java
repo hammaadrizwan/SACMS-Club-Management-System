@@ -1,22 +1,22 @@
 package com.example.sacms;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-import static javafx.application.Application.launch;
-//dfd
 public class ActivityManagementApplication extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ActivityManagementApplication.class.getResource("login-selection.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("School Activity Club Management System ");
+        Parent root = FXMLLoader.load(this.getClass().getResource("splashScreen.fxml"));
+        Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("School Activity Club Management System ");
         stage.show();
+        stage.setResizable(false);
     }
 
     public static void main(String[] args) {
