@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="185.0" fitWidth="475.0" layoutX="339.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/Logo.png" />
+            <Image url="@../test/Logo.png" />
          </image></ImageView>
       <Label layoutX="362.0" layoutY="368.0" prefHeight="45.0" prefWidth="394.0" text="School Activity Club Managment System">
          <font>
