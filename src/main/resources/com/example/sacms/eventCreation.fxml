@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.sacms.Controller"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+   <children>
+      <ImageView fitHeight="56.0" fitWidth="123.0" layoutX="16.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="28.0" layoutY="85.0" prefHeight="62.0" prefWidth="376.0" text="Schedule an Event">
+         <font>
+            <Font name="System Bold" size="42.0" />
+         </font>
+      </Label>
+      <Label layoutX="28.0" layoutY="196.0" text="Enter event name">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="377.0" layoutY="196.0" text="Enter event date">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="eventNameEventCreationInput" layoutX="28.0" layoutY="228.0" prefHeight="43.0" prefWidth="320.0" promptText="Name">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="eventDateEventCreationInput" layoutX="377.0" layoutY="228.0" prefHeight="43.0" prefWidth="206.0" promptText="DD/MM/YYYY">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Label layoutX="28.0" layoutY="292.0" text="Enter event time">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="eventTimeEventCreationInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="249.0" promptText="Time">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Label layoutX="304.0" layoutY="292.0" text="Organising Club ID">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="clubIDEventCreationInput" layoutX="304.0" layoutY="324.0" prefHeight="43.0" prefWidth="278.0" promptText="ClubID">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Label layoutX="28.0" layoutY="392.0" text="Enter event description">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="381.0" fitWidth="262.0" layoutX="673.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EventCreationPic.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="347.0" layoutY="556.0" mnemonicParsing="false" onAction="#onScheduleEventButtonClicked" prefHeight="43.0" prefWidth="236.0" style="-fx-background-color: #000000;" text="SCHEDULE" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <TextArea fx:id="eventDescriptionEventCreationInput" layoutX="28.0" layoutY="424.0" prefHeight="97.0" prefWidth="554.0" promptText="Explain about the event/meeting or activity" />
+   </children>
 </AnchorPane>
