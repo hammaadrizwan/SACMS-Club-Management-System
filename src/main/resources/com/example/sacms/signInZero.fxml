@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.sacms.Controller"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+   <children>
+      <ImageView fitHeight="680.0" fitWidth="1050.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/SignInScreen0BG.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="25.0" layoutY="23.0" mnemonicParsing="false" style="-fx-background-color: #000000;" text="SACMS." textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <AnchorPane layoutX="283.0" layoutY="62.0" prefHeight="478.0" prefWidth="495.0" style="-fx-background-color: #ffffff;">
+         <children>
+            <Text layoutX="138.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Register as..">
+               <font>
+                  <Font name="System Bold" size="42.0" />
+               </font>
+            </Text>
+            <Button layoutX="42.0" layoutY="257.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="171.0" style="-fx-background-color: #F2DEB8;" text="STUDENT">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Button layoutX="290.0" layoutY="257.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="171.0" style="-fx-background-color: #B5C5FF;" text="CLUB ADVISOR">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Text layoutX="149.0" layoutY="429.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Already a member? Login now">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </children>
 </AnchorPane>
