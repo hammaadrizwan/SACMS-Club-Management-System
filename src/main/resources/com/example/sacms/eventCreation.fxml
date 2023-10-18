@@ -11,11 +11,6 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
-      <ImageView fitHeight="56.0" fitWidth="123.0" layoutX="16.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/Logo.png" />
-         </image>
-      </ImageView>
       <Label layoutX="28.0" layoutY="85.0" prefHeight="62.0" prefWidth="376.0" text="Schedule an Event">
          <font>
             <Font name="System Bold" size="42.0" />
@@ -71,11 +66,17 @@
             <Image url="@../images/EventCreationPic.png" />
          </image>
       </ImageView>
-      <Button layoutX="347.0" layoutY="556.0" mnemonicParsing="false" onAction="#onScheduleEventButtonClicked" prefHeight="43.0" prefWidth="236.0" style="-fx-background-color: #000000;" text="SCHEDULE" textFill="WHITE">
+      <Button layoutX="347.0" layoutY="556.0" mnemonicParsing="false" onAction="#onScheduleEventButtonTwoClicked" prefHeight="43.0" prefWidth="236.0" style="-fx-background-color: #000000;" text="SCHEDULE" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
       <TextArea fx:id="eventDescriptionEventCreationInput" layoutX="28.0" layoutY="424.0" prefHeight="97.0" prefWidth="554.0" promptText="Explain about the event/meeting or activity" />
+      <Button fx:id="homeScreenButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
+      <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
