@@ -18,7 +18,7 @@ public class Controller {
     private Scene scene;
 
     @FXML
-    protected void onSplashScreenButtonClicked(ActionEvent event) throws IOException {
+    public void onSplashScreenButtonClicked(ActionEvent event) throws IOException {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -28,7 +28,7 @@ public class Controller {
         this.stage.setResizable(false);
     }
     @FXML
-    protected void onDashboardScreenButtonClicked(ActionEvent event) throws IOException {
+    public void onDashboardScreenButtonClicked(ActionEvent event) throws IOException {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboard.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -36,5 +36,6 @@ public class Controller {
         this.stage.setScene(this.scene);
         this.stage.show();
         this.stage.setResizable(false);
+        System.out.println("WORKS");
     }
 }

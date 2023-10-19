@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
-      <Button fx:id="homeScreenButton" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
+      <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
       <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="clubScreenButton" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
+      <Button fx:id="clubScreenButtonDashboard" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="clubScreenButton1" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
+      <Button fx:id="eventScreenButtonDashboard" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="clubScreenButton11" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
+      <Button fx:id="reportsScreenButtonDashboard" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
       </Button>
       <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
-      <ImageView fitHeight="58.0" fitWidth="56.0" layoutX="966.0" layoutY="25.0" opacity="0.94" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="userIconButtonDashboard" fitHeight="58.0" fitWidth="56.0" layoutX="966.0" layoutY="25.0" opacity="0.94" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/UserIcon.png" />
          </image>
@@ -58,7 +55,7 @@
             <Font name="Noto Sans Bold" size="44.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#bcbcbc" height="385.0" layoutX="36.0" layoutY="238.0" stroke="#ab434300" strokeType="INSIDE" width="652.0" />
+      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#e8e8e8" height="404.0" layoutX="36.0" layoutY="238.0" stroke="#ab434300" strokeType="INSIDE" width="652.0" />
       <Label layoutX="441.0" layoutY="171.0" text="Welcome">
          <font>
             <Font name="Noto Sans Regular" size="20.0" />
@@ -69,11 +66,127 @@
             <Font name="Noto Sans Regular" size="20.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#e1d789" height="207.0" layoutX="712.0" layoutY="238.0" stroke="#ab434300" strokeType="INSIDE" width="295.0" />
-      <ImageView fitHeight="163.0" fitWidth="295.0" layoutX="715.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
+      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#e8dd96" height="215.0" layoutX="712.0" layoutY="238.0" stroke="#ab434300" strokeType="INSIDE" width="295.0" />
+      <ImageView fitHeight="163.0" fitWidth="295.0" layoutX="715.0" layoutY="477.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/DashboardBG.png" />
          </image>
       </ImageView>
+      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="WHITE" height="132.0" layoutX="64.0" layoutY="300.0" stroke="#ab434300" strokeType="INSIDE" width="597.0" />
+      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="WHITE" height="74.0" layoutX="63.0" layoutY="490.0" stroke="#ab434300" strokeType="INSIDE" width="597.0" />
+      <Label layoutX="64.0" layoutY="265.0" text="Todays Events">
+         <font>
+            <Font name="Noto Sans Regular" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="63.0" layoutY="457.0" text="Tomorrow ">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventStartTime1" layoutX="81.0" layoutY="329.0" prefHeight="29.0" prefWidth="56.0" text="16:00">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventStartTime2" layoutX="83.0" layoutY="377.0" prefHeight="29.0" prefWidth="56.0" text="18:30">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventName1" layoutX="154.0" layoutY="328.0" prefHeight="29.0" prefWidth="212.0" text="Installation Meeting">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventName2" layoutX="154.0" layoutY="377.0" prefHeight="29.0" prefWidth="212.0" text="Workshop III">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventHostClub1" layoutX="389.0" layoutY="328.0" prefHeight="29.0" prefWidth="158.0" text="Esports Club">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTodayEventHostClub2" layoutX="389.0" layoutY="377.0" prefHeight="29.0" prefWidth="158.0" text="Religous Club">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="21.0" arcWidth="21.0" fill="#55cb68" height="32.0" layoutX="558.0" layoutY="328.0" stroke="#ab434300" strokeType="INSIDE" width="87.0" />
+      <Rectangle fx:id="todayEventView2" arcHeight="21.0" arcWidth="21.0" fill="#55cb68" height="32.0" layoutX="558.0" layoutY="376.0" stroke="#ab434300" strokeType="INSIDE" width="87.0" />
+      <Label layoutX="577.0" layoutY="330.0" prefHeight="29.0" prefWidth="56.0" text="View" textFill="WHITE">
+         <font>
+            <Font name="Noto Sans Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="576.0" layoutY="378.0" prefHeight="29.0" prefWidth="56.0" text="View" textFill="WHITE">
+         <font>
+            <Font name="Noto Sans Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTomorrowEventStartTime1" layoutX="84.0" layoutY="512.0" prefHeight="29.0" prefWidth="56.0" text="12:30">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTomorrowEventName1" layoutX="157.0" layoutY="511.0" prefHeight="29.0" prefWidth="212.0" text="Weekly Meetup">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="dashboardTomorrowEventHostClub1" layoutX="392.0" layoutY="511.0" prefHeight="29.0" prefWidth="158.0" text="Maths Club">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="21.0" arcWidth="21.0" fill="#55cb68" height="32.0" layoutX="558.0" layoutY="511.0" stroke="#ab434300" strokeType="INSIDE" width="87.0" />
+      <Label layoutX="577.0" layoutY="513.0" prefHeight="29.0" prefWidth="56.0" text="View" textFill="WHITE">
+         <font>
+            <Font name="Noto Sans Bold" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="dashboardTodayEventViewButton1" layoutX="576.0" layoutY="332.0" mnemonicParsing="false" opacity="0.0" text="Button" />
+      <Button fx:id="dashboardTodayEventViewButton2" layoutX="576.0" layoutY="380.0" mnemonicParsing="false" opacity="0.0" text="Button" />
+      <Button fx:id="dashboardTodayEventViewButton3" layoutX="576.0" layoutY="515.0" mnemonicParsing="false" opacity="0.0" text="Button" />
+      <Label layoutX="289.0" layoutY="603.0" text="View events here">
+         <font>
+            <Font name="Noto Sans Regular" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="dashboardViewEventsHereButton" layoutX="281.0" layoutY="605.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="177.0" text="Button" />
+      <Label layoutX="794.0" layoutY="265.0" text="Notifications">
+         <font>
+            <Font name="Noto Sans Regular" size="22.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#fff5bf" height="132.0" layoutX="723.0" layoutY="300.0" stroke="#ab434300" strokeType="INSIDE" width="274.0" />
+      <Label fx:id="notificationDashboard1" layoutX="737.0" layoutY="312.0" prefHeight="58.0" prefWidth="250.0" text="Welcome to the Maths Club" wrapText="true">
+         <font>
+            <Font name="Noto Sans Regular" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="notificationDashboard2" layoutX="737.0" layoutY="368.0" prefHeight="50.0" prefWidth="232.0" text="You are now a part of the Esports club" wrapText="true">
+         <font>
+            <Font name="Noto Sans Regular" size="18.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="userIconButtonOptionPaneDashboard" layoutX="910.0" layoutY="95.0" opacity="0.0" prefHeight="91.0" prefWidth="113.0">
+         <children>
+            <Button fx:id="exitButtonDashboard" layoutX="2.0" layoutY="1.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="104.0" style="-fx-background-color: FF9090;" text="EXIT">
+               <font>
+                  <Font name="Noto Sans Bold" size="20.0" />
+               </font>
+            </Button>
+            <Rectangle fx:id="todayEventView21" arcHeight="2.0" arcWidth="2.0" height="41.0" layoutX="2.0" layoutY="45.0" stroke="#ab434300" strokeType="INSIDE" width="104.0" />
+            <Label layoutX="9.0" layoutY="51.0" prefHeight="29.0" prefWidth="104.0" text="LOG OUT" textFill="WHITE">
+               <font>
+                  <Font name="Noto Sans Regular" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="logoutButtonDashboard" layoutX="5.0" layoutY="48.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="104.0" style="-fx-background-color: 000000;" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
