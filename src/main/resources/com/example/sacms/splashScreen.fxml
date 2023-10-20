@@ -7,7 +7,6 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
-      <Button fx:id="splashScreenButton" mnemonicParsing="false" onAction="#onSplashScreenButtonClicked" opacity="0.0" prefHeight="682.0" prefWidth="1050.0" text="Button" />
       <ImageView fitHeight="185.0" fitWidth="475.0" layoutX="339.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/Logo.png" />
@@ -17,5 +16,6 @@
             <Font name="Noto Sans Regular" size="20.0" />
          </font>
       </Label>
+      <Button fx:id="splashScreenButton" mnemonicParsing="false" onAction="#onSplashScreenButtonClicked" opacity="0.0" prefHeight="682.0" prefWidth="1050.0" text="Button" />
    </children>
 </AnchorPane>
