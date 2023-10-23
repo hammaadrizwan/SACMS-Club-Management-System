@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
     <children>
         <ImageView fitHeight="56.0" fitWidth="123.0" layoutX="16.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -82,7 +86,7 @@
                 <Image url="@../images/SignInScreen2BG.png" />
             </image>
         </ImageView>
-        <Button layoutX="696.0" layoutY="552.0" mnemonicParsing="false" onAction="#onRegisterClubAdvisorButtonClicked" prefHeight="43.0" prefWidth="178.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="REGISTER" textFill="WHITE">
+        <Button fx:id="registerButtonSignInTwo" layoutX="696.0" layoutY="552.0" mnemonicParsing="false" onAction="#onRegisterClubAdvisorButtonClicked" prefHeight="43.0" prefWidth="178.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="REGISTER" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
