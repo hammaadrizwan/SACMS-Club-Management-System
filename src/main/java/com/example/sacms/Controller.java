@@ -158,15 +158,22 @@ public class Controller {
         this.stage.setResizable(false);
     }
 
-
+    //Student SIGN IN SCREEN
     public void onRegisterStudentButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the student to the system
     }
+    //ClubAdvisor SIGN IN SCREEN
     public void onRegisterClubAdvisorButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the Club advisor to the system
     }
+    //Teacher SIGN IN SCREEN
     public void onRegisterTeacherButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the teacher to the system
+    }
+
+    //Club Creation SCREEN
+    public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException {
+        //displaylist of staffa avilable for a club incharge role
     }
 
 
