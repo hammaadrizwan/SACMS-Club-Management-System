@@ -107,7 +107,7 @@ public class Controller {
 
     @FXML
     public void onStudentSignInButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInOne.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInStudent.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Student Sign-In");
@@ -118,7 +118,16 @@ public class Controller {
 
     @FXML
     public void onClubAdvisorSignInButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInTwo.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInClubAdvisor.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Club Advisor Sign-In");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    public void onTeacherSignInButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInTeacher.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Club Advisor Sign-In");
@@ -155,6 +164,9 @@ public class Controller {
     }
     public void onRegisterClubAdvisorButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the Club advisor to the system
+    }
+    public void onRegisterTeacherButtonClicked (ActionEvent event) throws IOException {
+        //checks if the fields are valid and then registeres the teacher to the system
     }
 
 

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
       <Label layoutX="28.0" layoutY="85.0" prefHeight="62.0" prefWidth="376.0" text="Schedule an Event">
          <font>
@@ -86,7 +82,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorEventDateEventCreationInput" layoutX="377.0" layoutY="271.0" prefHeight="20.0" prefWidth="289.0" textFill="#ff0900">
+      <Label fx:id="errorEventDateEventCreationInput" layoutX="377.0" layoutY="271.0" prefHeight="20.0" prefWidth="206.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
@@ -96,7 +92,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorClubIDEventCreationInput" layoutX="305.0" layoutY="367.0" prefHeight="20.0" prefWidth="250.0" textFill="#ff0900">
+      <Label fx:id="errorClubIDEventCreationInput" layoutX="305.0" layoutY="367.0" prefHeight="20.0" prefWidth="278.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
