@@ -166,6 +166,11 @@ public class Controller {
     public void onRegisterClubAdvisorButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the Club advisor to the system
     }
+    //ClubAdvisor REQUEST
+    public void onrequestClubAdvisorRoleButtonClicked (ActionEvent event) throws IOException {
+        //Requests for approval from the club incharge which is the teacher then if they accept the ClubAdvisor is status is being given to the student
+    }
+
     //Teacher SIGN IN SCREEN
     public void onRegisterTeacherButtonClicked (ActionEvent event) throws IOException {
         //checks if the fields are valid and then registeres the teacher to the system

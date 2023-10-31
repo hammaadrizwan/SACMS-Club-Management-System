@@ -59,4 +59,16 @@ public class Person {
 
     }
 
+    public void getUser(){
+        System.out.println("Hello "+getFirstName()+" "+getLastName());
+    }
+
+    public Person(String firstName, String lastName, String email, String password, String dateOfBirth, int contactNo) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.contactNo = contactNo;
+    }
 }
