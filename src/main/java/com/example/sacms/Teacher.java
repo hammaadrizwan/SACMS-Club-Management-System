@@ -1,6 +1,6 @@
 package com.example.sacms;
 
-public class Teacher {
+public class Teacher extends Person{
     private String staffID;
 
     public String getStaffID() {
@@ -12,5 +12,10 @@ public class Teacher {
     }
     public boolean approveClubAdvisor(String clubAdvisorID){
         return false;
+    }
+
+    @Override
+    public void greetUser() {
+        //fname lname
     }
 }
