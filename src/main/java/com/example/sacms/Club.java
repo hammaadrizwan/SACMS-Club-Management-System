@@ -70,6 +70,7 @@ public class Club {
 
     }
     public String generateClubID() {
-
+        // gotto complete this
+        return "";
     }
 }

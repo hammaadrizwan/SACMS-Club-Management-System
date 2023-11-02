@@ -67,6 +67,7 @@ public class Event {
         this.eventAttendeesID = eventAttendeesID;
     }
     public String generateEEventID() {
-
+        // gotto complete this
+        return "";
     }
 }
