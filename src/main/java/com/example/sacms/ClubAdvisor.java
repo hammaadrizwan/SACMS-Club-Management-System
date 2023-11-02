@@ -1,36 +1,44 @@
 package com.example.sacms;
 
-import java.util.ArrayList;
-
 public class ClubAdvisor{
     private String studentID;
+    private String clubID;
     private String clubAdvisorID;
-    private String postition;
+    private String position;
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public String getClubID() {
+        return clubID;
+    }
+
+    public void setClubID(String clubID) {
+        this.clubID = clubID;
+    }
 
     public String getClubAdvisorID() {
         return clubAdvisorID;
     }
 
     public void setClubAdvisorID(String clubAdvisorID) {
-        this.clubAdvisorID = generateClubAdvisorID();
+        this.clubAdvisorID = clubAdvisorID;
     }
 
-    public String getPostition() {
-        return postition;
+    public String getPosition() {
+        return position;
     }
 
-    public void setPostition(String postition) {
-        this.postition = postition;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    public String generateClubAdvisorID(){
-        String clubAdvisorID = " ";
-        return clubAdvisorID;
-    }
-
-    public ClubAdvisor(String studentID,String postition, String staffID){
+    public ClubAdvisor(String studentID, String position, String clubID){
+        this.studentID=studentID;
         this.clubAdvisorID=null;
-        this.postition=postition;
+        this.position = position;
+        this.clubID = clubID;
 
     }
 }
