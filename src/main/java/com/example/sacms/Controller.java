@@ -14,6 +14,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 public class Controller {
 
@@ -22,11 +25,11 @@ public class Controller {
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen;
+    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput;
     @FXML
-    private TextArea clubDescriptionInputClubCreationScreen;
+    private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen;
+    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput;
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -189,39 +192,122 @@ public class Controller {
         //displaylist of staffa avilable for a club incharge role
     }
 
-    public void onCreateClubClubCreationScreenClicked (ActionEvent event) throws IOException {
+    public void onCreateClubButtonTwoClicked (ActionEvent event) throws IOException {
         boolean clubNameValid = true;//initially all input fields are said to be valid
-        boolean clubAdvisorID = true;
-        boolean clubDescription = true;
-        boolean staffID = true;
+        boolean clubAdvisorIDValid = true;
+        boolean clubDescriptionValid = true;
+        boolean staffIDValid = true;
+        errorClubNameInputClubCreationScreen.setText("");//all the error labels are made invisible at the start of the validation
+        errorClubAdvisorIDInputClubCreationScreen.setText("");
+        errorClubDescriptionInputClubCreationScreen.setText("");
+        errorStaffIDInputClubCreationScreen.setText("");
         if (clubNameInputClubCreationScreen.getText().equals("")) {//checks if the club name input field is blank
             errorClubNameInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
             clubNameValid = false;//sets clubName validity to be false
+            clubNameInputClubCreationScreen.clear();//clears the text field
         } else {//checks whether there is at least one integer in the clubName, since the name cannot contain any numbers/ digits
             char[] clubNameCharacters = clubNameInputClubCreationScreen.getText().toCharArray();//converts the string to a sequence of characters
             for (char character : clubNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
                 if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
                     clubNameValid = false;//if it is then clubName input will be invalid and the loop will break
+                    clubNameInputClubCreationScreen.clear();//clears the text field
                     break;
                 }
             }
             if (!clubNameValid) {//if the clubName is invalid, a message will be displayed to the user saying its incorrect
-                errorClubNameInputClubCreationScreen.setText("Incorrect value");
+                errorClubNameInputClubCreationScreen.setText("Invalid club name");
             } else {//if it is valid there will be no message displayed as the field is of correct data type
                 errorClubNameInputClubCreationScreen.setText("");
             }
         }
         if (clubAdvisorIDInputClubCreationScreen.getText().equals("")) {//checks if the club advisor ID input field is blank
             errorClubAdvisorIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubAdvisorID = false;//sets clubAdvisorID validity to be false
+            clubAdvisorIDValid = false;//sets clubAdvisorID validity to be false
+            clubAdvisorIDInputClubCreationScreen.clear();//clears the text field
         }
-        if (clubDescriptionInputClubCreationScreen.getText().equals("")) { // checks if the club description input field is blank
+        if (clubDescriptionInputClubCreationScreen.getText().equals("")) {//checks if the club description input field is blank
             errorClubDescriptionInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubDescription = false;//sets clubDescription validity to be false
+            clubDescriptionValid = false;//sets clubDescription validity to be false
+            clubDescriptionInputClubCreationScreen.clear();//clears the text field
         }
-        if (clubStaffIDInputClubCreationScreen.getText().equals("")) { // checks if the staff ID input field is blank
+        if (clubStaffIDInputClubCreationScreen.getText().equals("")) {//checks if the staff ID input field is blank
             errorStaffIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            staffID = false;//sets staffID validity to be false
+            staffIDValid = false;//sets staffID validity to be false
+            clubStaffIDInputClubCreationScreen.clear();//clears the text field
+        }
+        if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && staffIDValid) {//if the above inputs done by the user is valid the data will be stored
+            // Hammad complete this part this is linked with the database u have to store these data there
+        }
+    }
+
+    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
+        boolean eventNameValid = true;//initially all input fields are said to be valid
+        boolean eventDateValid = true;
+        boolean eventTimeValid = true;
+        boolean clubIDValid = true;
+        boolean eventDescriptionValid = true;
+        errorEventNameEventCreationInput.setText("");//all the error labels are made invisible at the start of the validation
+        errorEventDateEventCreationInput.setText("");
+        errorEventTimeEventCreationInput.setText("");
+        errorClubIDEventCreationInput.setText("");
+        errorEventDescriptionEventCreationInput.setText("");
+        if (eventNameEventCreationInput.getText().equals("")) {//checks if the event name input field is blank
+            errorEventNameEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
+            eventNameValid = false;//sets eventName validity to be false
+            eventNameEventCreationInput.clear();//clears the text field
+        } else {//checks whether there is at least one integer in the eventName, since the name cannot contain any numbers/digits
+            char[] eventNameCharacters = eventNameEventCreationInput.getText().toCharArray();//converts the string to a sequence of characters
+            for (char character : eventNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
+                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
+                    eventNameValid = false;//if it is then eventName input will be invalid and the loop will break
+                    eventNameEventCreationInput.clear();//clears the text field
+                    break;
+                }
+            }
+            if (!eventNameValid) {//if the eventName is invalid, a message will be displayed to the user saying its incorrect
+                errorEventNameEventCreationInput.setText("Invalid event name");
+            } else {//if it is valid there will be no message displayed as the field is of correct data type
+                errorEventNameEventCreationInput.setText("");
+            }
+        }
+        if (eventDateEventCreationInput.getText().equals("")) {//checks if the event date input field is blank
+            errorEventDateEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
+            eventDateValid = false;//sets eventDate validity to be false
+            eventDateEventCreationInput.clear();//clears the text field
+        } else {
+            try {
+                LocalDate.parse(eventDateEventCreationInput.getText());//checks if the eventDate is in the correct format
+            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
+                errorEventDateEventCreationInput.setText("Invalid date");//if the eventDate is invalid, a message will be displayed to the user saying its incorrect
+                eventDateValid = false;
+                eventDateEventCreationInput.clear();//clears the text field
+            }
+        }
+        if (eventTimeEventCreationInput.getText().equals("")) {//checks if the event time input field is blank
+            errorEventTimeEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
+            eventTimeValid = false;//sets eventTime validity to be false
+            eventTimeEventCreationInput.clear();//clears the text field
+        } else {
+            try {
+                LocalTime.parse(eventTimeEventCreationInput.getText());//checks if the eventTime is in the correct format
+            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
+                errorEventTimeEventCreationInput.setText("Invalid time");//if the eventTime is invalid, a message will be displayed to the user saying its incorrect
+                eventTimeValid = false;
+                eventTimeEventCreationInput.clear();//clears the text field
+            }
+        }
+        if (clubIDEventCreationInput.getText().equals("")) {//checks if the club ID input field is blank
+            errorClubIDEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
+            clubIDValid = false;//sets clubID validity to be false
+            clubIDEventCreationInput.clear();//clears the text field
+        }
+        if (eventDescriptionEventCreationInput.getText().equals("")) {//checks if the event description input field is blank
+            errorEventDescriptionEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
+            eventDescriptionValid = false;//sets eventDescription validity to be false
+            eventDescriptionEventCreationInput.clear();//clears the text field
+        }
+        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid) {//if the above inputs done by the user is valid the data will be stored
+            // Hammad complete this part this is linked with the database u have to store these data there
         }
     }
 }
