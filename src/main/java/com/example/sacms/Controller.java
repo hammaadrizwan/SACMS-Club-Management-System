@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -19,6 +21,12 @@ public class Controller {
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
+    @FXML
+    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen;
+    @FXML
+    private TextArea clubDescriptionInputClubCreationScreen;
+    @FXML
+    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen;
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -181,8 +189,39 @@ public class Controller {
         //displaylist of staffa avilable for a club incharge role
     }
 
-
-
-
-
+    public void onCreateClubClubCreationScreenClicked (ActionEvent event) throws IOException {
+        boolean clubNameValid = true;//initially all input fields are said to be valid
+        boolean clubAdvisorID = true;
+        boolean clubDescription = true;
+        boolean staffID = true;
+        if (clubNameInputClubCreationScreen.getText().equals("")) {//checks if the club name input field is blank
+            errorClubNameInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            clubNameValid = false;//sets clubName validity to be false
+        } else {//checks whether there is at least one integer in the clubName, since the name cannot contain any numbers/ digits
+            char[] clubNameCharacters = clubNameInputClubCreationScreen.getText().toCharArray();//converts the string to a sequence of characters
+            for (char character : clubNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
+                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
+                    clubNameValid = false;//if it is then clubName input will be invalid and the loop will break
+                    break;
+                }
+            }
+            if (!clubNameValid) {//if the clubName is invalid, a message will be displayed to the user saying its incorrect
+                errorClubNameInputClubCreationScreen.setText("Incorrect value");
+            } else {//if it is valid there will be no message displayed as the field is of correct data type
+                errorClubNameInputClubCreationScreen.setText("");
+            }
+        }
+        if (clubAdvisorIDInputClubCreationScreen.getText().equals("")) {//checks if the club advisor ID input field is blank
+            errorClubAdvisorIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            clubAdvisorID = false;//sets clubAdvisorID validity to be false
+        }
+        if (clubDescriptionInputClubCreationScreen.getText().equals("")) { // checks if the club description input field is blank
+            errorClubDescriptionInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            clubDescription = false;//sets clubDescription validity to be false
+        }
+        if (clubStaffIDInputClubCreationScreen.getText().equals("")) { // checks if the staff ID input field is blank
+            errorStaffIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            staffID = false;//sets staffID validity to be false
+        }
+    }
 }
