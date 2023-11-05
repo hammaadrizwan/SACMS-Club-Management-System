@@ -31,12 +31,12 @@
             <Font name="Noto Sans Regular" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="firstNameSignInOneInput" layoutX="28.0" layoutY="228.0" prefHeight="26.0" prefWidth="261.0" promptText="Firstname" style="-fx-background-radius: 10;">
+      <TextField fx:id="firstNameSignInStudentInput" layoutX="28.0" layoutY="228.0" prefHeight="26.0" prefWidth="261.0" promptText="Firstname" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="lastNameSignInOneInput" layoutX="321.0" layoutY="228.0" prefHeight="44.0" prefWidth="275.0" promptText="Lastname" style="-fx-background-radius: 10;">
+      <TextField fx:id="lastNameSignInStudentInput" layoutX="321.0" layoutY="228.0" prefHeight="44.0" prefWidth="275.0" promptText="Lastname" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -46,7 +46,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="dateSignInOneInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="320.0" promptText="DD/M/YYYY" style="-fx-background-radius: 10;">
+      <TextField fx:id="dateSignInStudentInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="320.0" promptText="DD/M/YYYY" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -56,7 +56,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="classSignInOneInput" layoutX="383.0" layoutY="324.0" prefHeight="44.0" prefWidth="214.0" promptText="Class" style="-fx-background-radius: 10;">
+      <TextField fx:id="classSignInStudentInput" layoutX="383.0" layoutY="324.0" prefHeight="44.0" prefWidth="214.0" promptText="Class" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -66,7 +66,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="emailSignInOneInput" layoutX="28.0" layoutY="424.0" prefHeight="44.0" prefWidth="320.0" promptText="Email" style="-fx-background-radius: 10;">
+      <TextField fx:id="emailSignInStudentInput" layoutX="28.0" layoutY="424.0" prefHeight="44.0" prefWidth="320.0" promptText="Email" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -76,7 +76,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <PasswordField fx:id="passwordSignInOneInput" layoutX="28.0" layoutY="519.0" prefHeight="44.0" prefWidth="320.0" promptText="Password" style="-fx-background-radius: 10;">
+      <PasswordField fx:id="passwordSignInStudentInput" layoutX="28.0" layoutY="519.0" prefHeight="44.0" prefWidth="320.0" promptText="Password" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -86,7 +86,7 @@
             <Image url="@../images/SignInScreen1BG.png" />
          </image>
       </ImageView>
-      <Button layoutX="716.0" layoutY="562.0" mnemonicParsing="false" onAction="#onRegisterStudentButtonClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-radius: 10; -fx-background-color: #000000;" text="REGISTER" textFill="WHITE">
+      <Button layoutX="716.0" layoutY="562.0" mnemonicParsing="false" onAction="#onStudentSignInTwoButtonClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-radius: 10; -fx-background-color: #000000;" text="REGISTER" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>

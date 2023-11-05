@@ -76,7 +76,7 @@
                 <Image url="@../images/SignInScreen3BG.png" />
             </image>
         </ImageView>
-        <Button layoutX="716.0" layoutY="562.0" mnemonicParsing="false" onAction="#onRegisterTeacherButtonClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-radius: 10; -fx-background-color: #000000;" text="REGISTER" textFill="WHITE">
+        <Button layoutX="716.0" layoutY="562.0" mnemonicParsing="false" onAction="#onTeacherSignInTwoButtonClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-radius: 10; -fx-background-color: #000000;" text="REGISTER" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>

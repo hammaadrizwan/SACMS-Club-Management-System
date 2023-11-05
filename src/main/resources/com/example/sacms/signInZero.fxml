@@ -29,12 +29,12 @@
                   <Font name="System Bold" size="42.0" />
                </font>
             </Text>
-            <Button layoutX="60.0" layoutY="287.0" mnemonicParsing="false" onAction="#onStudentSignInButtonClicked" prefHeight="67.0" prefWidth="171.0" style="-fx-background-color: #F2DEB8; -fx-background-radius: 10;" text="STUDENT">
+            <Button layoutX="60.0" layoutY="287.0" mnemonicParsing="false" onAction="#onStudentSignInOneButtonClicked" prefHeight="67.0" prefWidth="171.0" style="-fx-background-color: #F2DEB8; -fx-background-radius: 10;" text="STUDENT">
                <font>
                   <Font name="Noto Sans Bold" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="244.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClubAdvisorSignInButtonClicked" prefHeight="67.0" prefWidth="179.0" style="-fx-background-color: #B5C5FF; -fx-background-radius: 10;" text="CLUB ADVISOR">
+            <Button layoutX="244.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClubAdvisorSignInOneButtonClicked" prefHeight="67.0" prefWidth="179.0" style="-fx-background-color: #B5C5FF; -fx-background-radius: 10;" text="CLUB ADVISOR">
                <font>
                   <Font name="Noto Sans Bold" size="20.0" />
                </font>
@@ -44,8 +44,8 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="122.0" layoutY="505.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" opacity="0.0" prefHeight="25.0" prefWidth="238.0" text="Button" />
-            <Button layoutX="149.0" layoutY="363.0" mnemonicParsing="false" onAction="#onTeacherSignInButtonClicked" prefHeight="67.0" prefWidth="179.0" style="-fx-background-color: #E5E7E9; -fx-background-radius: 10;" text="TEACHER">
+            <Button layoutX="122.0" layoutY="505.0" mnemonicParsing="false" onAction="#onLogInOneButtonClicked" opacity="0.0" prefHeight="25.0" prefWidth="238.0" text="Button" />
+            <Button layoutX="149.0" layoutY="363.0" mnemonicParsing="false" onAction="#onTeacherSignInOneButtonClicked" prefHeight="67.0" prefWidth="179.0" style="-fx-background-color: #E5E7E9; -fx-background-radius: 10;" text="TEACHER">
                <font>
                   <Font name="Noto Sans Bold" size="20.0" />
                </font>

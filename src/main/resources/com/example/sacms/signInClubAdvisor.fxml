@@ -55,7 +55,7 @@
                 <Image url="@../images/SignInScreen2BG.png" />
             </image>
         </ImageView>
-        <Button fx:id="requestClubAdvisorRoleButtonSignInTwo" layoutX="197.0" layoutY="541.0" mnemonicParsing="false" onAction="#onRequestClubAdvisorRoleButtonClicked" prefHeight="54.0" prefWidth="227.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="REQUEST" textFill="WHITE">
+        <Button fx:id="requestClubAdvisorRoleButtonSignInTwo" layoutX="197.0" layoutY="541.0" mnemonicParsing="false" onAction="#onClubAdvisorSignInTwoButtonClicked" prefHeight="54.0" prefWidth="227.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="REQUEST" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
