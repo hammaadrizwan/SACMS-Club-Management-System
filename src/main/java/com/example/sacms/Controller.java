@@ -25,11 +25,11 @@ public class Controller {
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput;
+    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput;
+    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen;
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -310,4 +310,44 @@ public class Controller {
             // Hammad complete this part this is linked with the database u have to store these data there
         }
     }
+
+    public void onRequestClubAdvisorRoleButtonClicked(ActionEvent event) throws IOException {
+        boolean studentIDValid = true;//initially all input fields are said to be valid
+        boolean positionValid = true;
+        boolean clubIDValid = true;
+        if (studentIDSigInClubAdvisorScreen.getText().equals("")) {//checks if the student ID input field is blank
+            errorStudentIDSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            studentIDValid = false;//sets studentID validity to be false
+            studentIDSigInClubAdvisorScreen.clear();//clears the text field
+        }
+        if (positionSigInClubAdvisorScreen.getText().equals("")) {//checks if the club advisor position input field is blank
+            errorPositionSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            positionValid = false;//sets position validity to be false
+            positionSigInClubAdvisorScreen.clear();//clears the text field
+        } else {//checks whether there is at least one integer in the position, since the name cannot contain any numbers/digits
+            char[] eventNameCharacters = positionSigInClubAdvisorScreen.getText().toCharArray();//converts the string to a sequence of characters
+            for (char character : eventNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
+                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
+                    positionValid = false;//if it is then position input will be invalid and the loop will break
+                    positionSigInClubAdvisorScreen.clear();//clears the text field
+                    break;
+                }
+            }
+            if (!positionValid) {//if the position is invalid, a message will be displayed to the user saying its incorrect
+                errorPositionSigInClubAdvisorScreen.setText("Invalid event name");
+            } else {//if it is valid there will be no message displayed as the field is of correct data type
+                errorPositionSigInClubAdvisorScreen.setText("");
+            }
+        }
+        if (clubIDSigInClubAdvisorScreen.getText().equals("")) {//checks if the club ID input field is blank
+            errorClubIDSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
+            clubIDValid = false;//sets clubID validity to be false
+            clubIDSigInClubAdvisorScreen.clear();//clears the text field
+        }
+        if (studentIDValid && positionValid && clubIDValid) {//if the above inputs done by the user is valid the data will be stored
+            // Hammad complete this part this is linked with the database u have to store these data there
+        }
+    }
+
+
 }
