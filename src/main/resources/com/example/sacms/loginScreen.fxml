@@ -56,7 +56,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <PasswordField fx:id="PasswordLogin" layoutX="48.0" layoutY="279.0" prefHeight="52.0" prefWidth="316.0" promptText="Password" style="-fx-background-radius: 10;">
+            <PasswordField fx:id="passwordLoginInput" layoutX="48.0" layoutY="279.0" prefHeight="52.0" prefWidth="316.0" promptText="Password" style="-fx-background-radius: 10;">
                <font>
                   <Font size="20.0" />
                </font>
