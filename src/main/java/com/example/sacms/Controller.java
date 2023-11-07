@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -14,16 +13,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 public class Controller {
-
+    public String sessionUser=null;
     private Stage stage;//main stage where all our windows appear
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
@@ -163,7 +160,7 @@ public class Controller {
         userIconButtonOptionPane.setOpacity(0.00);//hides the buttons
     }
     @FXML
-    public void onLogInOneButtonClicked(ActionEvent event) throws IOException {
+    public void onLogInScreenButtonClicked(ActionEvent event) throws IOException {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -593,9 +590,12 @@ public class Controller {
         }
     }
 
-    public void onLogInTwoButtonClicked(ActionEvent event) throws  IOException {
+    public void onLogInButtonClicked(ActionEvent event) throws  IOException {
         boolean IDValid = true;//initially all input fields are said to be valid
         boolean passwordValid = true;
+        String idInput = null;
+        String passwordInput=null;
+
         errorIDLoginInput.setText("");//all the error labels are made invisible at the start of the validation
         errorPasswordLoginInput.setText("");
         if (IDLoginInput.getText().equals("")) {//checks if the ID input field is blank
@@ -603,16 +603,55 @@ public class Controller {
             IDValid = false;//sets ID validity to be false
             IDLoginInput.clear();//clears the text field
         }
+        if (IDLoginInput.getText().toCharArray().length>5) {//checks if the ID input field is more than 5 digits
+            errorIDLoginInput.setText("Example S0001");//display a message to the user to re-enter
+            IDValid = false;//sets ID validity to be false
+            IDLoginInput.clear();//clears the text field
+        }
+        if (idInput.toUpperCase().toCharArray()[0]=='S'){
+            sessionUser="Student";
+        }else if (idInput.toUpperCase().toCharArray()[0]=='T'){
+            sessionUser="Teacher";
+        }else if (idInput.toUpperCase().toCharArray()[0]=='C' && idInput.toUpperCase().toCharArray()[1]=='A'){
+            sessionUser="ClubAdvisor";
+        }else{
+            IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
+        }
         if (passwordLoginInput.getText().equals("")) {//checks if the password input field is blank
             errorPasswordLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
             passwordValid = false;//sets password validity to be false
             passwordLoginInput.clear();//clears the text field
         }
         if (IDValid && passwordValid) {
+            idInput=IDLoginInput.getText().toString();
+            passwordInput=passwordLoginInput.getText().toString();
+            //read from the database for exsisting records
+            if (sessionUser.equals("Student")){
+                boolean exists = false;//check if the Student Id is available
+                try (Connection connection = Database.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(String.format("SELECT COUNT(*) as count FROM Student WHERE StudentID = {}", idInput))) {
+                    preparedStatement.setString(1, idInput);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        int count = resultSet.getInt("count");
+                        exists = count > 0;
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                if (exists){
+                    //code to read the Password
+                }
+            }
             IDLoginInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             passwordLoginInput.clear();
-            // Hammad complete this part this is linked with the database u have to store these data there
+            System.out.println(sessionUser);
+            System.out.println();
         }
+
+
+
     }
 
     //Database Table Creation
@@ -636,4 +675,112 @@ public class Controller {
             e.printStackTrace();
         }
     }
+    public void createTeacherTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query = "CREATE TABLE Teacher (" +
+                    "    StaffID VARCHAR(5) PRIMARY KEY," +
+                    "    FirstName VARCHAR(25)," +
+                    "    LastName VARCHAR(25)," +
+                    "    Email VARCHAR(30)," +
+                    "    DateOfBirth VARCHAR(10)," +
+                    "    ContactNo VARCHAR(9)," +
+                    "    Password VARCHAR(255)" +
+                    ");";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Teacher table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createClubTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE Club (" +
+                    "    ClubID VARCHAR(5) PRIMARY KEY," +
+                    "    ClubName VARCHAR(255)," +
+                    "    Description VARCHAR(255)," +
+                    "    StaffID VARCHAR(5)," +
+                    "    FOREIGN KEY (StaffID) REFERENCES Teacher(StaffID));";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Club table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createClubAdvisorTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE ClubAdvisor ("+
+                    "    ClubAdvisorID VARCHAR(5) PRIMARY KEY," +
+                    "    StudentID VARCHAR(5)," +
+                    "    ClubID VARCHAR(5)," +
+                    "    Position VARCHAR(255)," +
+                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)," +
+                    "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID));";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Club Advisor table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createEventTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE Events ("+
+                    "    EventID VARCHAR(5) PRIMARY KEY," +
+                    "    EventName VARCHAR(255)," +
+                    "    Date VARCHAR(10)," +
+                    "    Time VARCHAR(5)," +
+                    "    Location VARCHAR(25)," +
+                    "    ClubID VARCHAR(5)," +
+                    "    EventDescription VARCHAR(255)," +
+                    "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID)" +
+                    ");";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Event table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createEventsAttendanceTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE EventsAttendance (" +
+                    "    AttendanceID VARCHAR(5) PRIMARY KEY," +
+                    "    EventID VARCHAR(5)," +
+                    "    StudentID VARCHAR(5)," +
+                    "    FOREIGN KEY (EventID) REFERENCES Events(EventID)," +
+                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
+                    ");";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Event Attendance table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createClubsMembershipTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE ClubsMembership (" +
+                    "    MembershipID VARCHAR(5) PRIMARY KEY," +
+                    "    ClubID VARCHAR(5)," +
+                    "    StudentID VARCHAR(5)," +
+                    "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID)," +
+                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
+                    ");";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Club Membership created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

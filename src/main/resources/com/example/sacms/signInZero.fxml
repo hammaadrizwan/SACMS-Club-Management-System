@@ -44,7 +44,7 @@
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="122.0" layoutY="505.0" mnemonicParsing="false" onAction="#onLogInOneButtonClicked" opacity="0.0" prefHeight="25.0" prefWidth="238.0" text="Button" />
+            <Button layoutX="122.0" layoutY="505.0" mnemonicParsing="false" onAction="#onLogInScreenButtonClicked" opacity="0.0" prefHeight="25.0" prefWidth="238.0" text="Button" />
             <Button layoutX="149.0" layoutY="363.0" mnemonicParsing="false" onAction="#onTeacherSignInOneButtonClicked" prefHeight="67.0" prefWidth="179.0" style="-fx-background-color: #E5E7E9; -fx-background-radius: 10;" text="TEACHER">
                <font>
                   <Font name="Noto Sans Bold" size="20.0" />
