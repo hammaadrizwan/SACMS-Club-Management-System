@@ -60,7 +60,7 @@
       <TextArea fx:id="clubDescriptionInputClubCreationScreen" layoutX="52.0" layoutY="333.0" prefHeight="214.0" prefWidth="322.0" style="-fx-border-radius: 20;" />
       <Label layoutX="63.0" layoutY="255.0" textFill="RED" />
       <Label layoutX="404.0" layoutY="255.0" textFill="RED" />
-      <TextField fx:id="clubStaffIDInputClubCreationScreen" layoutX="395.0" layoutY="331.0" prefHeight="44.0" prefWidth="202.0" promptText="Staff ID" style="-fx-background-radius: 10;">
+      <TextField fx:id="clubTeacherIDInputClubCreationScreen" layoutX="395.0" layoutY="331.0" prefHeight="44.0" prefWidth="202.0" promptText="Teacher ID" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -85,7 +85,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorStaffIDInputClubCreationScreen" layoutX="395.0" layoutY="376.0" prefHeight="20.0" prefWidth="193.0" textFill="#d30000">
+      <Label fx:id="errorTeacherIDInputClubCreationScreen" layoutX="395.0" layoutY="376.0" prefHeight="20.0" prefWidth="193.0" textFill="#d30000">
          <font>
             <Font size="14.0" />
          </font>

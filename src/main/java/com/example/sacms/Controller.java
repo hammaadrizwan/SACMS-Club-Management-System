@@ -20,17 +20,17 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 public class Controller {
-    public String sessionUser=null;
+    public String entity = null;
     private Stage stage;//main stage where all our windows appear
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, staffIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
+    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubTeacherIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorStaffIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -176,87 +176,42 @@ public class Controller {
     }
 
     public void onCreateClubButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean clubNameValid = true;//initially all input fields are said to be valid
-        boolean clubAdvisorIDValid = true;
-        boolean clubDescriptionValid = true;
-        boolean staffIDValid = true;
-        errorClubNameInputClubCreationScreen.setText("");//all the error labels are made invisible at the start of the validation
-        errorClubAdvisorIDInputClubCreationScreen.setText("");
-        errorClubDescriptionInputClubCreationScreen.setText("");
-        errorStaffIDInputClubCreationScreen.setText("");
-        if (clubNameInputClubCreationScreen.getText().equals("")) {//checks if the club name input field is blank
-            errorClubNameInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubNameValid = false;//sets clubName validity to be false
-            clubNameInputClubCreationScreen.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the clubName, since the name cannot contain any numbers/ digits
-            char[] clubNameCharacters = clubNameInputClubCreationScreen.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : clubNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    clubNameValid = false;//if it is then clubName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!clubNameValid) {//if the clubName is invalid, a message will be displayed to the user saying its incorrect
-                errorClubNameInputClubCreationScreen.setText("Invalid club name");
-                clubNameInputClubCreationScreen.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorClubNameInputClubCreationScreen.setText("");
+        boolean clubNameValid;
+        boolean clubAdvisorIDValid;
+        boolean clubDescriptionValid;
+        boolean teacherIDValid;
+        clubNameValid = checkName(clubNameInputClubCreationScreen, errorClubNameInputClubCreationScreen);
+        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen);
+        if (clubAdvisorIDValid) {
+            if (!entity.equals("ClubAdvisor")) {//To check whether the user has entered a clubAdvisorID or not
+                errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
+                clubAdvisorIDValid = false;
             }
         }
-        if (clubAdvisorIDInputClubCreationScreen.getText().equals("")) {//checks if the club advisor ID input field is blank
-            errorClubAdvisorIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubAdvisorIDValid = false;//sets clubAdvisorID validity to be false
-            clubAdvisorIDInputClubCreationScreen.clear();//clears the text field
+        clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
+        teacherIDValid = checkID(clubTeacherIDInputClubCreationScreen, errorTeacherIDInputClubCreationScreen);
+        if (teacherIDValid) {
+            if (!entity.equals("Teacher")) {//To check whether the user has entered a teacherID or not
+                errorTeacherIDInputClubCreationScreen.setText("Invalid ID");
+                teacherIDValid = false;
+            }
         }
-        if (clubDescriptionInputClubCreationScreen.getText().equals("")) {//checks if the club description input field is blank
-            errorClubDescriptionInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubDescriptionValid = false;//sets clubDescription validity to be false
-            clubDescriptionInputClubCreationScreen.clear();//clears the text field
-        }
-        if (clubStaffIDInputClubCreationScreen.getText().equals("")) {//checks if the staff ID input field is blank
-            errorStaffIDInputClubCreationScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            staffIDValid = false;//sets staffID validity to be false
-            clubStaffIDInputClubCreationScreen.clear();//clears the text field
-        }
-        if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && staffIDValid) {//if the above inputs done by the user is valid the data will be stored
+        if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
             clubNameInputClubCreationScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             clubAdvisorIDInputClubCreationScreen.clear();
             clubDescriptionInputClubCreationScreen.clear();
-            clubStaffIDInputClubCreationScreen.clear();
+            clubTeacherIDInputClubCreationScreen.clear();
             // Hammad complete this part this is linked with the database u have to store these data there
         }
     }
 
     public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean eventNameValid = true;//initially all input fields are said to be valid
+        boolean eventNameValid;
         boolean eventDateValid = true;
         boolean eventTimeValid = true;
-        boolean clubIDValid = true;
-        boolean eventDescriptionValid = true;
-        errorEventNameEventCreationInput.setText("");//all the error labels are made invisible at the start of the validation
-        errorEventDateEventCreationInput.setText("");
-        errorEventTimeEventCreationInput.setText("");
-        errorClubIDEventCreationInput.setText("");
-        errorEventDescriptionEventCreationInput.setText("");
-        if (eventNameEventCreationInput.getText().equals("")) {//checks if the event name input field is blank
-            errorEventNameEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
-            eventNameValid = false;//sets eventName validity to be false
-            eventNameEventCreationInput.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the eventName, since the name cannot contain any numbers/digits
-            char[] eventNameCharacters = eventNameEventCreationInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : eventNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    eventNameValid = false;//if it is then eventName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!eventNameValid) {//if the eventName is invalid, a message will be displayed to the user saying its incorrect
-                errorEventNameEventCreationInput.setText("Invalid event name");
-                eventNameEventCreationInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorEventNameEventCreationInput.setText("");
-            }
-        }
+        boolean clubIDValid;
+        boolean eventDescriptionValid;
+        eventNameValid = checkName(eventNameEventCreationInput, errorEventNameEventCreationInput);
         if (eventDateEventCreationInput.getText().equals("")) {//checks if the event date input field is blank
             errorEventDateEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
             eventDateValid = false;//sets eventDate validity to be false
@@ -283,16 +238,14 @@ public class Controller {
                 eventTimeEventCreationInput.clear();//clears the text field
             }
         }
-        if (clubIDEventCreationInput.getText().equals("")) {//checks if the club ID input field is blank
-            errorClubIDEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
-            clubIDValid = false;//sets clubID validity to be false
-            clubIDEventCreationInput.clear();//clears the text field
+        clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
+        if (clubIDValid) {
+            if (!entity.equals("Club")) {//To check whether the user has entered a clubID or not
+                errorClubIDEventCreationInput.setText("Invalid ID");
+                clubIDValid = false;
+            }
         }
-        if (eventDescriptionEventCreationInput.getText().equals("")) {//checks if the event description input field is blank
-            errorEventDescriptionEventCreationInput.setText("Cannot be empty");//display a message to the user to re-enter
-            eventDescriptionValid = false;//sets eventDescription validity to be false
-            eventDescriptionEventCreationInput.clear();//clears the text field
-        }
+        eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
         if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid) {//if the above inputs done by the user is valid the data will be stored
             eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             eventDateEventCreationInput.clear();
@@ -304,40 +257,23 @@ public class Controller {
     }
 
     public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
-        boolean studentIDValid = true;//initially all input fields are said to be valid
-        boolean positionValid = true;
-        boolean clubIDValid = true;
-        errorStudentIDSigInClubAdvisorScreen.setText("");//all the error labels are made invisible at the start of the validation
-        errorPositionSigInClubAdvisorScreen.setText("");
-        errorClubIDSigInClubAdvisorScreen.setText("");
-        if (studentIDSigInClubAdvisorScreen.getText().equals("")) {//checks if the student ID input field is blank
-            errorStudentIDSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            studentIDValid = false;//sets studentID validity to be false
-            studentIDSigInClubAdvisorScreen.clear();//clears the text field
-        }
-        if (positionSigInClubAdvisorScreen.getText().equals("")) {//checks if the club advisor position input field is blank
-            errorPositionSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            positionValid = false;//sets position validity to be false
-            positionSigInClubAdvisorScreen.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the position, since the name cannot contain any numbers/digits
-            char[] position = positionSigInClubAdvisorScreen.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : position) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    positionValid = false;//if it is then position input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!positionValid) {//if the position is invalid, a message will be displayed to the user saying its incorrect
-                errorPositionSigInClubAdvisorScreen.setText("Invalid position");
-                positionSigInClubAdvisorScreen.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorPositionSigInClubAdvisorScreen.setText("");
+        boolean studentIDValid;
+        boolean positionValid;
+        boolean clubIDValid;
+        studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
+        if (studentIDValid) {
+            if (!entity.equals("Student")) {//To check whether the user has entered a studentID or not
+                errorStudentIDSigInClubAdvisorScreen.setText("Invalid ID");
+                studentIDValid = false;
             }
         }
-        if (clubIDSigInClubAdvisorScreen.getText().equals("")) {//checks if the club ID input field is blank
-            errorClubIDSigInClubAdvisorScreen.setText("Cannot be empty");//display a message to the user to re-enter
-            clubIDValid = false;//sets clubID validity to be false
-            clubIDSigInClubAdvisorScreen.clear();//clears the text field
+        positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
+        clubIDValid = checkID(clubIDSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen);
+        if (clubIDValid) {
+            if (!entity.equals("Club")) {//To check whether the user has entered a clubID or not
+                errorClubIDSigInClubAdvisorScreen.setText("Invalid ID");
+                clubIDValid = false;
+            }
         }
         if (studentIDValid && positionValid && clubIDValid) {//if the above inputs done by the user is valid the data will be stored
             studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
@@ -348,114 +284,34 @@ public class Controller {
     }
 
     public void onStudentSignInTwoButtonClicked(ActionEvent event) throws  IOException {
-        boolean firstNameValid = true;//initially all input fields are said to be valid
-        boolean lastNameValid = true;
+        boolean firstNameValid;
+        boolean lastNameValid;
         boolean DOBValid = true;
-        boolean classValid = true;
-        boolean emailValid = true;
-        boolean contactNoValid = true;
-        boolean passwordValid = true;
-        boolean studentIDValid = true;
-        errorFirstNameSignInStudentInput.setText("");//all the error labels are made invisible at the start of the validation
-        errorLastNameSignInStudentInput.setText("");
-        errorDateSignInStudentInput.setText("");
-        errorClassSignInStudentInput.setText("");
-        errorEmailSignInStudentInput.setText("");
-        errorContactNoSignInStudentInput.setText("");
-        errorPasswordSignInStudentInput.setText("");
-        errorStudentIDSignInStudentInput.setText("");
-        if (firstNameSignInStudentInput.getText().equals("")) {//checks if the first name input field is blank
-            errorFirstNameSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            firstNameValid = false;//sets firstName validity to be false
-            firstNameSignInStudentInput.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the firstName, since the name cannot contain any numbers/digits
-            char[] firstNameCharacters = firstNameSignInStudentInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : firstNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    firstNameValid = false;//if it is then firstName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!firstNameValid) {//if the firstName is invalid, a message will be displayed to the user saying its incorrect
-                errorFirstNameSignInStudentInput.setText("Invalid first name");
-                firstNameSignInStudentInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorFirstNameSignInStudentInput.setText("");
-            }
-        }
-        if (lastNameSignInStudentInput.getText().equals("")) {//checks if the last name input field is blank
-            errorLastNameSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            lastNameValid = false;//sets lastName validity to be false
-            lastNameSignInStudentInput.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the lastName, since the name cannot contain any numbers/digits
-            char[] lastNameCharacters = lastNameSignInStudentInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : lastNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    lastNameValid = false;//if it is then lastName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!lastNameValid) {//if the lastName is invalid, a message will be displayed to the user saying its incorrect
-                errorLastNameSignInStudentInput.setText("Invalid last name");
-                lastNameSignInStudentInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorLastNameSignInStudentInput.setText("");
-            }
-        }
-        if (dateSignInStudentInput.getText().equals("")) {//checks if the DOB input field is blank
+        boolean classValid;
+        boolean emailValid;
+        boolean contactNoValid;
+        boolean passwordValid;
+        boolean studentIDValid;
+        firstNameValid = checkName(firstNameSignInStudentInput, errorFirstNameSignInStudentInput);
+        lastNameValid = checkName(lastNameSignInStudentInput, errorLastNameSignInStudentInput);
+        /*if (dateSignInStudentInput.getText().equals("")) {//checks if the DOB input field is blank
             errorDateSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
             DOBValid = false;//sets DOBValid validity to be false
             dateSignInStudentInput.clear();//clears the text field
         } else {
             char[] date=dateSignInStudentInput.toString().toCharArray();
 
-        }
-        if (classSignInStudentInput.getText().equals("")) {//checks if the class input field is blank
-            errorClassSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            classValid = false;//sets class validity to be false
-            classSignInStudentInput.clear();//clears the text field
-        }
-        if (emailSignInStudentInput.getText().equals("")) {//checks if the email input field is blank
-            errorEmailSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            emailValid = false;//sets email validity to be false
-            emailSignInStudentInput.clear();//clears the text field
-        } else {
-            if (emailSignInStudentInput.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {//checks if the email is in the correct format
-                errorEmailSignInStudentInput.setText("");//if so then no error message will be displayed
-            } else {
-                errorEmailSignInStudentInput.setText("Invalid email");//if there is an error then an error message is displayed
-                emailValid = false;//sets email validity to be false
-                emailSignInStudentInput.clear();//clears the text field
+        }*/
+        classValid = checkClass(classSignInStudentInput, errorClassSignInStudentInput);
+        emailValid = checkEmail(emailSignInStudentInput, errorEmailSignInStudentInput);
+        contactNoValid = checkContactNo(contactNoSignInStudentInput, errorContactNoSignInStudentInput);
+        passwordValid = checkPassword(passwordSignInStudentInput, errorPasswordSignInStudentInput);
+        studentIDValid = checkID(studentIDSignInStudentInput, errorStudentIDSignInStudentInput);
+        if (studentIDValid) {
+            if (!entity.equals("Student")) {//To check whether the user has entered a studentID or not
+                errorStudentIDSignInStudentInput.setText("Invalid ID");
+                studentIDValid = false;
             }
-        }
-        if (contactNoSignInStudentInput.getText().equals("")) {//checks if the contact No input field is blank
-            errorContactNoSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            contactNoValid = false;//sets contactNo validity to be false
-            contactNoSignInStudentInput.clear();//clears the text field
-        } else {//checks whether there is at least one string in the contactNo, since contactNo cannot contain any string characters
-            char[] contactNoCharacters = contactNoSignInStudentInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
-                if (!Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is not a digit
-                    contactNoValid = false;//if it is then contactNo input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!contactNoValid) {//if the contactNo is invalid, a message will be displayed to the user saying its incorrect
-                errorContactNoSignInStudentInput.setText("Invalid contact no.");
-                contactNoSignInStudentInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorContactNoSignInStudentInput.setText("");
-            }
-        }
-        if (passwordSignInStudentInput.getText().equals("")) {//checks if the password input field is blank
-            errorPasswordSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            passwordValid = false;//sets password validity to be false
-            passwordSignInStudentInput.clear();//clears the text field
-        }
-        if (studentIDSignInStudentInput.getText().equals("")) {//checks if the student ID input field is blank
-            errorStudentIDSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            studentIDValid = false;//sets studentID validity to be false
-            studentIDSignInStudentInput.clear();//clears the text field
         }
         if (firstNameValid && lastNameValid && DOBValid && classValid && emailValid && contactNoValid && passwordValid && studentIDValid) {//if the above inputs done by the user is valid the data will be stored
             firstNameSignInStudentInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
@@ -467,62 +323,20 @@ public class Controller {
             passwordSignInStudentInput.clear();
             studentIDSignInStudentInput.clear();
             // Hammad complete this part this is linked with the database u have to store these data there
+            createStudentTableOnDatabase();
         }
     }
 
     public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws  IOException {
-        boolean firstNameValid = true;//initially all input fields are said to be valid
-        boolean lastNameValid = true;
+        boolean firstNameValid;
+        boolean lastNameValid;
         boolean DOBValid = true;
-        boolean contactNoValid = true;
-        boolean emailValid = true;
-        boolean staffIDValid = true;
-        boolean passwordValid = true;
-        errorFirstNameSignInTeacherInput.setText("");//all the error labels are made invisible at the start of the validation
-        errorLastNameSignInTeacherInput.setText("");
-        errorDateSignInTeacherInput.setText("");
-        errorContactNoSignInTeacherInput.setText("");
-        errorEmailSignInTeacherInput.setText("");
-        errorStaffIDSignInTeacherInput.setText("");
-        errorPasswordSignInTeacherInput.setText("");
-        if (firstNameSignInTeacherInput.getText().equals("")) {//checks if the first name input field is blank
-            errorFirstNameSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            firstNameValid = false;//sets firstName validity to be false
-            firstNameSignInTeacherInput.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the firstName, since the name cannot contain any numbers/digits
-            char[] firstNameCharacters = firstNameSignInTeacherInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : firstNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    firstNameValid = false;//if it is then firstName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!firstNameValid) {//if the firstName is invalid, a message will be displayed to the user saying its incorrect
-                errorFirstNameSignInTeacherInput.setText("Invalid first name");
-                firstNameSignInTeacherInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorFirstNameSignInTeacherInput.setText("");
-            }
-        }
-        if (lastNameSignInTeacherInput.getText().equals("")) {//checks if the last name input field is blank
-            errorLastNameSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            lastNameValid = false;//sets lastName validity to be false
-            lastNameSignInTeacherInput.clear();//clears the text field
-        } else {//checks whether there is at least one integer in the lastName, since the name cannot contain any numbers/digits
-            char[] lastNameCharacters = lastNameSignInTeacherInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : lastNameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
-                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
-                    lastNameValid = false;//if it is then lastName input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!lastNameValid) {//if the lastName is invalid, a message will be displayed to the user saying its incorrect
-                errorLastNameSignInTeacherInput.setText("Invalid last name");
-                lastNameSignInTeacherInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorLastNameSignInTeacherInput.setText("");
-            }
-        }
+        boolean contactNoValid;
+        boolean emailValid;
+        boolean teacherIDValid;
+        boolean passwordValid;
+        firstNameValid = checkName(firstNameSignInTeacherInput, errorFirstNameSignInTeacherInput);
+        lastNameValid = checkName(lastNameSignInTeacherInput, errorLastNameSignInTeacherInput);
         if (dateSignInTeacherInput.getText().equals("")) {//checks if the DOB input field is blank
             errorDateSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
             DOBValid = false;//sets DOBValid validity to be false
@@ -536,97 +350,49 @@ public class Controller {
                 dateSignInTeacherInput.clear();//clears the text field
             }
         }
-        if (contactNoSignInTeacherInput.getText().equals("")) {//checks if the contact No input field is blank
-            errorContactNoSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            contactNoValid = false;//sets contactNo validity to be false
-            contactNoSignInTeacherInput.clear();//clears the text field
-        } else {//checks whether there is at least one string in the contactNo, since contactNo cannot contain any string characters
-            char[] contactNoCharacters = contactNoSignInTeacherInput.getText().toCharArray();//converts the string to a sequence of characters
-            for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
-                if (!Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is not a digit
-                    contactNoValid = false;//if it is then contactNo input will be invalid and the loop will break
-                    break;
-                }
-            }
-            if (!contactNoValid) {//if the contactNo is invalid, a message will be displayed to the user saying its incorrect
-                errorContactNoSignInTeacherInput.setText("Invalid contact no.");
-                contactNoSignInTeacherInput.clear();//clears the text field
-            } else {//if it is valid there will be no message displayed as the field is of correct data type
-                errorContactNoSignInTeacherInput.setText("");
+        contactNoValid = checkContactNo(contactNoSignInTeacherInput, errorContactNoSignInTeacherInput);
+        emailValid = checkEmail(emailSignInTeacherInput, errorEmailSignInTeacherInput);
+        teacherIDValid = checkID(teacherIDSignInTeacherInput, errorTeacherIDSignInTeacherInput);
+        if (teacherIDValid) {
+            if (!entity.equals("Teacher")) {//To check whether the user has entered a teacherID or not
+                errorTeacherIDSignInTeacherInput.setText("Invalid ID");
+                teacherIDValid = false;
             }
         }
-        if (emailSignInTeacherInput.getText().equals("")) {//checks if the email input field is blank
-            errorEmailSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            emailValid = false;//sets email validity to be false
-            emailSignInTeacherInput.clear();//clears the text field
-        } else {
-            if (emailSignInTeacherInput.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {//checks if the email is in the correct format
-                errorEmailSignInTeacherInput.setText("");//if so then no error message will be displayed
-            } else {
-                errorEmailSignInTeacherInput.setText("Invalid email");//if there is an error then an error message is displayed
-                emailValid = false;//sets email validity to be false
-                emailSignInTeacherInput.clear();//clears the text field
-            }
-        }
-        if (staffIDSignInTeacherInput.getText().equals("")) {//checks if the staff ID input field is blank
-            errorStaffIDSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            staffIDValid = false;//sets staffID validity to be false
-            staffIDSignInTeacherInput.clear();//clears the text field
-        }
-        if (passwordSignInTeacherInput.getText().equals("")) {//checks if the password input field is blank
-            errorPasswordSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            passwordValid = false;//sets password validity to be false
-            passwordSignInTeacherInput.clear();//clears the text field
-        }
-        if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && staffIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
+        passwordValid = checkPassword(passwordSignInTeacherInput, errorPasswordSignInTeacherInput);
+        if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && teacherIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
             firstNameSignInTeacherInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             lastNameSignInTeacherInput.clear();
             dateSignInTeacherInput.clear();
             contactNoSignInTeacherInput.clear();
             emailSignInTeacherInput.clear();
-            staffIDSignInTeacherInput.clear();
+            teacherIDSignInTeacherInput.clear();
             passwordSignInTeacherInput.clear();
             // Hammad complete this part this is linked with the database u have to store these data there
         }
     }
 
     public void onLogInButtonClicked(ActionEvent event) throws  IOException {
-        boolean IDValid = true;//initially all input fields are said to be valid
-        boolean passwordValid = true;
+        boolean IDValid;
+        boolean passwordValid;
         String idInput = null;
         String passwordInput=null;
-
-        errorIDLoginInput.setText("");//all the error labels are made invisible at the start of the validation
-        errorPasswordLoginInput.setText("");
-        if (IDLoginInput.getText().equals("")) {//checks if the ID input field is blank
-            errorIDLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
-            IDValid = false;//sets ID validity to be false
-            IDLoginInput.clear();//clears the text field
+        IDValid = checkID(IDLoginInput, errorIDLoginInput);
+        if (IDValid) {
+            if (entity.equals("Club") || entity.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ parent or teacher ID
+                errorIDLoginInput.setText("Invalid ID");
+                IDValid = false;
+            }
         }
-        if (IDLoginInput.getText().toCharArray().length>5) {//checks if the ID input field is more than 5 digits
-            errorIDLoginInput.setText("Example S0001");//display a message to the user to re-enter
-            IDValid = false;//sets ID validity to be false
-            IDLoginInput.clear();//clears the text field
-        }
-        if (idInput.toUpperCase().toCharArray()[0]=='S'){
-            sessionUser="Student";
-        }else if (idInput.toUpperCase().toCharArray()[0]=='T'){
-            sessionUser="Teacher";
-        }else if (idInput.toUpperCase().toCharArray()[0]=='C' && idInput.toUpperCase().toCharArray()[1]=='A'){
-            sessionUser="ClubAdvisor";
-        }else{
-            IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
-        }
-        if (passwordLoginInput.getText().equals("")) {//checks if the password input field is blank
-            errorPasswordLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
-            passwordValid = false;//sets password validity to be false
-            passwordLoginInput.clear();//clears the text field
-        }
+        passwordValid = checkPassword(passwordLoginInput, errorPasswordLoginInput);
         if (IDValid && passwordValid) {
+            IDLoginInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+            passwordLoginInput.clear();
             idInput=IDLoginInput.getText().toString();
             passwordInput=passwordLoginInput.getText().toString();
             //read from the database for exsisting records
-            if (sessionUser.equals("Student")){
+            if (entity.equals("Student")){
+             /*
                 boolean exists = false;//check if the Student Id is available
                 try (Connection connection = Database.getConnection();
                      PreparedStatement preparedStatement = connection.prepareStatement(String.format("SELECT COUNT(*) as count FROM Student WHERE StudentID = {}", idInput))) {
@@ -643,15 +409,9 @@ public class Controller {
                 if (exists){
                     //code to read the Password
                 }
+                */
             }
-            IDLoginInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            passwordLoginInput.clear();
-            System.out.println(sessionUser);
-            System.out.println();
         }
-
-
-
     }
 
     //Database Table Creation
@@ -782,5 +542,141 @@ public class Controller {
         }
     }
 
+    public boolean checkName(TextField textField, Label label) {
+        boolean nameValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the name input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            nameValid = false;//sets name validity to be false
+            textField.clear();//clears the text field
+        } else {//checks whether there is at least one integer in the name, since the name cannot contain any numbers/digits
+            char[] nameCharacters = textField.getText().toCharArray();//converts the string to a sequence of characters
+            for (char character : nameCharacters) {//and by using an enhanced for loop the program checks whether a number is present in the list of characters
+                if (Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is a digit
+                    nameValid = false;//if it is then name input will be invalid and the loop will break
+                    break;
+                }
+            }
+            if (!nameValid) {//if the name is invalid, a message will be displayed to the user saying its incorrect
+                label.setText("Invalid name");
+                textField.clear();//clears the text field
+            } else {//if it is valid there will be no message displayed as the field is of correct data type
+                label.setText("");
+            }
+        }
+        return nameValid;//returns whether name is valid or not
+    }
+
+    public boolean checkDescription(TextArea textArea, Label label) {
+        boolean descriptionValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textArea.getText().equals("")) {//checks if the description input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            descriptionValid = false;//sets description validity to be false
+            textArea.clear();//clears the text field
+        }
+        return descriptionValid;//returns whether description is valid or not
+    }
+
+    public boolean checkEmail(TextField textField, Label label) {
+        boolean emailValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the email input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            emailValid = false;//sets email validity to be false
+            textField.clear();//clears the text field
+        } else {
+            if (textField.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {//checks if the email is in the correct format
+                label.setText("");//if so then no error message will be displayed
+            } else {
+                label.setText("Invalid email");//if there is an error then an error message is displayed
+                emailValid = false;//sets email validity to be false
+                textField.clear();//clears the text field
+            }
+        }
+        return emailValid;//returns whether email is valid or not
+    }
+
+    public boolean checkContactNo(TextField textField, Label label) {
+        boolean contactNoValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the contact No input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            contactNoValid = false;//sets contactNo validity to be false
+            textField.clear();//clears the text field
+        } else {//checks whether there is at least one string in the contactNo, since contactNo cannot contain any string characters
+            char[] contactNoCharacters = textField.getText().toCharArray();//converts the string to a sequence of characters
+            if (contactNoCharacters.length == 10) {//checks whether the contact number has only 10 digits
+                for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
+                    if (!Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is not a digit
+                        contactNoValid = false;//if it is then contactNo input will be invalid and the loop will break
+                        break;
+                    }
+                }
+            } else {
+                contactNoValid = false;//if it doesn't have 10 digits then contactNo is invalid
+            }
+            if (!contactNoValid) {//if the contactNo is invalid, a message will be displayed to the user saying its incorrect
+                label.setText("Invalid contact no.");
+                textField.clear();//clears the text field
+            } else {//if it is valid there will be no message displayed as the field is of correct data type
+                label.setText("");
+            }
+        }
+        return contactNoValid;//returns whether contactNo is valid or not
+    }
+
+    public boolean checkClass(TextField textField, Label label) {
+        boolean classValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the class input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            classValid = false;//sets class validity to be false
+            textField.clear();//clears the text field
+        }
+        return classValid;//returns whether class is valid or not
+    }
+
+    public boolean checkID(TextField textField, Label label) {
+        boolean IDValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the ID input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            IDValid = false;//sets ID validity to be false
+            textField.clear();//clears the text field
+        } else if (textField.getText().toCharArray().length > 5) {//checks if the ID input field is more than 5 digits
+            label.setText("ID should contain maximum 5 characters");//display a message to the user to re-enter
+            IDValid = false;//sets ID validity to be false
+            textField.clear();//clears the text field
+        } else if (textField.getText().toUpperCase().toCharArray()[0] == 'S') {
+            entity = "Student";
+        } else if (textField.getText().toUpperCase().toCharArray()[0] == 'T') {
+            entity = "Teacher";
+        } else if (textField.getText().toUpperCase().toCharArray()[0] == 'C' && textField.getText().toUpperCase().toCharArray()[1] == 'A') {
+            entity = "ClubAdvisor";
+        } else if (textField.getText().toUpperCase().toCharArray()[0] == 'C') {
+            entity = "Club";
+        } else if (textField.getText().toUpperCase().toCharArray()[0] == 'E') {
+            entity = "Event";
+        } else {
+            IDValid = false;//if the id is not in either of the above formats the id is invalid
+            label.setText("Invalid ID");
+        }
+        return IDValid;
+    }
+
+    public boolean checkPassword(TextField textField, Label label) {
+        boolean passwordValid = true;
+        label.setText("");//the error label made invisible at the start of the validation
+        if (textField.getText().equals("")) {//checks if the password input field is blank
+            label.setText("Cannot be empty");//display a message to the user to re-enter
+            passwordValid = false;//sets password validity to be false
+            textField.clear();//clears the text field
+        } else if (textField.getText().toCharArray().length < 8) {
+            label.setText("Password should contain minimum of 8 characters");
+            passwordValid = false;
+        }
+        return passwordValid;
+    }
 
 }
