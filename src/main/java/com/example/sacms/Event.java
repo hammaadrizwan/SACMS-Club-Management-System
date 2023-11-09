@@ -14,7 +14,8 @@ public class Event {
     private String eventID;
     private String eventLocation;
     private int eventAttendance;
-    private ArrayList<String> eventAttendeesID;
+    private ArrayList<Student> eventAttendeesID;
+
     public String getEventName() {
         return eventName;
     }
@@ -39,9 +40,9 @@ public class Event {
     public int getEventAttendance() {
         return eventAttendance;
     }
-    public ArrayList<String> getEventAttendeesID() {
-        return eventAttendeesID;
-    }
+    //public ArrayList<String> getEventAttendeesID() {
+    //    return eventAttendeesID;
+    //}
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
@@ -66,9 +67,9 @@ public class Event {
     public void setEventAttendance(int eventAttendance) {
         this.eventAttendance = eventAttendance;
     }
-    public void setEventAttendeesID(ArrayList<String> eventAttendeesID) {
-        this.eventAttendeesID = eventAttendeesID;
-    }
+    //public void setEventAttendeesID(ArrayList<String> eventAttendeesID) {
+    //    this.eventAttendeesID = eventAttendeesID;
+    //}
     public String generateEEventID() {
         // gotto complete this
         return "";

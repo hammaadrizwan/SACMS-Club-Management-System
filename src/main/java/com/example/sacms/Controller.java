@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -15,12 +16,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Controller {
-    public String sessionUser=null;
+    public String sessionUser;
+    public String text;
     private Stage stage;//main stage where all our windows appear
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
@@ -30,8 +35,12 @@ public class Controller {
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorStaffIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorStaffIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    @FXML
+    private Label userNameLabelDashboard;
 
+    @FXML
+    private Button refreshButtonDashboard;
     //SCREEN NAVIGATION METHODS
     @FXML
     public void onSplashScreenButtonClicked(ActionEvent event) throws IOException {//User is required to login inorder to access the app
@@ -53,6 +62,29 @@ public class Controller {
         this.stage.setScene(this.scene);
         this.stage.show();
         this.stage.setResizable(false);
+    }
+
+    public void onRefreshDashboardScreenButtonClicked(ActionEvent event) throws IOException {
+
+        LocalDateTime now = LocalDateTime.now();
+        refreshButtonDashboard.setOpacity(0.0);
+        refreshButtonDashboard.setDisable(true);
+
+        // Format the date to "THU 03 OCT" using a custom DateTimeFormatter
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEE  dd  MMM");
+        String formattedDate = now.format(dateFormatter).toUpperCase();
+
+        // Format the time to "15:24"
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedTime = now.format(timeFormatter);
+
+        // Set the formatted date and time to the label
+        System.out.println(getUserLabelDashboardText());
+        userNameLabelDashboard.setText(getUserLabelDashboardText());
+        dayLabelDashboard.setText(formattedDate);
+        timeLabelDashboard.setText(formattedTime);
+
+
     }
 
     @FXML
@@ -149,6 +181,9 @@ public class Controller {
     }
 
     //User options methods when the icon is clicked
+    public void onLogOutButtonClicked(ActionEvent event) throws IOException {
+        onLogInScreenButtonClicked(event);// Close the app and terminate the session
+    }
     @FXML
     public void onExitButtonClicked(ActionEvent event) throws IOException {
         System.exit(0);// Close the app and terminate the session
@@ -602,21 +637,22 @@ public class Controller {
             errorIDLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
             IDValid = false;//sets ID validity to be false
             IDLoginInput.clear();//clears the text field
-        }
-        if (IDLoginInput.getText().toCharArray().length>5) {//checks if the ID input field is more than 5 digits
+        }else if (IDLoginInput.getText().toCharArray().length>0 && IDLoginInput.getText().toCharArray().length<=5) {//checks if the ID input field is more than 5 digits
+            if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='S'){
+                sessionUser="Student";
+            }else if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='T'){
+                sessionUser="Teacher";
+            }else if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='C' && IDLoginInput.getText().toUpperCase().toCharArray()[1]=='A'){
+                sessionUser="ClubAdvisor";
+            }else{
+                IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
+            }
+        }else{
             errorIDLoginInput.setText("Example S0001");//display a message to the user to re-enter
             IDValid = false;//sets ID validity to be false
             IDLoginInput.clear();//clears the text field
         }
-        if (idInput.toUpperCase().toCharArray()[0]=='S'){
-            sessionUser="Student";
-        }else if (idInput.toUpperCase().toCharArray()[0]=='T'){
-            sessionUser="Teacher";
-        }else if (idInput.toUpperCase().toCharArray()[0]=='C' && idInput.toUpperCase().toCharArray()[1]=='A'){
-            sessionUser="ClubAdvisor";
-        }else{
-            IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
-        }
+
         if (passwordLoginInput.getText().equals("")) {//checks if the password input field is blank
             errorPasswordLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
             passwordValid = false;//sets password validity to be false
@@ -627,68 +663,57 @@ public class Controller {
             passwordInput=passwordLoginInput.getText().toString();
             //read from the database for exsisting records
             if (sessionUser.equals("Student")){
-                boolean exists = false;//check if the Student Id is available
-                try (Connection connection = Database.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(String.format("SELECT COUNT(*) as count FROM Student WHERE StudentID = {}", idInput))) {
-                    preparedStatement.setString(1, idInput);
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    if (resultSet.next()) {
-                        int count = resultSet.getInt("count");
-                        exists = count > 0;
+                        ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
+                        for (Student student:registeredStudents){
+                            if (student.getStudentID().equals(idInput)){
+                                if(student.getPassword().equals(passwordInput)){
+                                    this.setUserLabelDashboardText(student.greetUser().toString());
+                                    onDashboardScreenButtonClicked(event);
+                                    System.out.println(getUserLabelDashboardText());
+
+                                }
+                            }
+                            errorPasswordLoginInput.setText("Incorrect ID or Password");
+                        }
+
+            }
+            if (sessionUser.equals("Teacher")){
+                /*ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
+                for (Student student:registeredStudents){
+                    if (student.getStudentID().equals(idInput)){
+                        if(student.getPassword().equals(passwordInput)){
+                            text=student.greetUser();
+                            onDashboardScreenButtonClicked(event);
+
+                        }
+                        errorPasswordLoginInput.setText("Incorrect ID or Password");
                     }
+                }*/
+            }if (sessionUser.equals("Club Advisor")){
+                /*ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
+                for (Student student:registeredStudents){
+                    if (student.getStudentID().equals(idInput)){
+                        if(student.getPassword().equals(passwordInput)){
+                            text=student.greetUser();
+                            onDashboardScreenButtonClicked(event);
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                if (exists){
-                    //code to read the Password
-                }
+                        }
+                        errorPasswordLoginInput.setText("Incorrect ID or Password");
+                    }
+                }*/
             }
-            IDLoginInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            passwordLoginInput.clear();
-            System.out.println(sessionUser);
-            System.out.println();
+
         }
+
 
 
 
     }
-
-
-
-    public void createEventsAttendanceTableOnDatabase() {
-        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query ="CREATE TABLE EventsAttendance (" +
-                    "    AttendanceID VARCHAR(5) PRIMARY KEY," +
-                    "    EventID VARCHAR(5)," +
-                    "    StudentID VARCHAR(5)," +
-                    "    FOREIGN KEY (EventID) REFERENCES Events(EventID)," +
-                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
-                    ");";// same SQL query is given here as string
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
-                preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Event Attendance table created");//confirmation message on the GUI
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public String getUserLabelDashboardText(){
+        return this.text;
     }
-    public void createClubsMembershipTableOnDatabase() {
-        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query ="CREATE TABLE ClubsMembership (" +
-                    "    MembershipID VARCHAR(5) PRIMARY KEY," +
-                    "    ClubID VARCHAR(5)," +
-                    "    StudentID VARCHAR(5)," +
-                    "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID)," +
-                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
-                    ");";// same SQL query is given here as string
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
-                preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Club Membership created");//confirmation message on the GUI
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void setUserLabelDashboardText(String text){
+        this.text=text;
     }
 
 

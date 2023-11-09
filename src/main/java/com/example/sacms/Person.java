@@ -1,12 +1,12 @@
 package com.example.sacms;
 
-public class Person {
+public abstract class Person {
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String dateOfBirth;
-    private int contactNo;
+    private String contactNo;
 
     public String getFirstName() {
         return firstName;
@@ -28,7 +28,7 @@ public class Person {
         return dateOfBirth;
     }
 
-    public int getContactNo() {
+    public String getContactNo() {
         return contactNo;
     }
 
@@ -52,18 +52,17 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setContactNo(int contactNo) {
+    public void setContactNo(String contactNo) {
         this.contactNo = contactNo;
     }
-    public void greetUser(){
 
-    }
+    public abstract String greetUser();
 
     public void getUser(){
         System.out.println("Hello "+getFirstName()+" "+getLastName());
     }
 
-    public Person(String firstName, String lastName, String email, String password, String dateOfBirth, int contactNo) {
+    public Person(String firstName, String lastName, String email, String password, String dateOfBirth, String contactNo) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

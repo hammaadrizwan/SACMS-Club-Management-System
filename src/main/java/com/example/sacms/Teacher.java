@@ -18,13 +18,18 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
     }//to approve a clubAdvisor
 
     @Override
+    public String greetUser() {
+        return null;
+    }
+
+    @Override
     public void getUser(){//polymorphism is used as the teacher has a different implementation
         String time="";
         String greeting="Good "+time+" Teacher "+getFirstName()+" "+getLastName()+"!";
         System.out.println(greeting);
     }
 
-    public Teacher(String firstName,String lastName,String email,String password,String dateOfBirth,int contactNo,String staffID){
+    public Teacher(String firstName,String lastName,String email,String password,String dateOfBirth,String contactNo,String staffID){
         super(firstName,lastName,email,password,dateOfBirth,contactNo);//automatically initialse
         this.staffID=staffID;
     }//Encapsulation is used here

@@ -35,17 +35,7 @@
          </image>
       </ImageView>
       <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="74.0" />
-      <Label fx:id="dayLabelDashboard" layoutX="335.0" layoutY="116.0" prefHeight="62.0" prefWidth="104.0" text="THU">
-         <font>
-            <Font name="Noto Sans Regular" size="44.0" />
-         </font>
-      </Label>
-      <Label fx:id="dayNoLabelDashboard" layoutX="445.0" layoutY="116.0" prefHeight="62.0" prefWidth="56.0" text="03">
-         <font>
-            <Font name="Noto Sans Regular" size="44.0" />
-         </font>
-      </Label>
-      <Label fx:id="monthLabelDashboard" layoutX="504.0" layoutY="116.0" prefHeight="62.0" prefWidth="104.0" text="OCT">
+      <Label fx:id="dayLabelDashboard" layoutX="335.0" layoutY="116.0" prefHeight="62.0" prefWidth="290.0" text="THU  03  OCT">
          <font>
             <Font name="Noto Sans Regular" size="44.0" />
          </font>
@@ -56,12 +46,7 @@
          </font>
       </Label>
       <Rectangle arcHeight="35.0" arcWidth="35.0" fill="#e8e8e8" height="404.0" layoutX="36.0" layoutY="238.0" stroke="#ab434300" strokeType="INSIDE" width="652.0" />
-      <Label layoutX="441.0" layoutY="171.0" text="Welcome">
-         <font>
-            <Font name="Noto Sans Regular" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="userNameLabelDashboard" layoutX="538.0" layoutY="171.0" text="Username">
+      <Label fx:id="userNameLabelDashboard" layoutX="410.0" layoutY="187.0" prefHeight="29.0" prefWidth="281.0" text="Welcome" textAlignment="RIGHT">
          <font>
             <Font name="Noto Sans Regular" size="20.0" />
          </font>
@@ -189,5 +174,10 @@
          </children>
       </AnchorPane>
       <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
+      <Button fx:id="refreshButtonDashboard" layoutX="-4.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.93" prefHeight="672.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
