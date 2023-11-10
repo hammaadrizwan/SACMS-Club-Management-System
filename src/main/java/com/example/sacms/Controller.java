@@ -61,7 +61,17 @@ public class Controller {
 
     @FXML
     public void onDashboardScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboard.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboardClubAdvisor.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Dashboard");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    @FXML
+    public void onDashboardStudentsAndTeachersScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboardViewStudentsAndTeachers.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Dashboard");
@@ -101,7 +111,7 @@ public class Controller {
 
     @FXML
     public void onReportsScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("reportsView.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("reportsClubAdvisorView.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Reports");
@@ -110,8 +120,29 @@ public class Controller {
         this.stage.setResizable(false);
     }
     @FXML
-    public void onClubsViewScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubsView.fxml"));
+    public void onReportsStudentAndTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("reportsViewStudentAndTeachers.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Reports");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    @FXML
+    public void onClubsViewClubAdvisorScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubsViewClubAdvisor.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Clubs");
+
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    @FXML
+    public void onClubsViewStudentsAndTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubsViewStudentsAndTeachers.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Clubs");
@@ -121,7 +152,17 @@ public class Controller {
     }
     @FXML
     public void onEventsViewScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("eventsView.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("eventsClubAdvisorView.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Events");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    @FXML
+    public void onEventsViewStudentsAndTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("eventsViewStudentsAndTeachers.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Events");
@@ -678,7 +719,7 @@ public class Controller {
                                 if(student.getPassword().equals(passwordInput)){
                                     text = (student.greetUser().toString());
                                     found=true;
-                                    onDashboardScreenButtonClicked(event);
+                                    onDashboardStudentsAndTeachersScreenButtonClicked(event);
                                 }
                             }
                             errorPasswordLoginInput.setText("Incorrect Password");
@@ -719,7 +760,7 @@ public class Controller {
         }
     }
 
-    public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardScreenButtonClicked(event);}
+    public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
     public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
         refreshButtonTeacherPopUp.setOpacity(0.00);
         refreshButtonTeacherPopUp.setDisable(true);
@@ -744,6 +785,48 @@ public class Controller {
         //test
         onTeacherPopUpCloseButtonClicked(event);
     }
+
+    //Clubs View Methods
+    public void onJoinClubsViewOptionClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onLeaveClubsViewOptionClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onJoinClubClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onLeaveClubClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
+
+    }
+
+
+    //Events View Methods
+    public void onCheckInEventsViewOptionClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onCheckOutEventsViewOptionClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onCheckInEventClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onCheckOutEventClicked(ActionEvent event) throws IOException {
+
+    }
+    public void onRefreshEventsViewButtonClicked(ActionEvent event) throws IOException {
+
+    }
+
+
+    //report View Methods
+    public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
+
+    }
+
 
     //Database Creation incase if it doesn't exsist
     public void createTeacherTableOnDatabase() {
