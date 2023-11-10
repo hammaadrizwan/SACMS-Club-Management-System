@@ -18,17 +18,17 @@
             </image>
         </ImageView>
         <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="133.0" text="Button" />
-        <Button fx:id="clubScreenButton" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
+        <Button fx:id="clubScreenButton" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
             <font>
                 <Font name="Noto Sans Regular" size="22.0" />
             </font>
         </Button>
-        <Button fx:id="eventScreenButton" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
+        <Button fx:id="eventScreenButton" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
             <font>
                 <Font name="Noto Sans Regular" size="22.0" />
             </font>
         </Button>
-        <Button fx:id="reportsScreenButton" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsScreenButtonClicked" prefHeight="58.0" prefWidth="133.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
+        <Button fx:id="reportsScreenButton" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsStudentAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="133.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
             <font>
                 <Font name="Noto Sans Bold" size="22.0" />
             </font>
@@ -56,18 +56,13 @@
             </children>
         </AnchorPane>
         <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
-        <Button fx:id="homeScreenButton" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
-        <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
+        <Button fx:id="homeScreenButton" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardStudentsAndTeachersScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
+        <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
         <Label layoutX="27.0" layoutY="133.0" prefHeight="62.0" prefWidth="352.0" text="Monthly Report">
             <font>
                 <Font name="System Bold" size="42.0" />
             </font>
         </Label>
-        <Button layoutX="627.0" layoutY="142.0" mnemonicParsing="false" onAction="#onScheduleEventButtonOneClicked" prefHeight="26.0" prefWidth="233.0" style="-fx-background-color: #000000; -fx-background-radius: 15;" text="DOWNLOAD" textFill="WHITE">
-            <font>
-                <Font name="System Bold" size="20.0" />
-            </font>
-        </Button>
         <TableView layoutX="28.0" layoutY="229.0" prefHeight="422.0" prefWidth="997.0">
             <columns>
                 <TableColumn prefWidth="217.0" text="Club Name" />
@@ -77,5 +72,10 @@
                 <TableColumn prefWidth="164.0" text="Recent Event Attendance" />
             </columns>
         </TableView>
+      <Button fx:id="refreshReportViewButton" layoutX="190.0" layoutY="262.0" mnemonicParsing="false" onAction="#onRefreshReportsViewButtonClicked" prefHeight="346.0" prefWidth="682.0" style="-fx-background-color: white;" text="Refresh Clubs">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

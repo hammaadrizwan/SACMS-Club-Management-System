@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+   <children>
+       <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+           <image>
+               <Image url="@../images/Logo.png" />
+           </image>
+       </ImageView>
+       <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="133.0" text="Button" />
+       <Button fx:id="clubScreenButton" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
+           <font>
+               <Font name="Noto Sans Regular" size="22.0" />
+           </font>
+       </Button>
+       <Button fx:id="eventScreenButton" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
+           <font>
+               <Font name="Noto Sans Bold" size="22.0" />
+           </font>
+       </Button>
+       <Button fx:id="reportsScreenButton" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsStudentAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
+           <font>
+               <Font name="Noto Sans Regular" size="22.0" />
+           </font>
+       </Button>
+       <ImageView fx:id="userIconButtonImage" fitHeight="58.0" fitWidth="56.0" layoutX="966.0" layoutY="25.0" opacity="0.94" pickOnBounds="true" preserveRatio="true">
+           <image>
+               <Image url="@../images/UserIcon.png" />
+           </image>
+       </ImageView>
+       <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="74.0" />
+       <AnchorPane fx:id="userIconButtonOptionPane" layoutX="895.0" layoutY="96.0" opacity="0.0" prefHeight="91.0" prefWidth="113.0">
+           <children>
+               <Button fx:id="exitButton" layoutX="2.0" layoutY="1.0" mnemonicParsing="false" onAction="#onExitButtonClicked" prefHeight="43.0" prefWidth="104.0" style="-fx-background-color: FF9090;" text="EXIT">
+                   <font>
+                       <Font name="Noto Sans Bold" size="20.0" />
+                   </font>
+               </Button>
+               <Rectangle fx:id="todayEventView21" arcHeight="2.0" arcWidth="2.0" height="41.0" layoutX="2.0" layoutY="45.0" stroke="#ab434300" strokeType="INSIDE" width="104.0" />
+               <Label layoutX="9.0" layoutY="51.0" prefHeight="29.0" prefWidth="104.0" text="LOG OUT" textFill="WHITE">
+                   <font>
+                       <Font name="Noto Sans Regular" size="20.0" />
+                   </font>
+               </Label>
+               <Button fx:id="logoutButton" layoutX="5.0" layoutY="48.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" opacity="0.0" prefHeight="41.0" prefWidth="104.0" style="-fx-background-color:FFFFFF;" />
+           </children>
+       </AnchorPane>
+       <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
+      <Button fx:id="homeScreenButton" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardStudentsAndTeachersScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
+      <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
+      <Label layoutX="27.0" layoutY="126.0" prefHeight="62.0" prefWidth="286.0" text="List of Events">
+         <font>
+            <Font name="System Bold" size="42.0" />
+         </font>
+      </Label>
+      <TableView layoutX="27.0" layoutY="219.0" prefHeight="422.0" prefWidth="736.0">
+        <columns>
+          <TableColumn prefWidth="73.0" text="EventID" />
+          <TableColumn prefWidth="223.0" text="Event Name" />
+            <TableColumn prefWidth="107.0" text="Date" />
+            <TableColumn prefWidth="79.0" text="Time" />
+            <TableColumn prefWidth="85.0" text="Location" />
+            <TableColumn prefWidth="167.0" text="Club Name" />
+        </columns>
+      </TableView>
+      <Button layoutX="486.0" layoutY="136.0" mnemonicParsing="false" onAction="#onCheckInEventsViewOptionClicked" prefHeight="44.0" prefWidth="126.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="CHECK IN" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="624.0" layoutY="136.0" mnemonicParsing="false" onAction="#onCheckOutEventsViewOptionClicked" prefHeight="44.0" prefWidth="141.0" style="-fx-background-color: #FB6F6F; -fx-background-radius: 15;" text="CHECK OUT" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="27.0" layoutY="176.0" prefHeight="31.0" prefWidth="385.0" text="Do you want to Check-in/ Check-out an event?">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="checkInEventsPane" layoutX="796.0" layoutY="237.0" opacity="0.0" prefHeight="167.0" prefWidth="221.0">
+         <children>
+            <TextField fx:id="eventIDCheckIn" layoutY="32.0" prefHeight="44.0" prefWidth="221.0" promptText="    Enter the Event ID" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <Button layoutX="39.0" layoutY="109.0" mnemonicParsing="false" onAction="#onCheckInEventClicked" prefHeight="44.0" prefWidth="143.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="CHECK IN" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Label fx:id="errorCheckInEventsLabel" layoutX="29.0" layoutY="76.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="checkOutEventsPane" layoutX="790.0" layoutY="425.0" opacity="0.0" prefHeight="167.0" prefWidth="229.0">
+         <children>
+            <Button layoutX="43.0" layoutY="111.0" mnemonicParsing="false" onAction="#onCheckOutEventClicked" prefHeight="44.0" prefWidth="143.0" style="-fx-background-color: #FB6F6F; -fx-background-radius: 15;" text="CHECK OUT" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <TextField fx:id="eventIDCheckOut" layoutX="3.0" layoutY="28.0" prefHeight="44.0" prefWidth="221.0" promptText="    Enter the Event ID" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
+            <Label fx:id="errorCheckOutEventsLabel" layoutX="32.0" layoutY="74.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Button fx:id="refreshEventsViewButton" layoutX="40.0" layoutY="257.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="378.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
