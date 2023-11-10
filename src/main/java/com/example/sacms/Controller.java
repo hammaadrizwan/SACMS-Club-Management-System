@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -80,9 +81,8 @@ public class Controller {
     }
 
     public void onRefreshDashboardScreenButtonClicked(ActionEvent event) throws IOException {
-
-        LocalDateTime now = LocalDateTime.now();
-        refreshButtonDashboard.setOpacity(0.0);
+        LocalDateTime now = LocalDateTime.now();//gets the current time
+        refreshButtonDashboard.setOpacity(0.0);//hides the refresh button when clicked
         refreshButtonDashboard.setDisable(true);
 
         // Format the date to "THU 03 OCT" using a custom DateTimeFormatter
@@ -653,6 +653,7 @@ public class Controller {
                 sessionUser="ClubAdvisor";
             }else{
                 IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
+                errorPasswordLoginInput.setText("Incorrect ID or Password");
             }
         }else{
             errorIDLoginInput.setText("Example S0001");//display a message to the user to re-enter
@@ -666,6 +667,7 @@ public class Controller {
             passwordLoginInput.clear();//clears the text field
         }
         if (IDValid && passwordValid) {
+            boolean found=false;
             idInput=IDLoginInput.getText().toString();
             passwordInput=passwordLoginInput.getText().toString();
             //read from the database for exsisting records
@@ -675,10 +677,11 @@ public class Controller {
                             if (student.getStudentID().equals(idInput)){
                                 if(student.getPassword().equals(passwordInput)){
                                     text = (student.greetUser().toString());
+                                    found=true;
                                     onDashboardScreenButtonClicked(event);
                                 }
                             }
-                            errorPasswordLoginInput.setText("Incorrect ID or Password");
+                            errorPasswordLoginInput.setText("Incorrect Password");
                         }
             }
             if (sessionUser.equals("Teacher")){
@@ -688,13 +691,12 @@ public class Controller {
                         if (teacher.getStaffID().equals(idInput)){
                             if(teacher.getPassword().equals(passwordInput)){
                                 text=teacher.greetUser();
+                                found=true;
                                 onTeacherPopUScreenButtonClicked(event);
                             }
                             errorPasswordLoginInput.setText("Incorrect ID or Password");
                         }
                     }
-                }else{
-                    errorPasswordLoginInput.setText("Not Available");
                 }
 
             }if (sessionUser.equals("Club Advisor")){
@@ -709,6 +711,9 @@ public class Controller {
                         errorPasswordLoginInput.setText("Incorrect ID or Password");
                     }
                 }*/
+            }
+            if (!found){
+                errorPasswordLoginInput.setText("Not Available");
             }
 
         }
