@@ -1,6 +1,6 @@
 package com.example.sacms;
 
-public abstract class Person {
+public class Person {
     private String firstName;
     private String lastName;
     private String email;
@@ -56,11 +56,11 @@ public abstract class Person {
         this.contactNo = contactNo;
     }
 
-    public abstract String greetUser();
 
-    public void getUser(){
-        System.out.println("Hello "+getFirstName()+" "+getLastName());
+    public String greetUser() {//Polymorphism
+        return "Hi " + getFirstName() +" !";
     }
+
 
     public Person(String firstName, String lastName, String email, String password, String dateOfBirth, String contactNo) {
         this.firstName = firstName;

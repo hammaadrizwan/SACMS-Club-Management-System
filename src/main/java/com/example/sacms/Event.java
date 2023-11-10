@@ -70,7 +70,7 @@ public class Event {
     //public void setEventAttendeesID(ArrayList<String> eventAttendeesID) {
     //    this.eventAttendeesID = eventAttendeesID;
     //}
-    public String generateEEventID() {
+    public String generateEventID() {
         // gotto complete this
         return "";
     }

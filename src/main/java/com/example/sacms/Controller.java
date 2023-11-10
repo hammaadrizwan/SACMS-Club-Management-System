@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Objects;
 
 public class Controller {
     public String sessionUser;
@@ -37,10 +38,14 @@ public class Controller {
     @FXML
     private Label dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorStaffIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorStaffIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
-    private Label userNameLabelDashboard;
-
+    private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
-    private Button refreshButtonDashboard;
+    private Label userNameLabelDashboard;
+    @FXML
+    private Button refreshButtonDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen;
+    ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
+    ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
+
     //SCREEN NAVIGATION METHODS
     @FXML
     public void onSplashScreenButtonClicked(ActionEvent event) throws IOException {//User is required to login inorder to access the app
@@ -63,6 +68,16 @@ public class Controller {
         this.stage.show();
         this.stage.setResizable(false);
     }
+    @FXML
+    public void onTeacherPopUScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("teacherPopUp.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Notifications");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
 
     public void onRefreshDashboardScreenButtonClicked(ActionEvent event) throws IOException {
 
@@ -79,12 +94,9 @@ public class Controller {
         String formattedTime = now.format(timeFormatter);
 
         // Set the formatted date and time to the label
-        System.out.println(getUserLabelDashboardText());
-        userNameLabelDashboard.setText(getUserLabelDashboardText());
         dayLabelDashboard.setText(formattedDate);
         timeLabelDashboard.setText(formattedTime);
-
-
+        userNameLabelDashboard.setText("");
     }
 
     @FXML
@@ -441,9 +453,6 @@ public class Controller {
             errorDateSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
             DOBValid = false;//sets DOBValid validity to be false
             dateSignInStudentInput.clear();//clears the text field
-        } else {
-            char[] date=dateSignInStudentInput.toString().toCharArray();
-
         }
         if (classSignInStudentInput.getText().equals("")) {//checks if the class input field is blank
             errorClassSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
@@ -505,7 +514,7 @@ public class Controller {
         }
     }
 
-    public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws  IOException {
+    public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws IOException, SQLException {
         boolean firstNameValid = true;//initially all input fields are said to be valid
         boolean lastNameValid = true;
         boolean DOBValid = true;
@@ -562,14 +571,6 @@ public class Controller {
             errorDateSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
             DOBValid = false;//sets DOBValid validity to be false
             dateSignInTeacherInput.clear();//clears the text field
-        } else {
-            try {
-                LocalDate.parse(dateSignInTeacherInput.getText());//checks if the DOB is in the correct format
-            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
-                errorDateSignInTeacherInput.setText("Invalid DOB");//if the DOB is invalid, a message will be displayed to the user saying its incorrect
-                DOBValid = false;
-                dateSignInTeacherInput.clear();//clears the text field
-            }
         }
         if (contactNoSignInTeacherInput.getText().equals("")) {//checks if the contact No input field is blank
             errorContactNoSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
@@ -607,21 +608,27 @@ public class Controller {
             errorStaffIDSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
             staffIDValid = false;//sets staffID validity to be false
             staffIDSignInTeacherInput.clear();//clears the text field
+        }if (staffIDSignInTeacherInput.getText().length()>5){
+            staffIDValid=false;
         }
+        for (Teacher teacher:registeredTeachers){//checks if theres an exsisting teacherID already
+            if (teacher.getStaffID().equals(staffIDSignInTeacherInput.getText())){
+                staffIDValid=false;
+                errorStaffIDSignInTeacherInput.setText("Records Exists");
+                break;
+            }
+        }
+
         if (passwordSignInTeacherInput.getText().equals("")) {//checks if the password input field is blank
             errorPasswordSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
             passwordValid = false;//sets password validity to be false
             passwordSignInTeacherInput.clear();//clears the text field
         }
+
         if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && staffIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
-            firstNameSignInTeacherInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            lastNameSignInTeacherInput.clear();
-            dateSignInTeacherInput.clear();
-            contactNoSignInTeacherInput.clear();
-            emailSignInTeacherInput.clear();
-            staffIDSignInTeacherInput.clear();
-            passwordSignInTeacherInput.clear();
-            // Hammad complete this part this is linked with the database u have to store these data there
+            Teacher teacher = new Teacher(firstNameSignInTeacherInput.getText(),lastNameSignInTeacherInput.getText(),emailSignInTeacherInput.getText(),passwordSignInTeacherInput.getText(),dateSignInTeacherInput.getText(),contactNoSignInTeacherInput.getText(),staffIDSignInTeacherInput.getText());
+            teacher.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
+            onDashboardScreenButtonClicked(event);
         }
     }
 
@@ -663,32 +670,33 @@ public class Controller {
             passwordInput=passwordLoginInput.getText().toString();
             //read from the database for exsisting records
             if (sessionUser.equals("Student")){
-                        ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
+                        registeredStudents=Student.loadStudentsFromDatabase();
                         for (Student student:registeredStudents){
                             if (student.getStudentID().equals(idInput)){
                                 if(student.getPassword().equals(passwordInput)){
-                                    this.setUserLabelDashboardText(student.greetUser().toString());
+                                    text = (student.greetUser().toString());
                                     onDashboardScreenButtonClicked(event);
-                                    System.out.println(getUserLabelDashboardText());
-
                                 }
                             }
                             errorPasswordLoginInput.setText("Incorrect ID or Password");
                         }
-
             }
             if (sessionUser.equals("Teacher")){
-                /*ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
-                for (Student student:registeredStudents){
-                    if (student.getStudentID().equals(idInput)){
-                        if(student.getPassword().equals(passwordInput)){
-                            text=student.greetUser();
-                            onDashboardScreenButtonClicked(event);
-
+                registeredTeachers=Teacher.loadTeachersFromDatabase();
+                if (registeredTeachers.size()>0){
+                    for (Teacher teacher:registeredTeachers){
+                        if (teacher.getStaffID().equals(idInput)){
+                            if(teacher.getPassword().equals(passwordInput)){
+                                text=teacher.greetUser();
+                                onTeacherPopUScreenButtonClicked(event);
+                            }
+                            errorPasswordLoginInput.setText("Incorrect ID or Password");
                         }
-                        errorPasswordLoginInput.setText("Incorrect ID or Password");
                     }
-                }*/
+                }else{
+                    errorPasswordLoginInput.setText("Not Available");
+                }
+
             }if (sessionUser.equals("Club Advisor")){
                 /*ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
                 for (Student student:registeredStudents){
@@ -704,16 +712,56 @@ public class Controller {
             }
 
         }
+    }
 
+    public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardScreenButtonClicked(event);}
+    public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+        refreshButtonTeacherPopUp.setOpacity(0.00);
+        refreshButtonTeacherPopUp.setDisable(true);
 
-
+        boolean haveNotification=false;
+        if (!haveNotification){
+            approveButtonTeacherScreen.setOpacity(0.00);
+            approveButtonTeacherScreen.setDisable(true);
+            rejectButtonTeacherScreen.setOpacity(0.00);
+            rejectButtonTeacherScreen.setDisable(true);
+            messageTeacherPopUpScreen.setText("No notifications");
+            studentNameTeacherPopUpScreen.setText("");
+            clubNameTeacherPopUpScreen.setText("");
+        }
 
     }
-    public String getUserLabelDashboardText(){
-        return this.text;
+    public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException {
+        //code to approve the club advisor
+        onTeacherPopUpCloseButtonClicked(event);
     }
-    public void setUserLabelDashboardText(String text){
-        this.text=text;
+    public void onRejectButtonTeacherScreenClicked(ActionEvent event) throws IOException {
+        //test
+        onTeacherPopUpCloseButtonClicked(event);
+    }
+
+    //Database Creation incase if it doesn't exsist
+    public void createTeacherTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query = "CREATE TABLE IF NOT EXISTS Teacher (TeacherID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(255),LastName VARCHAR(255),Email VARCHAR(255),DateOfBirth VARCHAR(255),ContactNumber VARCHAR(255),Password VARCHAR(255));";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Teacher table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void createStudentTableOnDatabase() {
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE IF NOT EXISTS Student (StudentID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(25),LastName VARCHAR(25),Email VARCHAR(30),DateOfBirth VARCHAR(10),Password VARCHAR(255),ContactNo VARCHAR(9),Classroom VARCHAR(6));";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finaly its then executed on the database
+                System.out.println("Student table created");//confirmation message on the GUI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
