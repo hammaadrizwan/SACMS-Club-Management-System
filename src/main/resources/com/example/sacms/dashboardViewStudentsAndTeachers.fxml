@@ -176,7 +176,7 @@
          </children>
       </AnchorPane>
       <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
-      <Button fx:id="refreshButtonDashboard" layoutX="2.0" layoutY="108.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" prefHeight="562.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
+      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" layoutX="2.0" layoutY="108.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="562.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

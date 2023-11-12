@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -23,7 +22,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Controller {
     public String sessionUser;
@@ -33,7 +31,7 @@ public class Controller {
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, staffIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
+    private TextField studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubStaffIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, staffIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
@@ -43,7 +41,12 @@ public class Controller {
     @FXML
     private Label userNameLabelDashboard;
     @FXML
-    private Button refreshButtonDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen;
+    private Button refreshClubsStudentsAndTeachersViewButton, refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsStudentsAndTeachersViewButton;
+    @FXML
+    private AnchorPane checkInEventsPane,checkOutEventsPane;
+    @FXML
+    private AnchorPane joinClubsPane,leaveClubsPane;
+
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
 
@@ -92,8 +95,8 @@ public class Controller {
 
     public void onRefreshDashboardScreenButtonClicked(ActionEvent event) throws IOException {
         LocalDateTime now = LocalDateTime.now();//gets the current time
-        refreshButtonDashboard.setOpacity(0.0);//hides the refresh button when clicked
-        refreshButtonDashboard.setDisable(true);
+        refreshButtonStudentsAndTeachersDashboard.setOpacity(0.0);//hides the refresh button when clicked
+        refreshButtonStudentsAndTeachersDashboard.setDisable(true);
 
         // Format the date to "THU 03 OCT" using a custom DateTimeFormatter
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEE  dd  MMM");
@@ -669,7 +672,7 @@ public class Controller {
         if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && staffIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
             Teacher teacher = new Teacher(firstNameSignInTeacherInput.getText(),lastNameSignInTeacherInput.getText(),emailSignInTeacherInput.getText(),passwordSignInTeacherInput.getText(),dateSignInTeacherInput.getText(),contactNoSignInTeacherInput.getText(),staffIDSignInTeacherInput.getText());
             teacher.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
-            onDashboardScreenButtonClicked(event);
+            onDashboardStudentsAndTeachersScreenButtonClicked(event);
         }
     }
 
@@ -766,6 +769,7 @@ public class Controller {
         refreshButtonTeacherPopUp.setDisable(true);
 
         boolean haveNotification=false;
+
         if (!haveNotification){
             approveButtonTeacherScreen.setOpacity(0.00);
             approveButtonTeacherScreen.setDisable(true);
@@ -788,10 +792,13 @@ public class Controller {
 
     //Clubs View Methods
     public void onJoinClubsViewOptionClicked(ActionEvent event) throws IOException {
+        joinClubsPane.setOpacity(1.0);
+        leaveClubsPane.setOpacity(0.0);
 
     }
     public void onLeaveClubsViewOptionClicked(ActionEvent event) throws IOException {
-
+        joinClubsPane.setOpacity(0.0);
+        leaveClubsPane.setOpacity(1.0);
     }
     public void onJoinClubClicked(ActionEvent event) throws IOException {
 
@@ -799,27 +806,50 @@ public class Controller {
     public void onLeaveClubClicked(ActionEvent event) throws IOException {
 
     }
-    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
+    public void onRefreshClubsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
+        refreshClubsStudentsAndTeachersViewButton.setDisable(true);
+        refreshClubsStudentsAndTeachersViewButton.setOpacity(0.0);
 
     }
+    public void onHideClubsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
+        joinClubsPane.setOpacity(0.00);
+        leaveClubsPane.setOpacity(0.00);
+
+    }
+
 
 
     //Events View Methods
     public void onCheckInEventsViewOptionClicked(ActionEvent event) throws IOException {
+        checkInEventsPane.setOpacity(1.0);
+        checkOutEventsPane.setOpacity(0.0);
 
     }
     public void onCheckOutEventsViewOptionClicked(ActionEvent event) throws IOException {
+        checkOutEventsPane.setOpacity(1.0);
+        checkInEventsPane.setOpacity(0.0);
 
     }
     public void onCheckInEventClicked(ActionEvent event) throws IOException {
+        String studentID=studentIdInputEventsScreen.getText();
+        String eventID = eventIDCheckIn.getText();
 
     }
     public void onCheckOutEventClicked(ActionEvent event) throws IOException {
+        String studentID=studentIdInputEventsScreen.getText();
+        String eventID = eventIDCheckIn.getText();
 
     }
-    public void onRefreshEventsViewButtonClicked(ActionEvent event) throws IOException {
+    public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
+        refreshEventsStudentsAndTeachersViewButton.setDisable(true);
+        refreshEventsStudentsAndTeachersViewButton.setOpacity(0.0);
+    }
+    public void onHideEventsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
+        checkInEventsPane.setOpacity(0.00);
+        checkOutEventsPane.setOpacity(0.00);
 
     }
+
 
 
     //report View Methods
