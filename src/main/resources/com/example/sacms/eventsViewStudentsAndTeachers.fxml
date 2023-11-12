@@ -13,6 +13,7 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
+      <Button fx:id="hideEventOptionsPane" layoutX="473.0" layoutY="124.0" mnemonicParsing="false" onAction="#onHideEventsViewStudentsAndTeachersOptionClicked" opacity="0.0" prefHeight="84.0" prefWidth="297.0" text="Button" />
        <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
            <image>
                <Image url="@../images/Logo.png" />
@@ -64,7 +65,7 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <TableView layoutX="27.0" layoutY="219.0" prefHeight="422.0" prefWidth="736.0">
+      <TableView layoutX="27.0" layoutY="225.0" prefHeight="416.0" prefWidth="736.0">
         <columns>
           <TableColumn prefWidth="73.0" text="EventID" />
           <TableColumn prefWidth="223.0" text="Event Name" />
@@ -89,7 +90,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="checkInEventsPane" layoutX="796.0" layoutY="237.0" opacity="0.0" prefHeight="167.0" prefWidth="221.0">
+      <AnchorPane fx:id="checkInEventsPane" layoutX="794.0" layoutY="299.0" opacity="0.0" prefHeight="155.0" prefWidth="221.0">
          <children>
             <TextField fx:id="eventIDCheckIn" layoutY="32.0" prefHeight="44.0" prefWidth="221.0" promptText="    Enter the Event ID" style="-fx-background-radius: 10;">
                <font>
@@ -101,14 +102,14 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
-            <Label fx:id="errorCheckInEventsLabel" layoutX="29.0" layoutY="76.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
+            <Label fx:id="errorCheckInEventsLabel" layoutX="29.0" layoutY="76.0" opacity="0.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="checkOutEventsPane" layoutX="790.0" layoutY="425.0" opacity="0.0" prefHeight="167.0" prefWidth="229.0">
+      <AnchorPane fx:id="checkOutEventsPane" layoutX="790.0" layoutY="474.0" opacity="0.0" prefHeight="167.0" prefWidth="229.0">
          <children>
             <Button layoutX="43.0" layoutY="111.0" mnemonicParsing="false" onAction="#onCheckOutEventClicked" prefHeight="44.0" prefWidth="143.0" style="-fx-background-color: #FB6F6F; -fx-background-radius: 15;" text="CHECK OUT" textFill="WHITE">
                <font>
@@ -127,10 +128,20 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button fx:id="refreshEventsViewButton" layoutX="40.0" layoutY="257.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="378.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
+      <Button fx:id="refreshEventsStudentsAndTeachersViewButton" layoutX="40.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRefreshEventsViewStudentsAndTeachersButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Button>
+      <TextField fx:id="studentIdInputEventsScreen" layoutX="818.0" layoutY="229.0" prefHeight="44.0" prefWidth="174.0" promptText=" Enter your ID" style="-fx-background-radius: 10; -fx-border-radius: 11;">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Label fx:id="errorStudentIDEventsLabel" layoutX="823.0" layoutY="275.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
