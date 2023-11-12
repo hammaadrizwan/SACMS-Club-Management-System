@@ -46,7 +46,7 @@
                 <Font size="22.0" />
             </font>
         </Label>
-        <TextField fx:id="dateSignInTeacherInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="320.0" promptText="DD/M/YYYY" style="-fx-background-radius: 10;">
+        <TextField fx:id="dateSignInTeacherInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="320.0" promptText="YYYY-MM-DD" style="-fx-background-radius: 10;">
             <font>
                 <Font size="20.0" />
             </font>

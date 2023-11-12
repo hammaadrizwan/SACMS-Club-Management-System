@@ -493,10 +493,18 @@ public class Controller {
                 errorLastNameSignInStudentInput.setText("");
             }
         }
-        if (dateSignInStudentInput.getText().equals("")) {//checks if the DOB input field is blank
+        if (dateSignInStudentInput.getText().equals("")) {//checks if the date input field is blank
             errorDateSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
-            DOBValid = false;//sets DOBValid validity to be false
+            DOBValid = false;//sets date validity to be false
             dateSignInStudentInput.clear();//clears the text field
+        } else {
+            try {
+                LocalDate.parse(dateSignInStudentInput.getText());//checks if the date is in the correct format
+            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
+                errorDateSignInStudentInput.setText("Invalid date");//if the date is invalid, a message will be displayed to the user saying its incorrect
+                DOBValid = false;
+                dateSignInStudentInput.clear();//clears the text field
+            }
         }
         if (classSignInStudentInput.getText().equals("")) {//checks if the class input field is blank
             errorClassSignInStudentInput.setText("Cannot be empty");//display a message to the user to re-enter
@@ -611,10 +619,18 @@ public class Controller {
                 errorLastNameSignInTeacherInput.setText("");
             }
         }
-        if (dateSignInTeacherInput.getText().equals("")) {//checks if the DOB input field is blank
+        if (dateSignInTeacherInput.getText().equals("")) {//checks if the date input field is blank
             errorDateSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
-            DOBValid = false;//sets DOBValid validity to be false
+            DOBValid = false;//sets date validity to be false
             dateSignInTeacherInput.clear();//clears the text field
+        } else {
+            try {
+                LocalDate.parse(dateSignInTeacherInput.getText());//checks if the date is in the correct format
+            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
+                errorDateSignInTeacherInput.setText("Invalid date");//if the date is invalid, a message will be displayed to the user saying its incorrect
+                DOBValid = false;
+                dateSignInTeacherInput.clear();//clears the text field
+            }
         }
         if (contactNoSignInTeacherInput.getText().equals("")) {//checks if the contact No input field is blank
             errorContactNoSignInTeacherInput.setText("Cannot be empty");//display a message to the user to re-enter
