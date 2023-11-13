@@ -2,12 +2,14 @@ package com.example.sacms;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ClubAdvisor{
+    private String clubAdvisorID;
     private String studentID;
     private String clubID;
-    private String clubAdvisorID;
     private String position;
 
     public String getStudentID() {
@@ -38,16 +40,21 @@ public class ClubAdvisor{
         this.position = position;
     }
 
-    public ClubAdvisor(String studentID, String position, String clubID){
+    public ClubAdvisor(String studentID, String clubID, String position){
         this.studentID=studentID;
-        this.clubAdvisorID=null;
+        this.clubAdvisorID=generateClubAdvisorID();
         this.position = position;
         this.clubID = clubID;
-
     }
-    public void createClubAdvisorTableOnDatabase() {
+    public ClubAdvisor(String clubAdvisorID,String studentID, String clubID,String position){
+        this.studentID=studentID;
+        this.clubAdvisorID=clubAdvisorID;
+        this.position = position;
+        this.clubID = clubID;
+    }
+    public static void createClubAdvisorTableOnDatabase() {
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query ="CREATE TABLE ClubAdvisor ("+
+            String query ="CREATE TABLE IF NOT EXISTS ClubAdvisor ("+
                     "    ClubAdvisorID VARCHAR(5) PRIMARY KEY," +
                     "    StudentID VARCHAR(5)," +
                     "    ClubID VARCHAR(5)," +
@@ -55,11 +62,36 @@ public class ClubAdvisor{
                     "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)," +
                     "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID));";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
-                preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Club Advisor table created");//confirmation message on the GUI
+                preparedStatement.executeUpdate();// finaly its then executed on the databas
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the student database
+        createClubAdvisorTableOnDatabase();
+        ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM clubAdvisor");
+             ResultSet results = preparedStatement.executeQuery()) {
+
+            while (results.next()) {
+                ClubAdvisor clubAdvisor = new ClubAdvisor(results.getString("ClubAdvisorID"),results.getString("StudentID"),results.getString("ClubID"),results.getString("Position"));
+                clubAdvisors.add(clubAdvisor);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubAdvisors;
+    }
+
+    public String generateClubAdvisorID() {
+        ArrayList<ClubAdvisor> clubAdvisors = loadClubAdvisorsFromDatabase();
+        int noOfClubAdvisors = clubAdvisors.size();
+        String generatedClubAdvisorID = "CA00"+ Integer.toString(Character.getNumericValue(clubAdvisors.get(noOfClubAdvisors).clubID.toCharArray()[4])+1);
+        return generatedClubAdvisorID;
+    }
+
 }

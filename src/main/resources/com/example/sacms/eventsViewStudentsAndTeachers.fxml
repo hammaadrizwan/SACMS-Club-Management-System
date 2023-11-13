@@ -128,7 +128,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button fx:id="refreshEventsStudentsAndTeachersViewButton" layoutX="40.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRefreshEventsViewStudentsAndTeachersButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
+      <Button fx:id="refreshEventsStudentsAndTeachersViewButton" layoutX="40.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRefreshEventsViewStudentsAndTeachersButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Events">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

@@ -49,6 +49,7 @@ public class Controller {
 
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
+    ArrayList<ClubAdvisor> registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -230,7 +231,7 @@ public class Controller {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInTeacher.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
-        this.stage.setTitle("Club Advisor Sign-In");
+        this.stage.setTitle("Teacher Sign-In");
         this.stage.setScene(this.scene);
         this.stage.show();
         this.stage.setResizable(false);
@@ -415,46 +416,13 @@ public class Controller {
     }
 
     public void onLogInButtonClicked(ActionEvent event) throws  IOException {
-//        boolean IDValid = true;//initially all input fields are said to be valid
-//        boolean passwordValid = true;
-//        String idInput = null;
-//        String passwordInput=null;
-//
-//        errorIDLoginInput.setText("");//all the error labels are made invisible at the start of the validation
-//        errorPasswordLoginInput.setText("");
-//        if (IDLoginInput.getText().equals("")) {//checks if the ID input field is blank
-//            errorIDLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
-//            IDValid = false;//sets ID validity to be false
-//            IDLoginInput.clear();//clears the text field
-//        }else if (IDLoginInput.getText().toCharArray().length>0 && IDLoginInput.getText().toCharArray().length<=5) {//checks if the ID input field is more than 5 digits
-//            if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='S'){
-//                sessionUser="Student";
-//            }else if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='T'){
-//                sessionUser="Teacher";
-//            }else if (IDLoginInput.getText().toUpperCase().toCharArray()[0]=='C' && IDLoginInput.getText().toUpperCase().toCharArray()[1]=='A'){
-//                sessionUser="ClubAdvisor";
-//            }else{
-//                IDValid=false;//incase if its either student/teacher or clubadvisor id they are reffering to id will be invalid
-//                errorPasswordLoginInput.setText("Incorrect ID or Password");
-//            }
-//        }else{
-//            errorIDLoginInput.setText("Example S0001");//display a message to the user to re-enter
-//            IDValid = false;//sets ID validity to be false
-//            IDLoginInput.clear();//clears the text field
-//        }
-//
-//        if (passwordLoginInput.getText().equals("")) {//checks if the password input field is blank
-//            errorPasswordLoginInput.setText("Cannot be empty");//display a message to the user to re-enter
-//            passwordValid = false;//sets password validity to be false
-//            passwordLoginInput.clear();//clears the text field
-//        }
         boolean IDValid;
         boolean passwordValid;
         String idInput = null;
         String passwordInput=null;
         IDValid = checkID(IDLoginInput, errorIDLoginInput);
         if (IDValid) {
-            if (sessionUser.equals("Club") || sessionUser.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ parent or teacher ID
+            if (sessionUser.equals("Club") || sessionUser.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ ClubAdvisor or teacher ID
                 errorIDLoginInput.setText("Invalid ID");
                 IDValid = false;
             }
@@ -493,18 +461,24 @@ public class Controller {
                     }
                 }
 
-            }if (sessionUser.equals("Club Advisor")){
-                /*ArrayList<Student> registeredStudents=Student.loadStudentDataFromDatabase();
-                for (Student student:registeredStudents){
-                    if (student.getStudentID().equals(idInput)){
-                        if(student.getPassword().equals(passwordInput)){
-                            text=student.greetUser();
-                            onDashboardScreenButtonClicked(event);
+            }
+            if (sessionUser.equals("ClubAdvisor")){
+                registeredStudents=Student.loadStudentsFromDatabase();
+                registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+                if (registeredClubAdvisors.size()>0){
+                    for (ClubAdvisor clubAdvisor:registeredClubAdvisors) {
+                        if (clubAdvisor.getClubAdvisorID().equals(idInput)){
+                            String studentId=clubAdvisor.getStudentID();
+                            for (Student student:registeredStudents) {
+                                if (student.getStudentID().equals(studentId) && student.getPassword().equals(passwordInput)){
+                                    found=true;
+                                    onDashboardScreenButtonClicked(event);
+                                }
 
+                            }
                         }
-                        errorPasswordLoginInput.setText("Incorrect ID or Password");
                     }
-                }*/
+                }
             }
             if (!found){
                 errorPasswordLoginInput.setText("Not Available");
@@ -601,37 +575,12 @@ public class Controller {
     }
 
 
-
     //report View Methods
     public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
 
     }
 
-
-    //Database Creation incase if it doesn't exsist
-    public void createTeacherTableOnDatabase() {
-        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query = "CREATE TABLE IF NOT EXISTS Teacher (TeacherID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(255),LastName VARCHAR(255),Email VARCHAR(255),DateOfBirth VARCHAR(255),ContactNumber VARCHAR(255),Password VARCHAR(255));";// same SQL query is given here as string
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
-                preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Teacher table created");//confirmation message on the GUI
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void createStudentTableOnDatabase() {
-        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query ="CREATE TABLE IF NOT EXISTS Student (StudentID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(25),LastName VARCHAR(25),Email VARCHAR(30),DateOfBirth VARCHAR(10),Password VARCHAR(255),ContactNo VARCHAR(9),Classroom VARCHAR(6));";// same SQL query is given here as string
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
-                preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Student table created");//confirmation message on the GUI
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    // Validation methods
     public boolean checkName(TextField textField, Label label) {
         boolean nameValid = true;
         label.setText("");//the error label made invisible at the start of the validation

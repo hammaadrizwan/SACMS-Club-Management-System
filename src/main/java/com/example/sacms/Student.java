@@ -12,6 +12,8 @@ public class Student extends Person { // inherits the behavoirs and attributes f
     private ArrayList<Club> clubs;//Due to Association we gotto add them here
     private ArrayList<Event> events;
 
+
+
     public String getStudentID() {
         return studentID;
     }
