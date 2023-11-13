@@ -41,11 +41,11 @@ public class Controller {
     @FXML
     private Label userNameLabelDashboard;
     @FXML
-    private Button refreshClubsStudentsAndTeachersViewButton, refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsStudentsAndTeachersViewButton;
+    private Button refreshEventsViewClubAdvisorButton,refreshClubsViewClubAdvisorButton,refreshClubsStudentsAndTeachersViewButton, refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsStudentsAndTeachersViewButton;
     @FXML
-    private AnchorPane checkInEventsPane,checkOutEventsPane;
+    private AnchorPane checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
-    private AnchorPane joinClubsPane,leaveClubsPane;
+    private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane;
 
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
@@ -543,7 +543,7 @@ public class Controller {
 
 
 
-    //Events View Methods
+    //Events View Methods Students and Teachers
     public void onCheckInEventsViewOptionClicked(ActionEvent event) throws IOException {
         checkInEventsPane.setOpacity(1.0);
         checkOutEventsPane.setOpacity(0.0);
@@ -574,6 +574,45 @@ public class Controller {
 
     }
 
+    //Events View Methods Club Advisors
+    public void onEditEventsViewOptionClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("editEventScreen.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Edit Event Screen");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+
+    public void onDeleteEventsViewOptionClicked(ActionEvent event) throws IOException {
+        deleteEventsPane.setOpacity(1.0);
+    }
+
+    public void onDeleteButtonClickedEventsScreen(ActionEvent event) throws IOException {
+
+    }
+    public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
+        refreshEventsViewClubAdvisorButton.setDisable(true);
+        refreshEventsViewClubAdvisorButton.setOpacity(0.0);
+    }
+
+    //clubs View Methods Club Advisors
+    public void onDeleteClubsViewOptionClicked(ActionEvent event) throws IOException {
+        deleteClubsPane.setOpacity(1.0);
+    }
+
+    public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException {
+
+    }
+    public void onRefreshClubsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
+        refreshClubsViewClubAdvisorButton.setDisable(true);
+        refreshClubsViewClubAdvisorButton.setOpacity(0.0);
+    }
+
+    public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
+
+    }
 
     //report View Methods
     public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
@@ -719,6 +758,7 @@ public class Controller {
     }
 
     public boolean checkDate(TextField textField, Label label) {
+        // split based on the  (-). if
         boolean dateValid = true;
         label.setText("");//the error label made invisible at the start of the validation
         if (textField.getText().equals("")) {//checks if the date input field is blank

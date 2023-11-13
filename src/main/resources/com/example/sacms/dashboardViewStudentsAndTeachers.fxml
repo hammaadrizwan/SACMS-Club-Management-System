@@ -37,7 +37,7 @@
          </image>
       </ImageView>
       <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="74.0" />
-      <Label fx:id="dayLabelDashboard" layoutX="318.0" layoutY="116.0" prefHeight="62.0" prefWidth="303.0" text="THU  03  OCT">
+      <Label fx:id="dayLabelDashboard" layoutX="309.0" layoutY="116.0" prefHeight="62.0" prefWidth="328.0" text="THU  03  OCT">
          <font>
             <Font name="Noto Sans Regular" size="44.0" />
          </font>
@@ -176,7 +176,7 @@
          </children>
       </AnchorPane>
       <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
-      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" layoutX="2.0" layoutY="92.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="580.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
+      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" layoutX="2.0" layoutY="82.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="590.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

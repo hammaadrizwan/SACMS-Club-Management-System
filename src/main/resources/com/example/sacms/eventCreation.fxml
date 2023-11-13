@@ -7,10 +7,55 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
+      <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Logo.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="133.0" text="Button" />
+      <Button fx:id="clubScreenButton" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewClubAdvisorScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
+         <font>
+            <Font name="Noto Sans " size="22.0" />
+         </font>
+      </Button>
+      <Button fx:id="eventScreenButton" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
+         <font>
+            <Font name="Noto Sans Bold" size="22.0" />
+         </font>
+      </Button>
+      <Button fx:id="reportsScreenButton" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsScreenButtonClicked" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
+         <font>
+            <Font name="Noto Sans Regular" size="22.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="userIconButtonImage" fitHeight="58.0" fitWidth="56.0" layoutX="966.0" layoutY="25.0" opacity="0.94" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/UserIcon.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="74.0" />
+      <AnchorPane fx:id="userIconButtonOptionPane" layoutX="895.0" layoutY="96.0" opacity="0.0" prefHeight="91.0" prefWidth="113.0">
+         <children>
+            <Button fx:id="exitButton" layoutX="2.0" layoutY="1.0" mnemonicParsing="false" onAction="#onExitButtonClicked" prefHeight="43.0" prefWidth="104.0" style="-fx-background-color: FF9090;" text="EXIT">
+               <font>
+                  <Font name="Noto Sans Bold" size="20.0" />
+               </font>
+            </Button>
+            <Rectangle fx:id="todayEventView21" arcHeight="2.0" arcWidth="2.0" height="41.0" layoutX="2.0" layoutY="45.0" stroke="#ab434300" strokeType="INSIDE" width="104.0" />
+            <Label layoutX="9.0" layoutY="51.0" prefHeight="29.0" prefWidth="104.0" text="LOG OUT" textFill="WHITE">
+               <font>
+                  <Font name="Noto Sans Regular" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="logoutButton" layoutX="5.0" layoutY="48.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" opacity="0.0" prefHeight="41.0" prefWidth="104.0" style="-fx-background-color:FFFFFF;" />
+         </children>
+      </AnchorPane>
+      <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
       <Label layoutX="28.0" layoutY="85.0" prefHeight="62.0" prefWidth="376.0" text="Schedule an Event">
          <font>
             <Font name="System Bold" size="42.0" />
@@ -41,12 +86,12 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="eventTimeEventCreationInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="249.0" promptText="Time" style="-fx-background-radius: 10;">
+      <TextField fx:id="eventTimeEventCreationInput" layoutX="28.0" layoutY="324.0" prefHeight="43.0" prefWidth="249.0" promptText="HH:MM" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <Label layoutX="304.0" layoutY="292.0" text="Organising Club ID">
+      <Label layoutX="304.0" layoutY="292.0" prefHeight="32.0" prefWidth="206.0" text="Club Organsier ID">
          <font>
             <Font size="22.0" />
          </font>
@@ -71,16 +116,10 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <TextArea fx:id="eventDescriptionEventCreationInput" layoutX="28.0" layoutY="424.0" prefHeight="97.0" prefWidth="554.0" promptText="Explain about the event/meeting or activity" style="-fx-background-radius: 10;">
+      <TextArea fx:id="eventDescriptionEventCreationInput" layoutX="28.0" layoutY="424.0" prefHeight="97.0" prefWidth="554.0" promptText="Explain about the event/meeting or activity">
          <font>
             <Font size="20.0" />
          </font></TextArea>
-      <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/Logo.png" />
-         </image>
-      </ImageView>
-      <Button fx:id="homeScreenButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
       <Label fx:id="errorEventNameEventCreationInput" layoutX="28.0" layoutY="271.0" prefHeight="18.0" prefWidth="298.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
