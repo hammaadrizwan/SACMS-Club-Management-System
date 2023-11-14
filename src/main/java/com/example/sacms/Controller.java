@@ -383,6 +383,7 @@ public class Controller {
             contactNoSignInStudentInput.clear();
             passwordSignInStudentInput.clear();
             studentIDSignInStudentInput.clear();
+            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),dateSignInStudentInput.getText(), classSignInStudentInput.getText(), emailSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), passwordSignInStudentInput.getText(),studentIDSignInStudentInput.getText());
             // Hammad complete this part this is linked with the database u have to store these data there
         }
     }
