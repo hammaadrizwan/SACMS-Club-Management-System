@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -31,11 +32,11 @@ public class Controller {
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubTeacherIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
+    private TextField clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubTeacherIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
@@ -50,6 +51,9 @@ public class Controller {
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
     ArrayList<ClubAdvisor> registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+    ArrayList<Club> registeredClubs =Club.loadClubsFromDatabase();
+
+
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -375,16 +379,9 @@ public class Controller {
             }
         }
         if (firstNameValid && lastNameValid && DOBValid && classValid && emailValid && contactNoValid && passwordValid && studentIDValid) {//if the above inputs done by the user is valid the data will be stored
-            firstNameSignInStudentInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            lastNameSignInStudentInput.clear();
-            dateSignInStudentInput.clear();
-            classSignInStudentInput.clear();
-            emailSignInStudentInput.clear();
-            contactNoSignInStudentInput.clear();
-            passwordSignInStudentInput.clear();
-            studentIDSignInStudentInput.clear();
-            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),dateSignInStudentInput.getText(), classSignInStudentInput.getText(), emailSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), passwordSignInStudentInput.getText(),studentIDSignInStudentInput.getText());
-            // Hammad complete this part this is linked with the database u have to store these data there
+            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),emailSignInStudentInput.getText(), passwordSignInStudentInput.getText(), dateSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), studentIDSignInStudentInput.getText(),classSignInStudentInput.getText());
+            student.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
+            onDashboardStudentsAndTeachersScreenButtonClicked(event);
         }
     }
 
@@ -526,11 +523,73 @@ public class Controller {
         leaveClubsPane.setOpacity(1.0);
     }
     public void onJoinClubClicked(ActionEvent event) throws IOException {
+        //RAHMY your code for validations needs to be done here
+        String studentID = studentIdInputClubsScreen.getText();
+        String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
+        registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
+        boolean studentAvailable = false;
+        boolean clubFound = false;
 
+        for (Club club : registeredClubs) {
+            if (club.getClubID().equals(clubID)) {
+                clubFound = true;//check if teh clubID is an exxsisting one so we can then proceed
+                ArrayList<Student> availableStudentsAtClub = club.loadStudentsOfClub(clubID);//returns the list of students in that club
+
+                for (Student student : availableStudentsAtClub) {//checks in that list if the student is available then we can say they are already in it
+                    if (student.getStudentID().equals(studentID)) {
+                        studentAvailable = true;
+                        errorJoinClubsLabel.setText("Already Joined");
+                        break; // No need to continue checking
+                    }
+                }
+
+                if (!studentAvailable) {
+                    for (Student student : registeredStudents) {
+                        if (student.getStudentID().equals(studentID)) {//else we get their records and then add it to the club Class
+                            club.addStudent(student);
+                            errorJoinClubsLabel.setText("Joined successfully");
+                            errorJoinClubsLabel.setTextFill(Paint.valueOf("Green"));
+                            break; // No need to continue checking
+                        }
+                    }
+                }
+
+                // No need to check other clubs once a match is found
+                break;
+            }
+        }
+
+        if (!clubFound) {
+            errorJoinClubsLabel.setText("Club Not Available");
+        }
     }
     public void onLeaveClubClicked(ActionEvent event) throws IOException {
+        //RAHMY your code for validations needs to be done here
+        String studentID = studentIdInputClubsScreen.getText();
+        String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
+        registeredStudents=Student.loadStudentsFromDatabase();
+        boolean studentAvailable=false;
+        for (Club club : registeredClubs) {//if leave then the oppposite of join
+            if (club.getClubID().equals(clubID)){
+                for ( Student student:club.loadStudentsOfClub(clubID)){
+                    if (student.getStudentID().equals(studentID)){
+                        club.removeStudent(student);
+                        studentAvailable=true;
+                        break;
+                    }
+                }
+                if (!studentAvailable){
+                    errorleaveClubsLabel1.setText("Not a member of this club");
+                    break;
 
+                }
+            }
+            else{
+                errorleaveClubsLabel1.setText("Club Not Available");
+            }
+        }
     }
+
     public void onRefreshClubsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
         refreshClubsStudentsAndTeachersViewButton.setDisable(true);
         refreshClubsStudentsAndTeachersViewButton.setOpacity(0.0);

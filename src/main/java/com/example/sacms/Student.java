@@ -9,10 +9,6 @@ import java.util.ArrayList;
 public class Student extends Person { // inherits the behavoirs and attributes from the Person class
     private String studentID;
     private String classroom;
-    private ArrayList<Club> clubs;//Due to Association we gotto add them here
-    private ArrayList<Event> events;
-
-
 
     public String getStudentID() {
         return studentID;
@@ -62,18 +58,28 @@ public class Student extends Person { // inherits the behavoirs and attributes f
         return students;
     }
 
-    public void addEvent(Event event){
-        events.add(event);
-    }//to remove inconsistency we add it from here
+    public void insertToDatabase() {
+        try (Connection connection = Database.getConnection()){
+            String insertEmployeeQuery = "INSERT INTO Student (StudentID, FirstName, LastName, Email, DateOfBirth, Password, ContactNo, Classroom) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(insertEmployeeQuery)) {
+                statement.setString(1, getStudentID());
+                statement.setString(2, getFirstName());
+                statement.setString(3, getLastName());
+                statement.setString(4, getEmail());
+                statement.setString(5, getDateOfBirth());
+                statement.setString(6, getPassword());
+                statement.setString(7, getContactNo());
+                statement.setString(8, getClassroom());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-    public void addCLub(Club club){
-        clubs.add(club);
     }
-    public ArrayList<Club> getCLubs(){
-        return clubs;
-    }//returns all the clubs
 
 
+    //inserts into the database
     @Override// own implementation of person class get behaviour method
     public String greetUser() {
         return("Hello "+getFirstName()+" !");
