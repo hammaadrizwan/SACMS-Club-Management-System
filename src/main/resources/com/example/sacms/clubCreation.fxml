@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.shape.Rectangle?>
 <AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
       <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
@@ -66,7 +67,7 @@
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="clubAdvisorIDInputClubCreationScreen" layoutX="397.0" layoutY="211.0" prefHeight="26.0" prefWidth="261.0" promptText="Club advisor ID" style="-fx-background-radius: 10;">
+      <TextField fx:id="clubAdvisorIDInputClubCreationScreen" layoutX="397.0" layoutY="211.0" prefHeight="44.0" prefWidth="284.0" promptText="Club advisor ID" style="-fx-background-radius: 10;">
          <font>
             <Font size="20.0" />
          </font>
@@ -105,11 +106,6 @@
       <TextArea fx:id="clubDescriptionInputClubCreationScreen" layoutX="52.0" layoutY="333.0" prefHeight="214.0" prefWidth="322.0" style="-fx-border-radius: 20;" />
       <Label layoutX="63.0" layoutY="255.0" textFill="RED" />
       <Label layoutX="404.0" layoutY="255.0" textFill="RED" />
-      <TextField fx:id="clubTeacherIDInputClubCreationScreen" layoutX="395.0" layoutY="331.0" prefHeight="44.0" prefWidth="202.0" promptText="Teacher ID" style="-fx-background-radius: 10;">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextField>
       <Label layoutX="395.0" layoutY="292.0" text="Choose a Teacher Incharge">
          <font>
             <Font size="22.0" />
@@ -135,14 +131,15 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="604.0" layoutY="331.0" mnemonicParsing="false" onAction="#onLoadStaffIDClubScreationScreenClicked" prefHeight="44.0" prefWidth="56.0" style="-fx-background-color: black; -fx-background-radius: 10;" textFill="#dddddd">
+      <Button layoutX="604.0" layoutY="331.0" mnemonicParsing="false" onAction="#onLoadStaffIDClubScreationScreenClicked" prefHeight="42.0" prefWidth="74.0" style="-fx-background-color: black; -fx-background-radius: 10;" textFill="#dddddd">
          <graphic>
-            <ImageView fitHeight="34.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/loadIcon.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
+      <ChoiceBox fx:id="clubTeacherIDInputClubCreationScreen" layoutX="397.0" layoutY="331.0" prefHeight="41.0" prefWidth="202.0" />
    </children>
 </AnchorPane>

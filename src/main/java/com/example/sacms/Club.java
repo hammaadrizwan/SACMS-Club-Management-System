@@ -11,7 +11,7 @@ public class Club {
     private String clubName;
     private String clubDescription;
     private String clubID;
-    private String TeacherID;
+    private String teacherIncharge;
     private ArrayList<Event> events;
     private ArrayList<Student> students;
     /*
@@ -21,25 +21,26 @@ public class Club {
     private ArrayList<Event> listOfEventDetails;
     */
 
-    Club(String clubID,String clubName, String clubDescription, String TeacherID){//To get it from the database
+    Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
         this.clubID=clubID;
         this.clubDescription=clubDescription;
         this.clubName=clubName;
-        this.TeacherID=TeacherID;
+        this.teacherIncharge = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
         //this.events=loadStudentsOfClub(clubID);
 
     }
-    Club(String clubName, String clubDescription, String TeacherID){//if we create a new club its automatically set
-        this.clubID=generateClubID();
-        this.clubDescription=clubDescription;
-        this.clubName=clubName;
-        this.TeacherID=TeacherID;
-    }
-
 
     public String getClubName() {
         return clubName;
+    }
+
+    public String getTeacherIncharge() {
+        return teacherIncharge;
+    }
+
+    public void setTeacherIncharge(String teacherIncharge) {
+        this.teacherIncharge = teacherIncharge;
     }
 
     public String getClubDescription() {
@@ -63,11 +64,16 @@ public class Club {
 
     }
 
-    public String generateClubID() {
-        ArrayList<Club> clubs = loadClubsFromDatabase();
-        int noOfClubs = clubs.size();
-        String generatedClubID = "C000"+ Integer.toString(Character.getNumericValue(clubs.get(noOfClubs).clubID.toCharArray()[4])+1);
-        return generatedClubID;
+    public static String generateClubID() {
+        int idLength = 4;//Mmebreshoip ID of 10 digits
+        StringBuilder stringBuilder = new StringBuilder("C");
+        Random random = new Random();
+        for (int i = 0; i < idLength; i++) {
+            int digit = random.nextInt(10);
+            stringBuilder.append(digit);
+        }
+
+        return stringBuilder.toString();
     }
 
     public static void createClubTableOnDatabase() {
@@ -218,6 +224,51 @@ public class Club {
         }
         return students; // return the list of students
     }
+
+    public void insertIntoClubs(){
+        String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
+            preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(2,getClubName());
+            preparedStatement.setString(3,getClubDescription());
+            preparedStatement.setString(4, getTeacherIncharge());
+
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteClub(String clubID){
+        String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";
+        String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
+        String deleteClubQuery = "Delete from club where clubid = ?;";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedDeleteClubAdvisorQueryStatement = connection.prepareStatement(deleteClubAdvisorQuery);
+             PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteClubMembershipQuery);
+             PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteClubQuery)) {
+
+            connection.setAutoCommit(false);
+
+            preparedDeleteClubAdvisorQueryStatement.setString(1,clubID);
+            preparedDeleteClubAdvisorQueryStatement.executeUpdate();
+
+            preparedDeleteClubMembershipQueryStatement.setString(1,clubID);
+            preparedDeleteClubMembershipQueryStatement.executeUpdate();
+
+            preparedDeleteClubQueryStatement.setString(1,clubID);
+            preparedDeleteClubQueryStatement.executeUpdate();
+
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 /*
     public void saveToDatabase(Connection connection) throws SQLException {

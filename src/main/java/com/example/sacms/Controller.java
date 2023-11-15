@@ -1,15 +1,15 @@
 package com.example.sacms;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -32,21 +32,36 @@ public class Controller {
     @FXML
     private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, clubTeacherIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput, eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput;
+    private TextField clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
-    private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
+    private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput;
     @FXML
-    private Label errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput, errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput;
+    private Label errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
     private Label userNameLabelDashboard;
     @FXML
-    private Button refreshEventsViewClubAdvisorButton,refreshClubsViewClubAdvisorButton,refreshClubsStudentsAndTeachersViewButton, refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsStudentsAndTeachersViewButton;
+    private Button refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
     @FXML
     private AnchorPane checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
     private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane;
+    @FXML
+    private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
+
+    @FXML
+    private TableView<Club> clubsViewTable;
+    @FXML
+    private TableColumn<Club, String> clubIDColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> clubNameColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> clubDescriptionColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> teacherInchargeColumnClubTable;
+
+
 
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
@@ -268,36 +283,108 @@ public class Controller {
 
     //Club Creation SCREEN
     public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException {
-        //displaylist of staffa avilable for a club incharge role
+        registeredTeachers = Teacher.loadTeachersFromDatabase();
+        registeredClubs = Club.loadClubsFromDatabase();
+        ArrayList<String> teacherIDs = new ArrayList<>();
+        for (Teacher teacher : registeredTeachers) {
+            boolean teacherExists = false;
+
+            for (Club club : registeredClubs) {
+                if (club.getTeacherIncharge().equals(teacher.getStaffID())) {
+                    teacherExists = true;
+                    break; // No need to continue checking once we find a match
+                }
+            }
+
+            if (!teacherExists) {
+                teacherIDs.add(teacher.getStaffID());
+            }
+        }
+        for (String teacher:teacherIDs){
+            clubTeacherIDInputClubCreationScreen.getItems().add(teacher);
+        }
+        clubTeacherIDInputClubCreationScreen.setValue("Please Select");
+
     }
 
     public void onCreateClubButtonTwoClicked (ActionEvent event) throws IOException {
         boolean clubNameValid;
         boolean clubAdvisorIDValid;
         boolean clubDescriptionValid;
-        boolean teacherIDValid;
+        boolean teacherIDValid = false;
+
         clubNameValid = checkName(clubNameInputClubCreationScreen, errorClubNameInputClubCreationScreen);
         clubAdvisorIDValid = checkID(clubAdvisorIDInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen);
+        if (clubTeacherIDInputClubCreationScreen.getValue() != null && !clubTeacherIDInputClubCreationScreen.getValue().equals("Please Select")) {
+            teacherIDValid = true;
+            errorTeacherIDInputClubCreationScreen.setText("");
+        } else {
+            errorTeacherIDInputClubCreationScreen.setText("Please Select a Teacher");
+        }
+
+
         if (clubAdvisorIDValid) {
             if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a clubAdvisorID or not
                 errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
                 clubAdvisorIDValid = false;
             }
         }
-        clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
-        teacherIDValid = checkID(clubTeacherIDInputClubCreationScreen, errorTeacherIDInputClubCreationScreen);
-        if (teacherIDValid) {
-            if (!sessionUser.equals("Teacher")) {//To check whether the user has entered a teacherID or not
-                errorTeacherIDInputClubCreationScreen.setText("Invalid ID");
-                teacherIDValid = false;
+        for (Club club:registeredClubs){
+            if (club.getClubName().equals(clubNameInputClubCreationScreen.getText())){
+                errorClubNameInputClubCreationScreen.setText("There Exists a Club");
             }
         }
+        clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
+        //teacherIDValid = checkID(clubTeacherIDInputClubCreationScreen, errorTeacherIDInputClubCreationScreen);
         if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
-            clubNameInputClubCreationScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            clubAdvisorIDInputClubCreationScreen.clear();
+            System.out.println("Creating Club");
+            String clubName = clubNameInputClubCreationScreen.getText();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+            String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
+            String clubDescription = clubDescriptionInputClubCreationScreen.getText();
+            String clubTeacherID = clubTeacherIDInputClubCreationScreen.getValue();
+            String clubID;
+
+            ArrayList registeredClubsID = new ArrayList<>();
+            for (Club club:registeredClubs){
+                registeredClubsID.add(club.getClubID());
+            }
+            do {
+                clubID = Club.generateClubID();//
+            } while (registeredClubsID.contains(clubID));
+            System.out.println("Club ID Generated");
+            Club club = new Club(clubID,clubName,clubDescription,clubTeacherID);//updated the club table
+            club.insertIntoClubs();
+            System.out.println("Club Created");
+            //update the clubAdvisor Table
+            ArrayList registeredClubsAdvisorIDs = new ArrayList<>();
+            String newClubAdvisorID;
+            for (ClubAdvisor clubAdvisor:registeredClubAdvisors){
+                registeredClubsAdvisorIDs.add(clubAdvisor.getClubAdvisorID());
+            }
+            do {
+                newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();//
+                System.out.println("ClubAdvisor ID Generated");
+            } while (registeredClubsAdvisorIDs.contains(newClubAdvisorID));
+
+            String existingStudentID = "";
+            for (ClubAdvisor clubAdvisor: registeredClubAdvisors) {
+                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)){
+                    for (Student student: registeredStudents) {
+                        if (clubAdvisor.getStudentID().equals(student.getStudentID())){
+                            existingStudentID=student.getStudentID();
+                            System.out.println("ClubAdvisor Found");
+                        }
+                    }
+                }else{
+                    System.out.println("No Student found");
+                }
+            }
+            ClubAdvisor newClubAdvisor = new ClubAdvisor(newClubAdvisorID,existingStudentID,clubID,"Founder Member");
+            newClubAdvisor.insertIntoClubAdvisorTable();
+            System.out.println("ClubAdvisor Created");
+            clubNameInputClubCreationScreen.clear();
             clubDescriptionInputClubCreationScreen.clear();
-            clubTeacherIDInputClubCreationScreen.clear();
-            // Hammad complete this part this is linked with the database u have to store these data there
+            clubAdvisorIDInputClubCreationScreen.clear();
         }
     }
 
@@ -471,6 +558,7 @@ public class Controller {
                                 if (student.getStudentID().equals(studentId) && student.getPassword().equals(passwordInput)){
                                     found=true;
                                     onDashboardScreenButtonClicked(event);
+
                                 }
 
                             }
@@ -486,6 +574,7 @@ public class Controller {
     }
 
     public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
+
     public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
         refreshButtonTeacherPopUp.setOpacity(0.00);
         refreshButtonTeacherPopUp.setDisable(true);
@@ -589,11 +678,27 @@ public class Controller {
             }
         }
     }
+    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
+        refreshClubsViewButton.setDisable(true);
+        refreshClubsViewButton.setOpacity(0.0);
 
-    public void onRefreshClubsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
-        refreshClubsStudentsAndTeachersViewButton.setDisable(true);
-        refreshClubsStudentsAndTeachersViewButton.setOpacity(0.0);
+        registeredClubs = Club.loadClubsFromDatabase();
+        ObservableList<Club> registeredClubsToTable = FXCollections.observableArrayList(registeredClubs);
 
+        // Clear existing columns
+        clubsViewTable.getColumns().clear();
+
+        // Bind the columns to the corresponding properties of the Club class
+        clubIDColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubID"));
+        clubNameColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubName"));
+        clubDescriptionColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubDescription"));
+        teacherInchargeColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("teacherIncharge"));
+
+        // Add columns to TableView
+        clubsViewTable.getColumns().addAll(clubIDColumnClubTable, clubNameColumnClubTable, clubDescriptionColumnClubTable, teacherInchargeColumnClubTable);
+
+        // Populate TableView with data
+        clubsViewTable.setItems(registeredClubsToTable);
     }
     public void onHideClubsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
         joinClubsPane.setOpacity(0.00);
@@ -625,8 +730,8 @@ public class Controller {
 
     }
     public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
-        refreshEventsStudentsAndTeachersViewButton.setDisable(true);
-        refreshEventsStudentsAndTeachersViewButton.setOpacity(0.0);
+        refreshEventsViewButton.setDisable(true);
+        refreshEventsViewButton.setOpacity(0.0);
     }
     public void onHideEventsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
         checkInEventsPane.setOpacity(0.00);
@@ -653,8 +758,10 @@ public class Controller {
 
     }
     public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
-        refreshEventsViewClubAdvisorButton.setDisable(true);
-        refreshEventsViewClubAdvisorButton.setOpacity(0.0);
+        refreshEventsViewButton.setDisable(true);
+        refreshEventsViewButton.setOpacity(0.0);
+
+
     }
 
     //clubs View Methods Club Advisors
@@ -663,39 +770,46 @@ public class Controller {
     }
 
     public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException {
+        /*clubIDDeleteInput
+        //RAHMY your code for validations needs to be done here
+        String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
+        String clubID = clubIDDeleteInput.getText();
+        registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+        boolean studentAvailable=false;
+        for (Club club : registeredClubs) {//if leave then the oppposite of join
+            if (club.getClubID().equals(clubID)){
+                for ( Student student:club.loadStudentsOfClub(clubID)){
+                    if (student.getStudentID().equals(studentID)){
+                        club.removeStudent(student);
+                        studentAvailable=true;
+                        break;
+                    }
+                }
+                if (!studentAvailable){
+                    errorleaveClubsLabel1.setText("Not a member of this club");
+                    break;
+
+                }
+            }
+            else{
+                errorleaveClubsLabel1.setText("Club Not Available");
+            }
+        }*/
 
     }
-    public void onRefreshClubsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
-        refreshClubsViewClubAdvisorButton.setDisable(true);
-        refreshClubsViewClubAdvisorButton.setOpacity(0.0);
-    }
+
 
     public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
-        boolean eventNameValid;
-        boolean eventDateValid;
-        boolean eventTimeValid;
-        boolean eventIDValid;
-        boolean eventDescriptionValid;
-        eventNameValid = checkName(eventNameEditEventInput, errorEventNameEditEventInput);
-        eventDateValid = checkDate(eventDateEditEventInput, errorEventDateEditEventInput);
-        eventTimeValid = checkTime(eventTimeEditEventInput, errorEventTimeEditEventInput);
-        eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);
-        if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a eventID or not
-                errorEventIDEditEventInput.setText("Invalid ID");
-                eventIDValid = false;
-            }
-        }
-        eventDescriptionValid = checkDescription(eventDescriptionEditEventInput, errorEventDescriptionEditEventInput);
-        if (eventNameValid && eventDateValid && eventTimeValid && eventIDValid && eventDescriptionValid) {//if the above inputs done by the user is valid the data will be stored
-            // should be completed
-        }
+
     }
 
     //report View Methods
     public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
 
     }
+
+    //clubCreation
+
 
     // Validation methods
     public boolean checkName(TextField textField, Label label) {
