@@ -14,12 +14,7 @@ public class Club {
     private String teacherIncharge;
     private ArrayList<Event> events;
     private ArrayList<Student> students;
-    /*
-    private ArrayList<String> clubMembersID;
-    private int noOfClubEvents;
-    private int clubMembershipCount;
-    private ArrayList<Event> listOfEventDetails;
-    */
+
 
     Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
         this.clubID=clubID;
@@ -34,15 +29,9 @@ public class Club {
     public String getClubName() {
         return clubName;
     }
-
     public String getTeacherIncharge() {
         return teacherIncharge;
     }
-
-    public void setTeacherIncharge(String teacherIncharge) {
-        this.teacherIncharge = teacherIncharge;
-    }
-
     public String getClubDescription() {
         return clubDescription;
     }
@@ -50,23 +39,29 @@ public class Club {
         return clubID;
     }
 
-    public void setClubName(String clubName) {
-        this.clubName = clubName;
-    }
-    public void setClubDescription(String clubDescription) {
-        this.clubDescription = clubDescription;
-    }
-    public void setClubID(String clubID) {
-        this.clubID = clubID;
-    }
-
     public void displayReport() {
 
     }
 
+
+
+    //DATABASE METHODS FOR CLUB
     public static String generateClubID() {
-        int idLength = 4;//Mmebreshoip ID of 10 digits
+        int idLength = 4;//club ID of 5 digits
         StringBuilder stringBuilder = new StringBuilder("C");
+        Random random = new Random();
+        for (int i = 0; i < idLength; i++) {
+            int digit = random.nextInt(10);
+            stringBuilder.append(digit);
+        }
+
+        return stringBuilder.toString();// returns it
+    }
+
+    public String generateMembershipID() {
+
+        int idLength = 9;//Mmebreshoip ID of 10 digits
+        StringBuilder stringBuilder = new StringBuilder("M");
         Random random = new Random();
         for (int i = 0; i < idLength; i++) {
             int digit = random.nextInt(10);
@@ -93,7 +88,7 @@ public class Club {
         }
     }
 
-    public static void createClubMembershipTableOnDatabase() {//to store studetn and club ID
+    public static void createClubMembershipTableOnDatabase() {//to store students and club ID
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
             String query ="CREATE TABLE IF NOT EXISTS ClubsMembership (" +
                     "    MembershipID VARCHAR(10) PRIMARY KEY," +
@@ -114,10 +109,10 @@ public class Club {
         createClubTableOnDatabase();
         ArrayList<Club> clubs = new ArrayList<>();
         try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM club");
-             ResultSet results = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM club");//prepare the statement
+             ResultSet results = preparedStatement.executeQuery()) {//we get it as a Result set
 
-            while (results.next()) {
+            while (results.next()) {// until the set of results are empty we populate the list of clubs and return it
                 Club club = new Club(results.getString("ClubID"),results.getString("ClubName"),results.getString("Description"),results.getString("TeacherID"));
                 clubs.add(club);//loads all clubs to the ArrayList
             }
@@ -158,19 +153,6 @@ public class Club {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public String generateMembershipID() {
-
-        int idLength = 9;//Mmebreshoip ID of 10 digits
-        StringBuilder stringBuilder = new StringBuilder("M");
-        Random random = new Random();
-        for (int i = 0; i < idLength; i++) {
-            int digit = random.nextInt(10);
-            stringBuilder.append(digit);
-        }
-
-        return stringBuilder.toString();
     }
 
     public ArrayList<String> loadExistingMemberships(){//get the exsisting Memberships to an arraylist, count howmany members
@@ -242,7 +224,7 @@ public class Club {
     }
 
     public void deleteClub(String clubID){
-        String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";
+        String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";//to delete a club first we remove them from the club advisor thenclub membership and finally in the club id
         String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
         String deleteClubQuery = "Delete from club where clubid = ?;";
         try (Connection connection = Database.getConnection();
@@ -250,7 +232,7 @@ public class Club {
              PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteClubMembershipQuery);
              PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteClubQuery)) {
 
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false);//pause autocommit as theres a squence of insturections to be followed
 
             preparedDeleteClubAdvisorQueryStatement.setString(1,clubID);
             preparedDeleteClubAdvisorQueryStatement.executeUpdate();
@@ -259,7 +241,7 @@ public class Club {
             preparedDeleteClubMembershipQueryStatement.executeUpdate();
 
             preparedDeleteClubQueryStatement.setString(1,clubID);
-            preparedDeleteClubQueryStatement.executeUpdate();
+            preparedDeleteClubQueryStatement.executeUpdate();// once its updated we then set commit all at once
 
 
             connection.commit();
@@ -268,43 +250,5 @@ public class Club {
             throw new RuntimeException(e);
         }
     }
-
-
-/*
-    public void saveToDatabase(Connection connection) throws SQLException {
-        //INSERT INTO Clubmembership values()
-        String insertClubMembershipQuery = "INSERT INTO banks (id, name) VALUES (?, ?)";
-        String insertEmployeeQuery = "INSERT INTO employees (id, name, bank_id) VALUES (?, ?, ?)";
-
-        try (PreparedStatement bankStatement = connection.prepareStatement(insertBankQuery);
-             PreparedStatement employeeStatement = connection.prepareStatement(insertEmployeeQuery)) {
-
-            // Start a transaction
-            connection.setAutoCommit(false);
-
-            // Insert bank
-            bankStatement.setString(1, getId());
-            bankStatement.setString(2, getName());
-            bankStatement.executeUpdate();//push
-
-            // Insert employees with the retrieved bank ID
-            for (Employee employee : employees) {
-                employeeStatement.setString(1, employee.id);
-                employeeStatement.setString(2, employee.name);
-                employeeStatement.setString(3, getId());
-                employeeStatement.executeUpdate();//push
-            }
-
-            // Commit the transaction
-            connection.commit();
-
-        } catch (SQLException e) {
-            // Rollback the transaction if there's an error
-            connection.rollback();
-            throw e;
-        } finally {
-            // Restore auto-commit mode
-            connection.setAutoCommit(true);
-        }*/
-    }
+}
 

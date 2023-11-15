@@ -8,28 +8,24 @@ import java.util.ArrayList;
 
 public class Teacher extends Person{ // inherits the behavoirs and attributes from the Person class[INHERITANCE]
     private String staffID;
+    public Teacher(String firstName,String lastName,String email,String password,String dateOfBirth,String contactNo,String staffID){
+        super(firstName,lastName,email,password,dateOfBirth,contactNo);//automatically initialse
+        this.staffID=staffID;
+    }//Encapsulation is used here
 
     public String getStaffID() {
         return staffID;
     }
-
-    public void setStaffID(String staffID) {
-        this.staffID = staffID;
-    }
     public boolean approveClubAdvisor(String clubAdvisorID){
         return false;
     }//to approve a clubAdvisor
-
     @Override
     public String greetUser(){//polymorphism is used as the teacher has a different implementation
         String greeting="Welcome Teacher, "+getFirstName()+" "+getLastName()+"!";
         return greeting;
     }//own implementation of the greet user method
 
-    public Teacher(String firstName,String lastName,String email,String password,String dateOfBirth,String contactNo,String staffID){
-        super(firstName,lastName,email,password,dateOfBirth,contactNo);//automatically initialse
-        this.staffID=staffID;
-    }//Encapsulation is used here
+    //DATABASE METHODS
     public static void createTeacherTableOnDatabase()  {
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
             String query = "CREATE TABLE IF NOT EXISTS Teacher (TeacherID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(255),LastName VARCHAR(255),Email VARCHAR(255),DateOfBirth VARCHAR(255),ContactNo VARCHAR(255),Password VARCHAR(255));";// same SQL query is given here as string
@@ -41,6 +37,7 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
             throw new RuntimeException(e);
         }
     }//create the teacher table
+
     public static ArrayList<Teacher> loadTeachersFromDatabase()  {//Load data from the student database
         createTeacherTableOnDatabase();
         ArrayList<Teacher> teachers = new ArrayList<>();
@@ -58,6 +55,7 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
         }
         return teachers;
     }//reads it from the database
+
     public void insertToDatabase() {
         try (Connection connection = Database.getConnection()){
             String insertEmployeeQuery = "INSERT INTO teacher (TeacherID, FirstName, LastName,Email,DateOfBirth,ContactNo,Password) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -70,7 +68,6 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
                 statement.setString(6, getContactNo());
                 statement.setString(7, getPassword());
                 statement.executeUpdate();
-                System.out.println("Teacher added");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

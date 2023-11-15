@@ -13,6 +13,12 @@ public class ClubAdvisor{
     private String clubID;
     private String position;
 
+    public ClubAdvisor(String clubAdvisorID,String studentID, String clubID,String position){
+        this.studentID=studentID;
+        this.clubAdvisorID=clubAdvisorID;
+        this.position = position;
+        this.clubID = clubID;
+    }
     public String getStudentID() {
         return studentID;
     }
@@ -21,32 +27,14 @@ public class ClubAdvisor{
         return clubID;
     }
 
-    public void setClubID(String clubID) {
-        this.clubID = clubID;
-    }
-
     public String getClubAdvisorID() {
         return clubAdvisorID;
-    }
-
-    public void setClubAdvisorID(String clubAdvisorID) {
-        this.clubAdvisorID = clubAdvisorID;
     }
 
     public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public ClubAdvisor(String clubAdvisorID,String studentID, String clubID,String position){
-        this.studentID=studentID;
-        this.clubAdvisorID=clubAdvisorID;
-        this.position = position;
-        this.clubID = clubID;
-    }
     public static void createClubAdvisorTableOnDatabase() {
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
             String query ="CREATE TABLE IF NOT EXISTS ClubAdvisor ("+
@@ -64,7 +52,7 @@ public class ClubAdvisor{
         }
     }
 
-    public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the student database
+    public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the clubAdvisor database
         createClubAdvisorTableOnDatabase();
         ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();
         try (Connection connection = Database.getConnection();
@@ -93,8 +81,9 @@ public class ClubAdvisor{
 
         return stringBuilder.toString();
     }
+
     public void insertIntoClubAdvisorTable(){
-        String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";
+        String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";//inserts the values into the database
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubAdvisorQuery)) {
             preparedStatement.setString(1,getClubAdvisorID());
