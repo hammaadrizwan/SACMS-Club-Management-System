@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -41,13 +42,26 @@ public class Controller {
     @FXML
     private Label userNameLabelDashboard;
     @FXML
-    private Button refreshEventsViewClubAdvisorButton,refreshClubsViewClubAdvisorButton,refreshClubsStudentsAndTeachersViewButton, refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsStudentsAndTeachersViewButton;
+    private Button refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
     @FXML
     private AnchorPane checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
     private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane;
     @FXML
     private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
+
+    @FXML
+    private TableView<Club> clubsViewTable;
+    @FXML
+    private TableColumn<Club, String> clubIDColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> clubNameColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> clubDescriptionColumnClubTable;
+    @FXML
+    private TableColumn<Club, String> teacherInchargeColumnClubTable;
+
+
 
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
@@ -276,7 +290,7 @@ public class Controller {
             boolean teacherExists = false;
 
             for (Club club : registeredClubs) {
-                if (club.getTeacherID().equals(teacher.getStaffID())) {
+                if (club.getTeacherIncharge().equals(teacher.getStaffID())) {
                     teacherExists = true;
                     break; // No need to continue checking once we find a match
                 }
@@ -664,11 +678,27 @@ public class Controller {
             }
         }
     }
+    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
+        refreshClubsViewButton.setDisable(true);
+        refreshClubsViewButton.setOpacity(0.0);
 
-    public void onRefreshClubsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
-        refreshClubsStudentsAndTeachersViewButton.setDisable(true);
-        refreshClubsStudentsAndTeachersViewButton.setOpacity(0.0);
+        registeredClubs = Club.loadClubsFromDatabase();
+        ObservableList<Club> registeredClubsToTable = FXCollections.observableArrayList(registeredClubs);
 
+        // Clear existing columns
+        clubsViewTable.getColumns().clear();
+
+        // Bind the columns to the corresponding properties of the Club class
+        clubIDColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubID"));
+        clubNameColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubName"));
+        clubDescriptionColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubDescription"));
+        teacherInchargeColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("teacherIncharge"));
+
+        // Add columns to TableView
+        clubsViewTable.getColumns().addAll(clubIDColumnClubTable, clubNameColumnClubTable, clubDescriptionColumnClubTable, teacherInchargeColumnClubTable);
+
+        // Populate TableView with data
+        clubsViewTable.setItems(registeredClubsToTable);
     }
     public void onHideClubsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
         joinClubsPane.setOpacity(0.00);
@@ -700,8 +730,8 @@ public class Controller {
 
     }
     public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
-        refreshEventsStudentsAndTeachersViewButton.setDisable(true);
-        refreshEventsStudentsAndTeachersViewButton.setOpacity(0.0);
+        refreshEventsViewButton.setDisable(true);
+        refreshEventsViewButton.setOpacity(0.0);
     }
     public void onHideEventsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
         checkInEventsPane.setOpacity(0.00);
@@ -728,8 +758,10 @@ public class Controller {
 
     }
     public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
-        refreshEventsViewClubAdvisorButton.setDisable(true);
-        refreshEventsViewClubAdvisorButton.setOpacity(0.0);
+        refreshEventsViewButton.setDisable(true);
+        refreshEventsViewButton.setOpacity(0.0);
+
+
     }
 
     //clubs View Methods Club Advisors
@@ -738,12 +770,34 @@ public class Controller {
     }
 
     public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException {
+        /*clubIDDeleteInput
+        //RAHMY your code for validations needs to be done here
+        String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
+        String clubID = clubIDDeleteInput.getText();
+        registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+        boolean studentAvailable=false;
+        for (Club club : registeredClubs) {//if leave then the oppposite of join
+            if (club.getClubID().equals(clubID)){
+                for ( Student student:club.loadStudentsOfClub(clubID)){
+                    if (student.getStudentID().equals(studentID)){
+                        club.removeStudent(student);
+                        studentAvailable=true;
+                        break;
+                    }
+                }
+                if (!studentAvailable){
+                    errorleaveClubsLabel1.setText("Not a member of this club");
+                    break;
+
+                }
+            }
+            else{
+                errorleaveClubsLabel1.setText("Club Not Available");
+            }
+        }*/
 
     }
-    public void onRefreshClubsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
-        refreshClubsViewClubAdvisorButton.setDisable(true);
-        refreshClubsViewClubAdvisorButton.setOpacity(0.0);
-    }
+
 
     public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
 

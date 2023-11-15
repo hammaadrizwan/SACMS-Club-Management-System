@@ -77,15 +77,15 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <TableView layoutX="37.0" layoutY="237.0" prefHeight="422.0" prefWidth="742.0">
+      <TableView fx:id="clubsViewTable" layoutX="37.0" layoutY="237.0" prefHeight="422.0" prefWidth="742.0">
          <columns>
-            <TableColumn prefWidth="89.0" text="Club ID" />
-            <TableColumn prefWidth="177.0" text="Club Name" />
-            <TableColumn prefWidth="336.0" text="Club Description" />
-            <TableColumn prefWidth="139.0" text="Teacher In charge" />
+            <TableColumn fx:id="clubIDColumnClubTable" prefWidth="89.0" text="Club ID" />
+            <TableColumn fx:id="clubNameColumnClubTable" prefWidth="177.0" text="Club Name" />
+            <TableColumn fx:id="clubDescriptionColumnClubTable" prefWidth="336.0" text="Club Description" />
+            <TableColumn fx:id="teacherInchargeColumnClubTable" prefWidth="130.0" text="Teacher In charge" />
          </columns>
       </TableView>
-      <Button fx:id="refreshClubsViewClubAdvisorButton" layoutX="50.0" layoutY="266.0" mnemonicParsing="false" onAction="#onRefreshClubsViewClubAdvisorButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
+      <Button fx:id="refreshClubsViewButton" layoutX="50.0" layoutY="266.0" mnemonicParsing="false" onAction="#onRefreshClubsViewButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

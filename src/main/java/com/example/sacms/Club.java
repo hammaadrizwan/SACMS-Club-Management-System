@@ -11,7 +11,7 @@ public class Club {
     private String clubName;
     private String clubDescription;
     private String clubID;
-    private String TeacherID;
+    private String teacherIncharge;
     private ArrayList<Event> events;
     private ArrayList<Student> students;
     /*
@@ -21,11 +21,11 @@ public class Club {
     private ArrayList<Event> listOfEventDetails;
     */
 
-    Club(String clubID,String clubName, String clubDescription, String TeacherID){//To get it from the database
+    Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
         this.clubID=clubID;
         this.clubDescription=clubDescription;
         this.clubName=clubName;
-        this.TeacherID=TeacherID;
+        this.teacherIncharge = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
         //this.events=loadStudentsOfClub(clubID);
 
@@ -35,12 +35,12 @@ public class Club {
         return clubName;
     }
 
-    public String getTeacherID() {
-        return TeacherID;
+    public String getTeacherIncharge() {
+        return teacherIncharge;
     }
 
-    public void setTeacherID(String teacherID) {
-        TeacherID = teacherID;
+    public void setTeacherIncharge(String teacherIncharge) {
+        this.teacherIncharge = teacherIncharge;
     }
 
     public String getClubDescription() {
@@ -232,9 +232,37 @@ public class Club {
             preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
             preparedStatement.setString(2,getClubName());
             preparedStatement.setString(3,getClubDescription());
-            preparedStatement.setString(4,getTeacherID());
+            preparedStatement.setString(4, getTeacherIncharge());
 
             preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteClub(String clubID){
+        String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";
+        String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
+        String deleteClubQuery = "Delete from club where clubid = ?;";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedDeleteClubAdvisorQueryStatement = connection.prepareStatement(deleteClubAdvisorQuery);
+             PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteClubMembershipQuery);
+             PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteClubQuery)) {
+
+            connection.setAutoCommit(false);
+
+            preparedDeleteClubAdvisorQueryStatement.setString(1,clubID);
+            preparedDeleteClubAdvisorQueryStatement.executeUpdate();
+
+            preparedDeleteClubMembershipQueryStatement.setString(1,clubID);
+            preparedDeleteClubMembershipQueryStatement.executeUpdate();
+
+            preparedDeleteClubQueryStatement.setString(1,clubID);
+            preparedDeleteClubQueryStatement.executeUpdate();
+
+
+            connection.commit();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

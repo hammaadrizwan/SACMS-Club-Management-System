@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
     <children>
       <Button layoutX="510.0" layoutY="134.0" mnemonicParsing="false" onAction="#onHideClubsViewStudentsAndTeachersOptionClicked" opacity="0.0" prefHeight="76.0" prefWidth="210.0" text="Button" />
         <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
@@ -63,12 +58,12 @@
                 <Font name="System Bold" size="42.0" />
             </font>
         </Label>
-      <TableView layoutX="27.0" layoutY="227.0" prefHeight="422.0" prefWidth="688.0">
+      <TableView fx:id="clubsViewTable" layoutX="27.0" layoutY="227.0" prefHeight="422.0" prefWidth="688.0">
          <columns>
-            <TableColumn prefWidth="89.0" text="Club ID" />
-            <TableColumn prefWidth="177.0" text="Club Name" />
-            <TableColumn prefWidth="291.0" text="Club Description" />
-            <TableColumn prefWidth="130.0" text="Teacher In charge" />
+            <TableColumn fx:id="clubIDColumnClubTable" prefWidth="89.0" text="Club ID" />
+            <TableColumn fx:id="clubNameColumnClubTable" prefWidth="177.0" text="Club Name" />
+            <TableColumn fx:id="clubDescriptionColumnClubTable" prefWidth="291.0" text="Club Description" />
+            <TableColumn fx:id="teacherInchargeColumnClubTable" prefWidth="126.0" text="Teacher In charge" />
          </columns>
       </TableView>
       <Button layoutX="514.0" layoutY="142.0" mnemonicParsing="false" onAction="#onJoinClubsViewOptionClicked" prefHeight="29.0" prefWidth="96.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="JOIN" textFill="WHITE">
@@ -124,7 +119,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="refreshClubsStudentsAndTeachersViewButton" layoutX="30.0" layoutY="252.0" mnemonicParsing="false" onAction="#onRefreshClubsViewStudentsAndTeachersButtonClicked" prefHeight="393.0" prefWidth="682.0" style="-fx-background-color: white;" text="Refresh Clubs">
+      <Button fx:id="refreshClubsViewButton" layoutX="30.0" layoutY="252.0" mnemonicParsing="false" onAction="#onRefreshClubsViewButtonClicked" prefHeight="393.0" prefWidth="682.0" style="-fx-background-color: white;" text="Refresh Clubs">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
