@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ClubAdvisor{
     private String clubAdvisorID;
@@ -40,12 +41,6 @@ public class ClubAdvisor{
         this.position = position;
     }
 
-    public ClubAdvisor(String studentID, String clubID, String position){
-        this.studentID=studentID;
-        this.clubAdvisorID=generateClubAdvisorID();
-        this.position = position;
-        this.clubID = clubID;
-    }
     public ClubAdvisor(String clubAdvisorID,String studentID, String clubID,String position){
         this.studentID=studentID;
         this.clubAdvisorID=clubAdvisorID;
@@ -87,11 +82,32 @@ public class ClubAdvisor{
         return clubAdvisors;
     }
 
-    public String generateClubAdvisorID() {
-        ArrayList<ClubAdvisor> clubAdvisors = loadClubAdvisorsFromDatabase();
-        int noOfClubAdvisors = clubAdvisors.size();
-        String generatedClubAdvisorID = "CA00"+ Integer.toString(Character.getNumericValue(clubAdvisors.get(noOfClubAdvisors).clubID.toCharArray()[4])+1);
-        return generatedClubAdvisorID;
+    public static String generateClubAdvisorID() {
+        int idLength = 3;//Membreshoip ID of 10 digits
+        StringBuilder stringBuilder = new StringBuilder("CA");
+        Random random = new Random();
+        for (int i = 0; i < idLength; i++) {
+            int digit = random.nextInt(10);
+            stringBuilder.append(digit);
+        }
+
+        return stringBuilder.toString();
     }
+    public void insertIntoClubAdvisorTable(){
+        String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubAdvisorQuery)) {
+            preparedStatement.setString(1,getClubAdvisorID());
+            preparedStatement.setString(2,getStudentID());
+            preparedStatement.setString(3,getClubID());
+            preparedStatement.setString(4,getPosition());
+
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

@@ -30,16 +30,17 @@ public class Club {
         //this.events=loadStudentsOfClub(clubID);
 
     }
-    Club(String clubName, String clubDescription, String TeacherID){//if we create a new club its automatically set
-        this.clubID=generateClubID();
-        this.clubDescription=clubDescription;
-        this.clubName=clubName;
-        this.TeacherID=TeacherID;
-    }
-
 
     public String getClubName() {
         return clubName;
+    }
+
+    public String getTeacherID() {
+        return TeacherID;
+    }
+
+    public void setTeacherID(String teacherID) {
+        TeacherID = teacherID;
     }
 
     public String getClubDescription() {
@@ -63,11 +64,16 @@ public class Club {
 
     }
 
-    public String generateClubID() {
-        ArrayList<Club> clubs = loadClubsFromDatabase();
-        int noOfClubs = clubs.size();
-        String generatedClubID = "C000"+ Integer.toString(Character.getNumericValue(clubs.get(noOfClubs).clubID.toCharArray()[4])+1);
-        return generatedClubID;
+    public static String generateClubID() {
+        int idLength = 4;//Mmebreshoip ID of 10 digits
+        StringBuilder stringBuilder = new StringBuilder("C");
+        Random random = new Random();
+        for (int i = 0; i < idLength; i++) {
+            int digit = random.nextInt(10);
+            stringBuilder.append(digit);
+        }
+
+        return stringBuilder.toString();
     }
 
     public static void createClubTableOnDatabase() {
@@ -218,6 +224,23 @@ public class Club {
         }
         return students; // return the list of students
     }
+
+    public void insertIntoClubs(){
+        String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
+            preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(2,getClubName());
+            preparedStatement.setString(3,getClubDescription());
+            preparedStatement.setString(4,getTeacherID());
+
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 /*
     public void saveToDatabase(Connection connection) throws SQLException {
