@@ -120,27 +120,27 @@
          <font>
             <Font size="20.0" />
          </font></TextArea>
-      <Label fx:id="errorEventNameEventCreationInput" layoutX="28.0" layoutY="271.0" prefHeight="18.0" prefWidth="298.0" textFill="#ff0900">
+      <Label fx:id="errorEventNameEditEventInput" layoutX="28.0" layoutY="271.0" prefHeight="18.0" prefWidth="298.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorEventDateEventCreationInput" layoutX="377.0" layoutY="271.0" prefHeight="20.0" prefWidth="206.0" textFill="#ff0900">
+      <Label fx:id="errorEventDateEditEventInput" layoutX="377.0" layoutY="271.0" prefHeight="20.0" prefWidth="206.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorEventTimeEventCreationInput" layoutX="28.0" layoutY="367.0" prefHeight="20.0" prefWidth="250.0" textFill="#ff0900">
+      <Label fx:id="errorEventTimeEditEventInput" layoutX="28.0" layoutY="367.0" prefHeight="20.0" prefWidth="250.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorClubIDEventCreationInput" layoutX="305.0" layoutY="367.0" prefHeight="20.0" prefWidth="278.0" textFill="#ff0900">
+      <Label fx:id="errorEventIDEditEventInput" layoutX="305.0" layoutY="367.0" prefHeight="20.0" prefWidth="278.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorEventDescriptionEventCreationInput" layoutX="27.0" layoutY="522.0" prefHeight="20.0" prefWidth="458.0" textFill="#ff0900">
+      <Label fx:id="errorEventDescriptionEditEventInput" layoutX="27.0" layoutY="522.0" prefHeight="20.0" prefWidth="458.0" textFill="#ff0900">
          <font>
             <Font size="14.0" />
          </font>
