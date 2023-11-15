@@ -77,4 +77,5 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
         }
 
     }//inserts into the database
+
 }

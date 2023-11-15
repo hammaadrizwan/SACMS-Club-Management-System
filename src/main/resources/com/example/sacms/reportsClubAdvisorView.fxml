@@ -82,5 +82,10 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Button>
+        <Label fx:id="messageLabel" layoutX="223.0" layoutY="-7.0" opacity="0.0" prefHeight="41.0" prefWidth="645.0" style="-fx-background-color: #ff7f7f; -fx-background-radius: 10; -fx-alignment: center;" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>
