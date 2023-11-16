@@ -34,13 +34,13 @@ public class Controller {
     @FXML
     private TextField clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
-    private TextField eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput;
+    private TextField eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDDelete, eventIDCheckOut;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
     @FXML
     private Label messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
-    private Label errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput;
+    private Label errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorEventIDDelete, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
@@ -678,89 +678,122 @@ public class Controller {
         leaveClubsPane.setOpacity(1.0);
     }
     public void onJoinClubClicked(ActionEvent event) throws IOException, InterruptedException {
-        //RAHMY your code for validations needs to be done here
-        String studentID = studentIdInputClubsScreen.getText();
-        String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
-        registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
-        boolean studentAvailable = false;
-        boolean clubFound = false;
+        boolean studentIDValid;
+        boolean clubIDValid;
+        studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
+        if (studentIDValid) {
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
+                errorStudentIdInputClubsScreen.setText("Invalid ID");
+                studentIDValid = false;
+            }
+        }
+        clubIDValid = checkID(clubIDInputJoinClubsStudetnsAndTeachers, errorJoinClubsLabel);
+        if (clubIDValid) {
+            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
+                errorJoinClubsLabel.setText("Invalid ID");
+                clubIDValid = false;
+            }
+        }
+        if (studentIDValid && clubIDValid) {
+            String studentID = studentIdInputClubsScreen.getText();
+            String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
+            registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
+            boolean studentAvailable = false;
+            boolean clubFound = false;
 
-        for (Club club : registeredClubs) {
-            if (club.getClubID().equals(clubID)) {
-                clubFound = true;//check if teh clubID is an exxsisting one so we can then proceed
-                ArrayList<Student> availableStudentsAtClub = club.loadStudentsOfClub(clubID);//returns the list of students in that club
+            for (Club club : registeredClubs) {
+                if (club.getClubID().equals(clubID)) {
+                    clubFound = true;//check if teh clubID is an exxsisting one so we can then proceed
+                    ArrayList<Student> availableStudentsAtClub = club.loadStudentsOfClub(clubID);//returns the list of students in that club
 
-                for (Student student : availableStudentsAtClub) {//checks in that list if the student is available then we can say they are already in it
-                    if (student.getStudentID().equals(studentID)) {
-                        studentAvailable = true;
-                        messageLabel.setText("Already Joined".toUpperCase());
-                        messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                        messageLabel.setOpacity(1.0);
-                        studentIdInputClubsScreen.clear();
-                        clubIDInputJoinClubsStudetnsAndTeachers.clear();
-                        break; // No need to continue checking
-                    }
-                }
-
-                if (!studentAvailable) {
-                    for (Student student : registeredStudents) {
-                        if (student.getStudentID().equals(studentID)) {//else we get their records and then add it to the club Class
-                            club.addStudent(student);
-                            messageLabel.setText("Joined Successfully".toUpperCase());
-                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                    for (Student student : availableStudentsAtClub) {//checks in that list if the student is available then we can say they are already in it
+                        if (student.getStudentID().equals(studentID)) {
+                            studentAvailable = true;
+                            messageLabel.setText("Already Joined".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
                             messageLabel.setOpacity(1.0);
                             studentIdInputClubsScreen.clear();
                             clubIDInputJoinClubsStudetnsAndTeachers.clear();
                             break; // No need to continue checking
                         }
                     }
-                }
 
-                // No need to check other clubs once a match is found
-                break;
-            }
-        }
-
-        if (!clubFound) {
-            errorJoinClubsLabel.setText("Club Not Available");
-        }
-    }
-    public void onLeaveClubClicked(ActionEvent event) throws IOException, InterruptedException {
-        // RAHMY your code for validations needs to be done here
-        String studentID = studentIdInputClubsScreen.getText();
-        String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
-        boolean clubFound = false;
-        registeredStudents = Student.loadStudentsFromDatabase();
-        boolean studentAvailable = false;
-
-        for (Club club : registeredClubs) {// if leave then the opposite of join
-            if (club.getClubID().equals(clubID)) {
-                clubFound = true;
-                for (Student student : club.loadStudentsOfClub(clubID)) {
-                    if (student.getStudentID().equals(studentID)) {
-                        club.removeStudent(student);
-                        messageLabel.setText("Left the club".toUpperCase());
-                        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                        messageLabel.setOpacity(1.0);
-                        studentIdInputClubsScreen.clear();
-                        clubIDInputLeaveClubsStudetnsAndTeachers.clear();
-                        studentAvailable = true;
-                        break;
+                    if (!studentAvailable) {
+                        for (Student student : registeredStudents) {
+                            if (student.getStudentID().equals(studentID)) {//else we get their records and then add it to the club Class
+                                club.addStudent(student);
+                                messageLabel.setText("Joined Successfully".toUpperCase());
+                                messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                                messageLabel.setOpacity(1.0);
+                                studentIdInputClubsScreen.clear();
+                                clubIDInputJoinClubsStudetnsAndTeachers.clear();
+                                break; // No need to continue checking
+                            }
+                        }
                     }
-                }
-                if (!studentAvailable) {
-                    messageLabel.setText("Please be a member inorder to leave".toUpperCase());
-                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    studentIdInputClubsScreen.clear();
-                    clubIDInputLeaveClubsStudetnsAndTeachers.clear();
+
+                    // No need to check other clubs once a match is found
                     break;
                 }
             }
-        }
 
-        if (!clubFound) {
-            errorleaveClubsLabel1.setText("Club Not Available");
+            if (!clubFound) {
+                errorJoinClubsLabel.setText("Club Not Available");
+            }
+        }
+    }
+    public void onLeaveClubClicked(ActionEvent event) throws IOException, InterruptedException {
+        boolean studentIDValid;
+        boolean clubIDValid;
+        studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
+        if (studentIDValid) {
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
+                errorStudentIdInputClubsScreen.setText("Invalid ID");
+                studentIDValid = false;
+            }
+        }
+        clubIDValid = checkID(clubIDInputLeaveClubsStudetnsAndTeachers, errorleaveClubsLabel1);
+        if (clubIDValid) {
+            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
+                errorleaveClubsLabel1.setText("Invalid ID");
+                clubIDValid = false;
+            }
+        }
+        if (studentIDValid && clubIDValid) {
+            String studentID = studentIdInputClubsScreen.getText();
+            String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
+            boolean clubFound = false;
+            registeredStudents = Student.loadStudentsFromDatabase();
+            boolean studentAvailable = false;
+            for (Club club : registeredClubs) {// if leave then the opposite of join
+                if (club.getClubID().equals(clubID)) {
+                    clubFound = true;
+                    for (Student student : club.loadStudentsOfClub(clubID)) {
+                        if (student.getStudentID().equals(studentID)) {
+                            club.removeStudent(student);
+                            messageLabel.setText("Left the club".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                            messageLabel.setOpacity(1.0);
+                            studentIdInputClubsScreen.clear();
+                            clubIDInputLeaveClubsStudetnsAndTeachers.clear();
+                            studentAvailable = true;
+                            break;
+                        }
+                    }
+                    if (!studentAvailable) {
+                        messageLabel.setText("Please be a member inorder to leave".toUpperCase());
+                        messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                        messageLabel.setOpacity(1.0);
+                        studentIdInputClubsScreen.clear();
+                        clubIDInputLeaveClubsStudetnsAndTeachers.clear();
+                        break;
+                    }
+                }
+            }
+
+            if (!clubFound) {
+                errorleaveClubsLabel1.setText("Club Not Available");
+            }
         }
     }
 
@@ -807,14 +840,50 @@ public class Controller {
 
     }
     public void onCheckInEventClicked(ActionEvent event) throws IOException {
-        String studentID=studentIdInputEventsScreen.getText();
-        String eventID = eventIDCheckIn.getText();
-
+        boolean studentIDValid;
+        boolean eventIDValid;
+        studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
+        if (studentIDValid) {
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
+                errorStudentIDEventsLabel.setText("Invalid ID");
+                studentIDValid = false;
+            }
+        }
+        eventIDValid = checkID(eventIDCheckIn, errorCheckInEventsLabel);
+        if (eventIDValid) {
+            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
+                errorCheckInEventsLabel.setText("Invalid ID");
+                eventIDValid = false;
+            }
+        }
+        if (studentIDValid && eventIDValid) {
+            String studentID=studentIdInputEventsScreen.getText();
+            String eventID = eventIDCheckIn.getText();
+            // hammad complete
+        }
     }
     public void onCheckOutEventClicked(ActionEvent event) throws IOException {
-        String studentID=studentIdInputEventsScreen.getText();
-        String eventID = eventIDCheckIn.getText();
-
+        boolean studentIDValid;
+        boolean eventIDValid;
+        studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
+        if (studentIDValid) {
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
+                errorStudentIDEventsLabel.setText("Invalid ID");
+                studentIDValid = false;
+            }
+        }
+        eventIDValid = checkID(eventIDCheckOut, errorCheckOutEventsLabel);
+        if (eventIDValid) {
+            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
+                errorCheckOutEventsLabel.setText("Invalid ID");
+                eventIDValid = false;
+            }
+        }
+        if (studentIDValid && eventIDValid) {
+            String studentID=studentIdInputEventsScreen.getText();
+            String eventID = eventIDCheckIn.getText();
+            // hammad complete
+        }
     }
     public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
         refreshEventsViewButton.setDisable(true);
@@ -842,7 +911,25 @@ public class Controller {
     }
 
     public void onDeleteButtonClickedEventsScreen(ActionEvent event) throws IOException {
-
+        boolean clubAdvisorIDValid;
+        boolean eventIDValid;
+        clubAdvisorIDValid = checkID(clubAdvisorIdInputEventsScreen, errorClubAdvisorIdInputEventsLabel);
+        if (clubAdvisorIDValid) {
+            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
+                errorClubAdvisorIdInputEventsLabel.setText("Invalid ID");
+                clubAdvisorIDValid = false;
+            }
+        }
+        eventIDValid = checkID(eventIDDelete, errorEventIDDelete);
+        if (eventIDValid) {
+            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
+                errorEventIDDelete.setText("Invalid ID");
+                eventIDValid = false;
+            }
+        }
+        if (clubAdvisorIDValid && eventIDValid) {
+            // hammad complete
+        }
     }
     public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
         refreshEventsViewButton.setDisable(true);
@@ -858,37 +945,51 @@ public class Controller {
     }
 
     public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException, InterruptedException {
-        //RAHMY your code for validations needs to be done here
-        String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
-        String clubID = clubIDDeleteInput.getText();
-        registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
-        boolean clubAdvisorAvailable=false;
-        for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
-            if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)){
-                for ( Club club:registeredClubs){
-                    if (club.getClubID().equals(clubID)){
-                        club.deleteClub(clubID);
-                        clubAdvisorAvailable=true;
-                        messageLabel.setText("club deleted successfully".toUpperCase());
-                        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                        messageLabel.setOpacity(1.0);
-                        clubIDDeleteInput.clear();
-                        clubAdvisorIDInputClubsScreen.clear();
-
-                        break;
-                    }
-                }
-                if (!clubAdvisorAvailable){
-                    errorDeleteClubsLabel.setText("Not a member of this club");
-                    break;
-
-                }
-            }
-            else{
-                errorDeleteClubsLabel.setText("Club Not Available");
+        boolean clubAdvisorIDValid;
+        boolean clubIDValid;
+        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen);
+        if (clubAdvisorIDValid) {
+            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
+                errorClubAdvisorIDInputClubsScreen.setText("Invalid ID");
+                clubAdvisorIDValid = false;
             }
         }
+        clubIDValid = checkID(clubIDDeleteInput, errorDeleteClubsLabel);
+        if (clubIDValid) {
+            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
+                errorDeleteClubsLabel.setText("Invalid ID");
+                clubIDValid = false;
+            }
+        }
+        if (clubAdvisorIDValid && clubIDValid) {
+            String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
+            String clubID = clubIDDeleteInput.getText();
+            registeredClubAdvisors = ClubAdvisor.loadClubAdvisorsFromDatabase();
+            boolean clubAdvisorAvailable = false;
+            for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
+                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
+                    for (Club club : registeredClubs) {
+                        if (club.getClubID().equals(clubID)) {
+                            club.deleteClub(clubID);
+                            clubAdvisorAvailable = true;
+                            messageLabel.setText("club deleted successfully".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                            messageLabel.setOpacity(1.0);
+                            clubIDDeleteInput.clear();
+                            clubAdvisorIDInputClubsScreen.clear();
+                            break;
+                        }
+                    }
+                    if (!clubAdvisorAvailable) {
+                        errorDeleteClubsLabel.setText("Not a member of this club");
+                        break;
 
+                    }
+                } else {
+                    errorDeleteClubsLabel.setText("Club Not Available");
+                }
+            }
+        }
     }
 
 
