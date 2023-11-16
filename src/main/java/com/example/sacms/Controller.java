@@ -265,8 +265,17 @@ public class Controller {
         this.stage.show();
         this.stage.setResizable(false);
     }
-    public void onLoadClubInchargeList(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubInchargeScreen.fxml"));
+    public void onLoadClubInchargeListStudentsAndTeachers(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubInchargeScreenStudentsAndTeachers.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("View Club Advisor of all clubs");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    public void onLoadClubInchargeListClubAvisor(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubInchargeScreenClubAdvisor.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("View Club Advisor of all clubs");
@@ -367,7 +376,6 @@ public class Controller {
         clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
         //teacherIDValid = checkID(clubTeacherIDInputClubCreationScreen, errorTeacherIDInputClubCreationScreen);
         if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
-            System.out.println("Creating Club");
             String clubName = clubNameInputClubCreationScreen.getText();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
             String clubDescription = clubDescriptionInputClubCreationScreen.getText();
@@ -864,6 +872,8 @@ public class Controller {
                         messageLabel.setText("club deleted successfully".toUpperCase());
                         messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
                         messageLabel.setOpacity(1.0);
+                        clubIDDeleteInput.clear();
+                        clubAdvisorIDInputClubsScreen.clear();
 
                         break;
                     }
@@ -912,36 +922,30 @@ public class Controller {
         refreshClubsInchargeList.setOpacity(0.0);
         refreshClubsInchargeList.setDisable(true);
 
-        clubAdvisorTable.getItems().clear();
+        clubAdvisorTable.getItems().clear();//Clears the existing values in the table view
         clubAdvisorTable.getColumns().clear();
-        ArrayList<String[]> clubAdvisorInformation = ClubAdvisor.getClubAdvisorInformation();
+        ArrayList<String[]> clubAdvisorInformation = ClubAdvisor.getClubAdvisorInformation();// loads the infor from the Database
 
 
-        ObservableList<String> data = FXCollections.observableArrayList();
-        for (String[] row : clubAdvisorInformation) {
+        ObservableList<String> data = FXCollections.observableArrayList();//the obsevable list is being crated
+        for (String[] row : clubAdvisorInformation) {//rows are being joined with the comma
             data.add(String.join(", ", row));
         }
 
-        clubAdvisorTable.setItems(data);
+        clubAdvisorTable.setItems(data);//sets the table with this data observalbe list
 
-        clubAdvisorIDColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[0]));
+        clubAdvisorIDColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[0]));//each cell is going to store the values of a simple string Property and is considering only the 0 element
         clubNameColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[1]));
         studentIDColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[2]));
         nameColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[3]));
         contactNoColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[4]));
         positionColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[5]));
-        emailColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[6]));
+        emailColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[6]));//repeat for each column
 
 
         // Add columns to the TableView
-        clubAdvisorTable.getColumns().addAll(clubAdvisorIDColumnClubAdvisorTable, clubNameColumnClubAdvisorTable,
-                studentIDColumnClubAdvisorTable, nameColumnClubAdvisorTable, contactNoColumnClubAdvisorTable,positionColumnClubAdvisorTable,emailColumnClubAdvisorTable);
+        clubAdvisorTable.getColumns().addAll(clubAdvisorIDColumnClubAdvisorTable, clubNameColumnClubAdvisorTable, studentIDColumnClubAdvisorTable, nameColumnClubAdvisorTable, contactNoColumnClubAdvisorTable,positionColumnClubAdvisorTable,emailColumnClubAdvisorTable);
     }
-
-
-
-    //clubCreation
-
 
     // Validation methods
     public boolean checkName(TextField textField, Label label) {

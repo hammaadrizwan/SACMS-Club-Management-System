@@ -103,10 +103,10 @@ public class ClubAdvisor{
 
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT clubadvisor.ClubAdvisorID, club.ClubName, student.StudentID, CONCAT(student.FirstName, ' ', student.LastName) AS StudentName, student.ContactNo,  clubadvisor.Position,Student.Email FROM ClubAdvisor JOIN Student ON ClubAdvisor.StudentID = Student.StudentID JOIN Club  ON ClubAdvisor.ClubID = Club.ClubID;");
-             ResultSet results = preparedStatement.executeQuery()) {
+             ResultSet results = preparedStatement.executeQuery()) {//selects the important coulms by joining them
 
             while (results.next()) {
-                String[] row = new String[7];
+                String[] row = new String[7];//creates an list to store the values
                 row[0]=results.getString("ClubAdvisorID").toString();
                 row[1]=results.getString("ClubName").toString();
                 row[2]=results.getString("StudentID").toString();
@@ -114,7 +114,7 @@ public class ClubAdvisor{
                 row[4]=results.getString("ContactNo").toString();
                 row[5]=results.getString("Position").toString();
                 row[6]=results.getString("Email").toString();
-                result.add(row);
+                result.add(row);//adds this list to the arraylist
             }
 
         } catch (SQLException e) {
