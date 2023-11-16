@@ -14,6 +14,7 @@ public class Club {
     private String teacherIncharge;
     private ArrayList<Event> events;
     private ArrayList<Student> students;
+    private ArrayList<Request> requests;
 
 
     Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
@@ -123,8 +124,8 @@ public class Club {
         return clubs;
     }
 
-    public void addStudent(Student s){
-        students.add(s);//add the studetn to tthe list of students
+    public void addStudent(Student student){
+        students.add(student);//add the studetn to tthe list of students
         String membershipID;
         do {
             membershipID = generateMembershipID();//generate a membership ID for each student
@@ -134,7 +135,7 @@ public class Club {
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubMembershipQuery)) {
             preparedStatement.setString(1, membershipID);//inserts the Membership ID,student ID and the club ID to the table
             preparedStatement.setString(2, getClubID());
-            preparedStatement.setString(3, s.getStudentID());
+            preparedStatement.setString(3, student.getStudentID());
             preparedStatement.executeUpdate();//push
 
     } catch (SQLException e) {
@@ -248,6 +249,45 @@ public class Club {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /*public void addRequest(){
+
+        ArrayList<String> exsistingRequests= new ArrayList<String>();
+        String requestID;
+        do {
+            requestID = generateRequestID();//generate a membership ID for each student
+        } while (Request.loadExistingRequests().contains(requestID));//until its unique we generate a new ID
+        requests.add(request);
+
+    }*/
+    public static String generateRequestID() {
+        int idLength = 9;
+        StringBuilder stringBuilder = new StringBuilder("R");
+        Random random = new Random();
+        for (int i = 0; i < idLength; i++) {
+            int digit = random.nextInt(10);
+            stringBuilder.append(digit);
+        }
+
+        return stringBuilder.toString();// returns it
+    }
+    public static void createTableOnDatabase(){
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String query ="CREATE TABLE IF NOT exists Request (" +
+                    "    RequestID VARCHAR(10) PRIMARY KEY," +
+                    "    TeacherID VARCHAR(5)," +
+                    "    StudentID VARCHAR(5)," +
+                    "    Position VARCHAR(25)," +
+                    "    FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID)" +
+                    "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
+                    ");";// same SQL query is given here as string
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
+                preparedStatement.executeUpdate();// finally its then executed on the database
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
