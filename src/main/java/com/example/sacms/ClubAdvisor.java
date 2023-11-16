@@ -98,5 +98,32 @@ public class ClubAdvisor{
         }
     }
 
+    public static ArrayList<String[]> getClubAdvisorInformation()  {//Load data from the clubAdvisor database
+        ArrayList<String[]> result = new ArrayList<String[]>();
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT clubadvisor.ClubAdvisorID, club.ClubName, student.StudentID, CONCAT(student.FirstName, ' ', student.LastName) AS StudentName, student.ContactNo,  clubadvisor.Position,Student.Email FROM ClubAdvisor JOIN Student ON ClubAdvisor.StudentID = Student.StudentID JOIN Club  ON ClubAdvisor.ClubID = Club.ClubID;");
+             ResultSet results = preparedStatement.executeQuery()) {
+
+            while (results.next()) {
+                String[] row = new String[7];
+                row[0]=results.getString("ClubAdvisorID").toString();
+                row[1]=results.getString("ClubName").toString();
+                row[2]=results.getString("StudentID").toString();
+                row[3]=results.getString("StudentName").toString();
+                row[4]=results.getString("ContactNo").toString();
+                row[5]=results.getString("Position").toString();
+                row[6]=results.getString("Email").toString();
+                result.add(row);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+
 
 }

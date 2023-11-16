@@ -1,5 +1,6 @@
 package com.example.sacms;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,11 +44,13 @@ public class Controller {
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
-    private Button refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
+    private Button refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
     @FXML
     private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane,checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
     private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
+
+
     @FXML
     private TableView<Club> clubsViewTable;
     @FXML
@@ -58,6 +61,24 @@ public class Controller {
     private TableColumn<Club, String> clubDescriptionColumnClubTable;
     @FXML
     private TableColumn<Club, String> teacherInchargeColumnClubTable;
+
+    @FXML
+    private TableView<String> clubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> clubAdvisorIDColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> clubNameColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> studentIDColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> nameColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> contactNoColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> positionColumnClubAdvisorTable;
+    @FXML
+    private TableColumn<String, String> emailColumnClubAdvisorTable;
+
 
 
 
@@ -240,6 +261,15 @@ public class Controller {
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Club Advisor Sign-In");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+    public void onLoadClubInchargeList(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubInchargeScreen.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("View Club Advisor of all clubs");
         this.stage.setScene(this.scene);
         this.stage.show();
         this.stage.setResizable(false);
@@ -726,6 +756,7 @@ public class Controller {
         }
     }
 
+
     public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
         refreshClubsViewButton.setDisable(true);
         refreshClubsViewButton.setOpacity(0.0);
@@ -810,6 +841,7 @@ public class Controller {
         refreshEventsViewButton.setOpacity(0.0);
 
 
+
     }
 
     //clubs View Methods Club Advisors
@@ -876,6 +908,37 @@ public class Controller {
     public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
 
     }
+    public void onRefreshClubsInchargeListClicked(ActionEvent event) throws IOException {
+        refreshClubsInchargeList.setOpacity(0.0);
+        refreshClubsInchargeList.setDisable(true);
+
+        clubAdvisorTable.getItems().clear();
+        clubAdvisorTable.getColumns().clear();
+        ArrayList<String[]> clubAdvisorInformation = ClubAdvisor.getClubAdvisorInformation();
+
+
+        ObservableList<String> data = FXCollections.observableArrayList();
+        for (String[] row : clubAdvisorInformation) {
+            data.add(String.join(", ", row));
+        }
+
+        clubAdvisorTable.setItems(data);
+
+        clubAdvisorIDColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[0]));
+        clubNameColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[1]));
+        studentIDColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[2]));
+        nameColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[3]));
+        contactNoColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[4]));
+        positionColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[5]));
+        emailColumnClubAdvisorTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[6]));
+
+
+        // Add columns to the TableView
+        clubAdvisorTable.getColumns().addAll(clubAdvisorIDColumnClubAdvisorTable, clubNameColumnClubAdvisorTable,
+                studentIDColumnClubAdvisorTable, nameColumnClubAdvisorTable, contactNoColumnClubAdvisorTable,positionColumnClubAdvisorTable,emailColumnClubAdvisorTable);
+    }
+
+
 
     //clubCreation
 

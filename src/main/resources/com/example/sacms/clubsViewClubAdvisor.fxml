@@ -77,15 +77,15 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <TableView fx:id="clubsViewTable" layoutX="37.0" layoutY="237.0" prefHeight="422.0" prefWidth="742.0">
-         <columns>
-            <TableColumn fx:id="clubIDColumnClubTable" prefWidth="89.0" text="Club ID" />
-            <TableColumn fx:id="clubNameColumnClubTable" prefWidth="177.0" text="Club Name" />
-            <TableColumn fx:id="clubDescriptionColumnClubTable" prefWidth="336.0" text="Club Description" />
-            <TableColumn fx:id="teacherInchargeColumnClubTable" prefWidth="130.0" text="Teacher In charge" />
-         </columns>
-      </TableView>
-      <Button fx:id="refreshClubsViewButton" layoutX="50.0" layoutY="266.0" mnemonicParsing="false" onAction="#onRefreshClubsViewButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Clubs">
+        <TableView fx:id="clubsViewTable" layoutX="27.0" layoutY="227.0" prefHeight="371.0" prefWidth="688.0">
+            <columns>
+                <TableColumn fx:id="clubIDColumnClubTable" prefWidth="89.0" text="Club ID" />
+                <TableColumn fx:id="clubNameColumnClubTable" prefWidth="177.0" text="Club Name" />
+                <TableColumn fx:id="clubDescriptionColumnClubTable" prefWidth="291.0" text="Club Description" />
+                <TableColumn fx:id="teacherInchargeColumnClubTable" prefWidth="126.0" text="Teacher In charge" />
+            </columns>
+        </TableView>
+      <Button fx:id="refreshClubsViewButton" layoutX="50.0" layoutY="266.0" mnemonicParsing="false" onAction="#onRefreshClubsViewButtonClicked" prefHeight="315.0" prefWidth="645.0" style="-fx-background-color: white;" text="Refresh Clubs">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -119,5 +119,10 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
+        <Button layoutX="176.0" layoutY="610.0" mnemonicParsing="false" onAction="#onLoadClubInchargeList" prefHeight="39.0" prefWidth="390.0" style="-fx-background-color: white;" text="Want to contact the club incharge? Click here">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>
