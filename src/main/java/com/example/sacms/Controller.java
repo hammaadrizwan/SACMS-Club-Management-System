@@ -86,6 +86,7 @@ public class Controller {
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
     ArrayList<ClubAdvisor> registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
     ArrayList<Club> registeredClubs =Club.loadClubsFromDatabase();
+    ArrayList<Event> registeredevents = Event.loadEventsFromDatabase();
 
 
 
@@ -859,7 +860,49 @@ public class Controller {
         if (studentIDValid && eventIDValid) {
             String studentID=studentIdInputEventsScreen.getText();
             String eventID = eventIDCheckIn.getText();
-            // hammad complete
+            registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
+            boolean studentAvailable = false;
+            boolean eventFound = false;
+
+            for (Event eventInformation : registeredevents) {
+                if (eventInformation.getEventID().equals(eventID)) {
+                    eventFound = true;//check if teh clubID is an exxsisting one so we can then proceed
+                    ArrayList<Student> availableStudentsAtEvent = eventInformation.loadStudentsOfEvent(eventID);//returns the list of students in that club
+
+                    for (Student student : availableStudentsAtEvent) {//checks in that list if the student is available then we can say they are already in it
+                        if (student.getStudentID().equals(studentID)) {
+                            studentAvailable = true;
+                            messageLabel.setText("Already Checked in".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                            messageLabel.setOpacity(1.0);
+                            studentIdInputEventsScreen.clear();
+                            eventIDCheckIn.clear();
+                            break; // No need to continue checking
+                        }
+                    }
+
+                    if (!studentAvailable) {
+                        for (Student student : registeredStudents) {
+                            if (student.getStudentID().equals(studentID)) {//else we get their records and then add it to the club Class
+                                eventInformation.addStudent(student);
+                                messageLabel.setText("Checked in Successfully".toUpperCase());
+                                messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                                messageLabel.setOpacity(1.0);
+                                studentIdInputEventsScreen.clear();
+                                eventIDCheckIn.clear();
+                                break; // No need to continue checking
+                            }
+                        }
+                    }
+
+                    // No need to check other clubs once a match is found
+                    break;
+                }
+            }
+
+            if (!eventFound) {
+                errorJoinClubsLabel.setText("Event Not Available");
+            }
         }
     }
     public void onCheckOutEventClicked(ActionEvent event) throws IOException {
@@ -881,8 +924,39 @@ public class Controller {
         }
         if (studentIDValid && eventIDValid) {
             String studentID=studentIdInputEventsScreen.getText();
-            String eventID = eventIDCheckIn.getText();
-            // hammad complete
+            String eventID = eventIDCheckOut.getText();
+            boolean eventFound = false;
+            registeredStudents = Student.loadStudentsFromDatabase();
+            boolean studentAvailable = false;
+            for (Event eventInformation : registeredevents) {// if leave then the opposite of join
+                if (eventInformation.getEventID().equals(eventID)) {
+                    eventFound = true;
+                    for (Student student : eventInformation.loadStudentsOfEvent(eventID)) {
+                        if (student.getStudentID().equals(studentID)) {
+                            eventInformation.removeStudent(student);
+                            messageLabel.setText("Successfully Checked Out from event".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                            messageLabel.setOpacity(1.0);
+                            studentIdInputEventsScreen.clear();
+                            eventIDCheckOut.clear();
+                            studentAvailable = true;
+                            break;
+                        }
+                    }
+                    if (!studentAvailable) {
+                        messageLabel.setText("You have not checked in".toUpperCase());
+                        messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                        messageLabel.setOpacity(1.0);
+                        studentIdInputEventsScreen.clear();
+                        eventIDCheckOut.clear();
+                        break;
+                    }
+                }
+            }
+
+            if (!eventFound) {
+                errorleaveClubsLabel1.setText("Event Not Available");
+            }
         }
     }
     public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
