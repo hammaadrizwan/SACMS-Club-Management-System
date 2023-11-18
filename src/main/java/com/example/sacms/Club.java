@@ -44,7 +44,21 @@ public class Club {
 
     }
 
+    public void insertIntoClubs(){
+        String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
+            preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(2,getClubName());
+            preparedStatement.setString(3,getClubDescription());
+            preparedStatement.setString(4, getTeacherIncharge());
 
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     //DATABASE METHODS FOR CLUB
     public static String generateClubID() {
