@@ -102,7 +102,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
-            <Label fx:id="errorCheckInEventsLabel" layoutX="29.0" layoutY="76.0" opacity="0.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
+            <Label fx:id="errorCheckInEventsLabel" layoutX="29.0" layoutY="76.0" prefHeight="31.0" prefWidth="163.0" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="15.0" />
                </font>
