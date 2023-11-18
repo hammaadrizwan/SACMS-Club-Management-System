@@ -65,16 +65,16 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <TableView layoutX="27.0" layoutY="225.0" prefHeight="416.0" prefWidth="736.0">
-        <columns>
-          <TableColumn prefWidth="73.0" text="EventID" />
-          <TableColumn prefWidth="223.0" text="Event Name" />
-            <TableColumn prefWidth="107.0" text="Date" />
-            <TableColumn prefWidth="79.0" text="Time" />
-            <TableColumn prefWidth="85.0" text="Location" />
-            <TableColumn prefWidth="167.0" text="Club Name" />
-        </columns>
-      </TableView>
+       <TableView fx:id="eventsViewTable" layoutX="27.0" layoutY="256.0" prefHeight="396.0" prefWidth="736.0">
+           <columns>
+               <TableColumn fx:id="eventIDColumn" prefWidth="73.0" text="EventID" />
+               <TableColumn fx:id="eventNameColumn" prefWidth="223.0" text="Event Name" />
+               <TableColumn fx:id="eventDateColumn" prefWidth="107.0" text="Date" />
+               <TableColumn fx:id="eventTimeColumn" prefWidth="79.0" text="Time" />
+               <TableColumn fx:id="eventLocationColumn" prefWidth="85.0" text="Location" />
+               <TableColumn fx:id="clubIDColumn" prefWidth="167.0" text="Club ID" />
+           </columns>
+       </TableView>
       <Button layoutX="486.0" layoutY="136.0" mnemonicParsing="false" onAction="#onCheckInEventsViewOptionClicked" prefHeight="44.0" prefWidth="126.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="CHECK IN" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
@@ -128,7 +128,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button fx:id="refreshEventsStudentsAndTeachersViewButton" layoutX="40.0" layoutY="256.0" mnemonicParsing="false" onAction="#onRefreshEventsViewStudentsAndTeachersButtonClicked" prefHeight="379.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Events">
+      <Button fx:id="refreshEventsViewButton" layoutX="40.0" layoutY="294.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="341.0" prefWidth="715.0" style="-fx-background-color: white;" text="Refresh Events">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

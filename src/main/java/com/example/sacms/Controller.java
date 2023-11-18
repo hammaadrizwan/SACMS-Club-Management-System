@@ -34,13 +34,13 @@ public class Controller {
     @FXML
     private TextField clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
-    private TextField eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDDelete, eventIDCheckOut;
+    private TextField eventIDDelete,locationEventCreationInput,eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDCheckOut;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
     @FXML
-    private Label messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
-    private Label errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorEventIDDelete, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
+    private Label errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
@@ -61,6 +61,22 @@ public class Controller {
     private TableColumn<Club, String> clubDescriptionColumnClubTable;
     @FXML
     private TableColumn<Club, String> teacherInchargeColumnClubTable;
+
+    @FXML
+    private TableView<Event> eventsViewTable;
+    @FXML
+    private TableColumn<Event, String> eventIDColumn ;
+    @FXML
+    private TableColumn<Event, String> eventNameColumn;
+    @FXML
+    private TableColumn<Event, String> eventDateColumn;
+    @FXML
+    private TableColumn<Event, String> eventTimeColumn;
+    @FXML
+    private TableColumn<Event, String> eventLocationColumn;
+    @FXML
+    private TableColumn<Event, String> clubIDColumn;
+
 
     @FXML
     private TableView<String> clubAdvisorTable;
@@ -425,12 +441,25 @@ public class Controller {
     }
 
     public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean eventNameValid;
+        boolean eventNameValid=false;
         boolean eventDateValid;
         boolean eventTimeValid;
         boolean clubIDValid;
+        boolean eventLocationValid;
         boolean eventDescriptionValid;
-        eventNameValid = checkName(eventNameEventCreationInput, errorEventNameEventCreationInput);
+        String eventNameInput=eventNameEventCreationInput.getText();
+        String eventDateInput=eventDateEventCreationInput.getText();
+        String eventTimeInput=eventTimeEventCreationInput.getText();
+        String clubIDInput=clubIDEventCreationInput.getText();
+        String eventLocationInput=locationEventCreationInput.getText();
+        String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
+
+        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")  ){
+            eventNameValid=false;
+            errorEventNameEventCreationInput.setText("Cannot be empty");
+        }else{
+            eventNameValid= true;
+        }
         eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
         eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
         clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
@@ -441,13 +470,29 @@ public class Controller {
             }
         }
         eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
-        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid) {//if the above inputs done by the user is valid the data will be stored
+        eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
+        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
+            ArrayList registeredEventsID = new ArrayList<>();
+            for (Event eventInfomation:registeredevents){
+                registeredEventsID.add(eventInfomation.getEventID());
+            }
+            String newEventID;
+            do {
+                newEventID = Event.generateEventID();//
+            } while (registeredEventsID.contains(newEventID));
+            Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,eventDescriptionInput,clubIDInput);//updated the club table
+            newEvent.insertIntoEvents();
+
+            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+
             eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             eventDateEventCreationInput.clear();
             eventTimeEventCreationInput.clear();
             clubIDEventCreationInput.clear();
             eventDescriptionEventCreationInput.clear();
-            // Hammad complete this part this is linked with the database u have to store these data there
+
         }
     }
 
@@ -959,9 +1004,28 @@ public class Controller {
             }
         }
     }
-    public void onRefreshEventsViewStudentsAndTeachersButtonClicked(ActionEvent event) throws IOException {
+    public void onRefreshEventsViewButtonClicked(ActionEvent event) throws IOException {
         refreshEventsViewButton.setDisable(true);
         refreshEventsViewButton.setOpacity(0.0);
+        registeredevents = Event.loadEventsFromDatabase();
+        ObservableList<Event> registeredEventsToTable = FXCollections.observableArrayList(registeredevents);
+
+        // Clear existing columns
+        eventsViewTable.getColumns().clear();
+
+
+        eventIDColumn.setCellValueFactory(new PropertyValueFactory<>("eventID"));
+        eventNameColumn.setCellValueFactory(new PropertyValueFactory<>("eventName"));
+        eventDateColumn.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
+        eventTimeColumn.setCellValueFactory(new PropertyValueFactory<>("eventTime"));
+        eventLocationColumn.setCellValueFactory(new PropertyValueFactory<>("eventLocation"));
+        clubIDColumn.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
+
+
+        eventsViewTable.getColumns().addAll(eventIDColumn, eventNameColumn, eventDateColumn, eventTimeColumn, eventLocationColumn, clubIDColumn);
+
+
+        eventsViewTable.setItems(registeredEventsToTable);
     }
     public void onHideEventsViewStudentsAndTeachersOptionClicked(ActionEvent event) throws IOException {
         checkInEventsPane.setOpacity(0.00);
@@ -1002,7 +1066,33 @@ public class Controller {
             }
         }
         if (clubAdvisorIDValid && eventIDValid) {
-            // hammad complete
+            String clubAdvisorID = clubAdvisorIdInputEventsScreen.getText();
+            String eventID = eventIDDelete.getText();
+            registeredClubAdvisors = ClubAdvisor.loadClubAdvisorsFromDatabase();
+            boolean clubAdvisorAvailable = false;
+            for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
+                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
+                    for (Event eventInformation : registeredevents) {
+                        if (eventInformation.getEventID().equals(eventID)) {
+                            eventInformation.deleteEvent(eventID);
+                            clubAdvisorAvailable = true;
+                            messageLabel.setText("Event deleted successfully".toUpperCase());
+                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                            messageLabel.setOpacity(1.0);
+                            eventIDDelete.clear();
+                            clubAdvisorIdInputEventsScreen.clear();
+                            break;
+                        }
+                    }
+                    if (!clubAdvisorAvailable) {
+                        errorEventIDDelete.setText("Not a member of this club");
+                        break;
+
+                    }
+                } else {
+                    errorEventIDDelete.setText("Club Not Available");
+                }
+            }
         }
     }
     public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
@@ -1068,12 +1158,14 @@ public class Controller {
 
 
     public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
-        boolean eventNameValid;
+        boolean eventNameValid = false;
         boolean eventDateValid;
         boolean eventTimeValid;
         boolean eventIDValid;
         boolean eventDescriptionValid;
-        eventNameValid = checkName(eventNameEditEventInput, errorEventNameEditEventInput);
+        if (eventNameEditEventInput.getText().equals("")){
+            eventNameValid=false;
+        }
         eventDateValid = checkDate(eventDateEditEventInput, errorEventDateEditEventInput);
         eventTimeValid = checkTime(eventTimeEditEventInput, errorEventTimeEditEventInput);
         eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);

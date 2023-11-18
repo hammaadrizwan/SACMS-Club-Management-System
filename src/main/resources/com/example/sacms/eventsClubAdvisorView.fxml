@@ -58,7 +58,7 @@
        </AnchorPane>
        <Button layoutX="1013.0" layoutY="99.0" mnemonicParsing="false" onAction="#onUserIconHideButtonClicked" opacity="0.0" prefHeight="84.0" prefWidth="34.0" />
       <Button fx:id="homeScreenButton" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="133.0" text="Button" />
-      <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
+      <Button fx:id="userIconButton" layoutX="957.0" layoutY="24.0" mnemonicParsing="false" onAction="#onUserIconButtonClicked" opacity="0.0" prefHeight="58.0" prefWidth="74.0" />
       <Label layoutX="27.0" layoutY="133.0" prefHeight="62.0" prefWidth="286.0" text="List of Events">
          <font>
             <Font name="System Bold" size="42.0" />
@@ -74,14 +74,14 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TableView layoutX="27.0" layoutY="256.0" prefHeight="396.0" prefWidth="736.0">
+      <TableView fx:id="eventsViewTable" layoutX="27.0" layoutY="256.0" prefHeight="396.0" prefWidth="736.0">
          <columns>
-            <TableColumn prefWidth="73.0" text="EventID" />
-            <TableColumn prefWidth="223.0" text="Event Name" />
-            <TableColumn prefWidth="107.0" text="Date" />
-            <TableColumn prefWidth="79.0" text="Time" />
-            <TableColumn prefWidth="85.0" text="Location" />
-            <TableColumn prefWidth="167.0" text="Club Name" />
+            <TableColumn fx:id="eventIDColumn" prefWidth="73.0" text="EventID" />
+            <TableColumn fx:id="eventNameColumn" prefWidth="223.0" text="Event Name" />
+            <TableColumn fx:id="eventDateColumn" prefWidth="107.0" text="Date" />
+            <TableColumn fx:id="eventTimeColumn" prefWidth="79.0" text="Time" />
+            <TableColumn fx:id="eventLocationColumn" prefWidth="85.0" text="Location" />
+            <TableColumn fx:id="clubIDColumn" prefWidth="167.0" text="Club ID" />
          </columns>
       </TableView>
       <Button layoutX="489.0" layoutY="195.0" mnemonicParsing="false" onAction="#onEditEventsViewOptionClicked" prefHeight="44.0" prefWidth="126.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="EDIT" textFill="WHITE">
@@ -123,7 +123,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="refreshEventsViewClubAdvisorButton" layoutX="50.0" layoutY="287.0" mnemonicParsing="false" onAction="#onRefreshEventsViewClubAdvisorButtonClicked" prefHeight="358.0" prefWidth="691.0" style="-fx-background-color: white;" text="Refresh Events">
+      <Button fx:id="refreshEventsViewButton" layoutX="50.0" layoutY="287.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="358.0" prefWidth="691.0" style="-fx-background-color: white;" text="Refresh Events">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

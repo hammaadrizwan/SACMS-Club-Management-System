@@ -72,7 +72,7 @@ public class Event {
         this.eventLocation = eventLocation;
     }
 
-    public String generateEventID() {
+    public static String generateEventID() {
         int idLength = 4;//Mmebreshoip ID of 10 digits
         StringBuilder stringBuilder = new StringBuilder("E");
         Random random = new Random();
@@ -97,11 +97,11 @@ public class Event {
     }
     public static void createEventTableOnDatabase() {
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
-            String query = "CREATE TABLE Events (" +
+            String query = "CREATE TABLE IF NOT EXISTS Events (" +
                     "    EventID VARCHAR(5) PRIMARY KEY," +
                     "    EventName VARCHAR(255)," +
                     "    Date VARCHAR(10)," +
-                    "    Time VARCHAR(5)," +
+                    "    Time VARCHAR(10)," +
                     "    Location VARCHAR(25)," +
                     "    ClubID VARCHAR(5)," +
                     "    EventDescription VARCHAR(255)," +
@@ -109,7 +109,6 @@ public class Event {
                     ");";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
                 preparedStatement.executeUpdate();// finaly its then executed on the database
-                System.out.println("Event table created");//confirmation message on the GUI
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,7 +120,7 @@ public class Event {
                     "    AttendanceID VARCHAR(10) PRIMARY KEY," +
                     "    EventID VARCHAR(5)," +
                     "    StudentID VARCHAR(5)," +
-                    "    FOREIGN KEY (EventID) REFERENCES Event(EventID)," +
+                    "    FOREIGN KEY (EventID) REFERENCES Events(EventID)," +
                     "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
                     ");";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
@@ -135,7 +134,7 @@ public class Event {
         createEventTableOnDatabase();
         ArrayList<Event> events = new ArrayList<>();
         try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM event");//prepare the statement
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM events");//prepare the statement
              ResultSet results = preparedStatement.executeQuery()) {//we get it as a Result set
 
             while (results.next()) {// until the set of results are empty we populate the list of clubs and return it
@@ -229,7 +228,7 @@ public class Event {
     }
 
     public void insertIntoEvents(){
-        String insertClubQuery = "INSERT INTO Event VALUES (?, ?,?,?,?,?,?)";
+        String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
             preparedStatement.setString(1,getEventID());//inserts the Membership ID,student ID and the club ID to the table
@@ -248,7 +247,7 @@ public class Event {
     }
     public void deleteEvent(String eventID){
         String deleteEventAttendanceQuery = "Delete from eventattendance where eventattendance.eventid = ?;";
-        String deleteEventQuery = "Delete from event where eventid = ?;";
+        String deleteEventQuery = "Delete from events where eventid = ?;";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteEventAttendanceQuery);
              PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteEventQuery)) {
