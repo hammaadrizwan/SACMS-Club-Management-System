@@ -208,22 +208,6 @@ public class Club {
         return students; // return the list of students
     }
 
-    public void insertIntoClubs(){
-        String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
-        try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
-            preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
-            preparedStatement.setString(2,getClubName());
-            preparedStatement.setString(3,getClubDescription());
-            preparedStatement.setString(4, getTeacherIncharge());
-
-            preparedStatement.executeUpdate();//push
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void deleteClub(String clubID){
         String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";//to delete a club first we remove them from the club advisor thenclub membership and finally in the club id
         String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
