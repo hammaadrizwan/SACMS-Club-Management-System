@@ -34,13 +34,13 @@ public class Controller {
     @FXML
     private TextField clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
-    private TextField eventIDDelete,locationEventCreationInput,eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDCheckOut;
+    private TextField clubIDEditEventInput,locationEventEditInput,eventIDDelete,locationEventCreationInput,eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDCheckOut;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
     @FXML
-    private Label errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
-    private Label errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
+    private Label errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
@@ -387,11 +387,12 @@ public class Controller {
         eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
         eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
         clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
-        if (clubIDValid) {
-            if (!sessionUser.equals("Club")) {//To check whether the user has entered a clubID or not
-                errorClubIDEventCreationInput.setText("Invalid ID");
-                clubIDValid = false;
-            }
+        ArrayList<String> registeredClubsID = new ArrayList<>();
+        for (Club club :registeredClubs){
+            registeredClubsID.add(club.getClubID());
+        }
+        if (!registeredClubsID.contains(clubIDEditEventInput)){
+            clubIDValid=false;
         }
         eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
         eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
@@ -405,7 +406,7 @@ public class Controller {
                 newEventID = Event.generateEventID();//
             } while (registeredEventsID.contains(newEventID));
             Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,eventDescriptionInput,clubIDInput);//updated the club table
-            newEvent.insertIntoEvents();
+            newEvent.insertEvent();
 
             messageLabel.setText("EVENT CREATED SUCCESSFULLY");
             messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
@@ -1081,8 +1082,11 @@ public class Controller {
                             messageLabel.setOpacity(1.0);
                             eventIDDelete.clear();
                             clubAdvisorIdInputEventsScreen.clear();
+                            refreshEventsViewButton.setDisable(false);
+                            refreshEventsViewButton.setOpacity(1.0);
                             break;
                         }
+
                     }
                     if (!clubAdvisorAvailable) {
                         errorEventIDDelete.setText("Not a member of this club");
@@ -1095,14 +1099,6 @@ public class Controller {
             }
         }
     }
-    public void onRefreshEventsViewClubAdvisorButtonClicked(ActionEvent event) throws IOException {
-        refreshEventsViewButton.setDisable(true);
-        refreshEventsViewButton.setOpacity(0.0);
-
-
-
-    }
-
     //clubs View Methods Club Advisors
     public void onDeleteClubsViewOptionClicked(ActionEvent event) throws IOException {
         deleteClubsPane.setOpacity(1.0);
@@ -1141,8 +1137,11 @@ public class Controller {
                             messageLabel.setOpacity(1.0);
                             clubIDDeleteInput.clear();
                             clubAdvisorIDInputClubsScreen.clear();
+                            refreshClubsViewButton.setDisable(false);
+                            refreshClubsViewButton.setOpacity(1.0);
                             break;
                         }
+
                     }
                     if (!clubAdvisorAvailable) {
                         errorDeleteClubsLabel.setText("Not a member of this club");
@@ -1158,26 +1157,79 @@ public class Controller {
 
 
     public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
-        boolean eventNameValid = false;
+        boolean eventNameValid;
         boolean eventDateValid;
         boolean eventTimeValid;
         boolean eventIDValid;
+        boolean clubIDValid;
         boolean eventDescriptionValid;
-        if (eventNameEditEventInput.getText().equals("")){
+        boolean eventLocationValid;
+
+        boolean eventFound = false;
+
+        if (eventNameEditEventInput.getText().equals(null) || eventNameEditEventInput.getText().equals("")  ){
             eventNameValid=false;
+            errorEventNameEditEventInput.setText("Cannot be empty");
+        }else{
+            eventNameValid= true;
+            errorEventNameEditEventInput.setText("");
+        }
+        if (locationEventEditInput.getText().equals(null) || locationEventEditInput.getText().equals("")  ){
+            eventLocationValid=false;
+            errorLocationEventEditInput.setText("Cannot be empty");
+        }else{
+            eventLocationValid= true;
+            errorLocationEventEditInput.setText("");
         }
         eventDateValid = checkDate(eventDateEditEventInput, errorEventDateEditEventInput);
         eventTimeValid = checkTime(eventTimeEditEventInput, errorEventTimeEditEventInput);
         eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);
-        if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a eventID or not
-                errorEventIDEditEventInput.setText("Invalid ID");
-                eventIDValid = false;
-            }
+        clubIDValid = checkID(clubIDEditEventInput, errorClubIDEditEventInput);
+
+        ArrayList<String> registeredClubsID = new ArrayList<>();
+        for (Club club :registeredClubs){
+            registeredClubsID.add(club.getClubID());
         }
+        if (!registeredClubsID.contains(clubIDEditEventInput)){
+            clubIDValid=false;
+        }
+
         eventDescriptionValid = checkDescription(eventDescriptionEditEventInput, errorEventDescriptionEditEventInput);
-        if (eventNameValid && eventDateValid && eventTimeValid && eventIDValid && eventDescriptionValid) {//if the above inputs done by the user is valid the data will be stored
-            // should be completed
+        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
+            String eventIDInput=eventIDEditEventInput.getText();
+            String eventNameInput=eventNameEditEventInput.getText();
+            String eventDateInput=eventDateEditEventInput.getText();
+            String eventTimeInput=eventTimeEditEventInput.getText();
+            String eventClubIDInput=clubIDEditEventInput.getText();
+            String eventLocationInput=locationEventEditInput.getText();
+            String eventDescriptionInput=eventDescriptionEditEventInput.getText();
+            for (Event existingEvent:registeredevents){
+                if (existingEvent.getEventID().equals(eventIDInput)){
+                    eventFound = true;
+                    existingEvent.setEventName(eventNameInput);
+                    existingEvent.setEventDate(eventDateInput);
+                    existingEvent.setEventTime(eventTimeInput);
+                    existingEvent.setClubID(eventClubIDInput);
+                    existingEvent.setEventLocation(eventLocationInput);
+                    existingEvent.setEventDescription(eventDescriptionInput);//updates the event based on the new info
+                    existingEvent.updateEvent();
+                    messageLabel.setText("Event updated successfully".toUpperCase());
+                    messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    eventIDEditEventInput.clear();
+                    eventNameEditEventInput.clear();
+                    eventDateEditEventInput.clear();
+                    eventTimeEditEventInput.clear();
+                    clubIDEditEventInput.clear();
+                    locationEventEditInput.clear();
+                    eventDescriptionEditEventInput.clear();
+                }
+            }
+            if (!eventFound){
+                messageLabel.setText("EVENT NOT FOUND");
+                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
+            }
         }
     }
 

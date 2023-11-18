@@ -227,7 +227,7 @@ public class Event {
         return existingAttendanceIDs;
     }
 
-    public void insertIntoEvents(){
+    public void insertEvent(){
         String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
@@ -260,6 +260,28 @@ public class Event {
             preparedDeleteClubQueryStatement.setString(1,eventID);
             preparedDeleteClubQueryStatement.executeUpdate();// once its updated we then set commit all at once
 
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateEvent(){
+        String updateQuery = "UPDATE Events SET EventName = ?, Date = ?,Time = ?,Location = ?,ClubID=? ,EventDescription = ? WHERE EventID = ?;";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatementToEdit = connection.prepareStatement(updateQuery)) {
+
+            connection.setAutoCommit(false);//pause autocommit as theres a squence of insturections to be followed
+
+            preparedStatementToEdit.setString(1,getEventName());
+            preparedStatementToEdit.setString(2,getEventDate());
+            preparedStatementToEdit.setString(3,getEventTime());
+            preparedStatementToEdit.setString(4,getEventLocation());
+            preparedStatementToEdit.setString(5,getClubID());
+            preparedStatementToEdit.setString(6,getEventDescription());
+            preparedStatementToEdit.setString(7,getEventID());
+            preparedStatementToEdit.executeUpdate();
 
             connection.commit();
 

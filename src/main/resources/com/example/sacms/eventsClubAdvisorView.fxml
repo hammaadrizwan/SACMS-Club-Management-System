@@ -123,7 +123,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="refreshEventsViewButton" layoutX="50.0" layoutY="287.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="358.0" prefWidth="691.0" style="-fx-background-color: white;" text="Refresh Events">
+      <Button fx:id="refreshEventsViewButton" layoutX="30.0" layoutY="281.0" mnemonicParsing="false" onAction="#onRefreshEventsViewButtonClicked" prefHeight="369.0" prefWidth="730.0" style="-fx-background-color: white;" text="Refresh Events">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
