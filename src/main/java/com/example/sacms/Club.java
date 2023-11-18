@@ -12,9 +12,7 @@ public class Club {
     private String clubDescription;
     private String clubID;
     private String teacherIncharge;
-    private ArrayList<Event> events;
     private ArrayList<Student> students;
-    private ArrayList<Request> requests;
 
 
     Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
@@ -23,8 +21,6 @@ public class Club {
         this.clubName=clubName;
         this.teacherIncharge = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
-        //this.events=loadStudentsOfClub(clubID);
-
     }
 
     public String getClubName() {
@@ -223,15 +219,21 @@ public class Club {
     }
 
     public void deleteClub(String clubID){
+        createRequestTableOnDatabase();
+        String deleteRequestQuery = "Delete from request where request.clubId = ?;";
         String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";//to delete a club first we remove them from the club advisor thenclub membership and finally in the club id
         String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
         String deleteClubQuery = "Delete from club where clubid = ?;";
         try (Connection connection = Database.getConnection();
+             PreparedStatement preparedDeleteRequestQueryStatement = connection.prepareStatement(deleteRequestQuery);
              PreparedStatement preparedDeleteClubAdvisorQueryStatement = connection.prepareStatement(deleteClubAdvisorQuery);
              PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteClubMembershipQuery);
              PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteClubQuery)) {
 
             connection.setAutoCommit(false);//pause autocommit as theres a squence of insturections to be followed
+
+            preparedDeleteRequestQueryStatement.setString(1,clubID);
+            preparedDeleteRequestQueryStatement.executeUpdate();
 
             preparedDeleteClubAdvisorQueryStatement.setString(1,clubID);
             preparedDeleteClubAdvisorQueryStatement.executeUpdate();
@@ -250,16 +252,6 @@ public class Club {
         }
     }
 
-    /*public void addRequest(){
-
-        ArrayList<String> exsistingRequests= new ArrayList<String>();
-        String requestID;
-        do {
-            requestID = generateRequestID();//generate a membership ID for each student
-        } while (Request.loadExistingRequests().contains(requestID));//until its unique we generate a new ID
-        requests.add(request);
-
-    }*/
     public static String generateRequestID() {
         int idLength = 9;
         StringBuilder stringBuilder = new StringBuilder("R");
@@ -271,14 +263,16 @@ public class Club {
 
         return stringBuilder.toString();// returns it
     }
-    public static void createTableOnDatabase(){
+    public static void createRequestTableOnDatabase(){
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
             String query ="CREATE TABLE IF NOT exists Request (" +
                     "    RequestID VARCHAR(10) PRIMARY KEY," +
+                    "    ClubID VARCHAR(5),"+
                     "    TeacherID VARCHAR(5)," +
                     "    StudentID VARCHAR(5)," +
                     "    Position VARCHAR(25)," +
-                    "    FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID)" +
+                    "    FOREIGN KEY (ClubID) REFERENCES Club(ClubID)," +
+                    "    FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID)," +
                     "    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)" +
                     ");";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
@@ -287,6 +281,77 @@ public class Club {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public static void addRequest(String requestID, String clubID, String teacherID, String studentID, String position){
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+            String insertRequest = "INSERT INTO REQUEST VALUES (?,?,?,?,?);";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertRequest)) {//this is then converted to a prerpare statment
+                preparedStatement.setString(1,requestID);//inserts the Membership ID,student ID and the club ID to the table
+                preparedStatement.setString(2,clubID);
+                preparedStatement.setString(3,teacherID);
+                preparedStatement.setString(4,studentID);
+                preparedStatement.setString(5,position);
+                preparedStatement.executeUpdate();//push
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static ArrayList<String[]> loadRequestsOfClub(String teacherID) {
+        createRequestTableOnDatabase();
+        ArrayList<String[]> result = new ArrayList<String[]>();
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from Request where Request.TeacherID=?;")) {
+
+            preparedStatement.setString(1, teacherID);
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    String[] row = new String[5];
+                    row[0] = results.getString("RequestID");
+                    row[1] = results.getString("ClubID");
+                    row[2] = results.getString("TeacherID");
+                    row[3] = results.getString("StudentID");
+                    row[4] = results.getString("Position");
+                    result.add(row);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void deleteRequest(String requestID){
+        String deleteRequestQuery = "Delete from Request where requestID = ?;";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedDeleteEventQueryStatement = connection.prepareStatement(deleteRequestQuery)) {
+            connection.setAutoCommit(false);//pause autocommit as a squence of insturections to be followed
+            preparedDeleteEventQueryStatement.setString(1,requestID);
+            preparedDeleteEventQueryStatement.executeUpdate();// once its updated we then set commit all at once
+            connection.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static ArrayList<String> loadExistingRequestsIds(){
+        createRequestTableOnDatabase();
+        ArrayList<String> existingRequestsIds = new ArrayList<>();
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM request");
+             ResultSet results = preparedStatement.executeQuery()) {
+
+            while (results.next()) {
+                existingRequestsIds.add(results.getString("RequestID"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return existingRequestsIds;
     }
 }
 

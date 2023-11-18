@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Controller {
     public String sessionUser;
-    public String text;
+
     private Stage stage;//main stage where all our windows appear
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
@@ -40,16 +40,15 @@ public class Controller {
     @FXML
     private Label errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
-    private Label errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
+    private Label dashboardLabelClubAdvisorSignin,errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
-    private Button refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
+    private Button requestClubAdvisorRoleButtonSignInTwo,dashboardButtonClubAdvisorSignin,refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
     @FXML
     private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane,checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
     private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
-
 
     @FXML
     private TableView<Club> clubsViewTable;
@@ -103,8 +102,22 @@ public class Controller {
     ArrayList<ClubAdvisor> registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
     ArrayList<Club> registeredClubs =Club.loadClubsFromDatabase();
     ArrayList<Event> registeredevents = Event.loadEventsFromDatabase();
-
-
+    public static Controller instance;
+    public String sessionID;
+    public String getSessionID(){//to check whos currently logged in to the system
+        return this.sessionID;
+    }
+    public void setSessionID(String id){
+        this.sessionID=id;
+    }
+    public Controller() {
+    }
+    public static Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
+        }
+        return instance;
+    }//create a new controller instance if its null
 
     //SCREEN NAVIGATION METHODS
     @FXML
@@ -154,11 +167,9 @@ public class Controller {
         refreshButtonStudentsAndTeachersDashboard.setOpacity(0.0);//hides the refresh button when clicked
         refreshButtonStudentsAndTeachersDashboard.setDisable(true);
 
-        // Format the date to "THU 03 OCT" using a custom DateTimeFormatter
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEE  dd  MMM");
         String formattedDate = now.format(dateFormatter).toUpperCase();
 
-        // Format the time to "15:24"
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedTime = now.format(timeFormatter);
 
@@ -422,29 +433,53 @@ public class Controller {
     }
 
     public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
+        messageLabel.setText("");
         boolean studentIDValid;
         boolean positionValid;
         boolean clubIDValid;
+        boolean clubFound = false;
+        boolean studentFound = false;
         studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
-        if (studentIDValid) {
-            if (!sessionUser.equals("Student")) {//To check whether the user has entered a studentID or not
-                errorStudentIDSigInClubAdvisorScreen.setText("Invalid ID");
-                studentIDValid = false;
+        for (Student student: registeredStudents) {
+            if (student.getStudentID().equals(studentIDSigInClubAdvisorScreen.getText())){
+                studentFound=true;
             }
         }
         positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
         clubIDValid = checkID(clubIDSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen);
-        if (clubIDValid) {
-            if (!sessionUser.equals("Club")) {//To check whether the user has entered a clubID or not
-                errorClubIDSigInClubAdvisorScreen.setText("Invalid ID");
-                clubIDValid = false;
+        if (studentIDValid && positionValid && clubIDValid && studentFound) {//if the above inputs done by the user is valid the data will be stored
+            String requestID;
+            do {
+                requestID=Club.generateRequestID();
+            }while (Club.loadExistingRequestsIds().contains(requestID));
+            String teacherID="";
+            String clubID="";
+            for (Club club:registeredClubs){
+                if (club.getClubID().equals(clubIDSigInClubAdvisorScreen.getText())){
+                    teacherID=club.getTeacherIncharge();
+                    clubID=club.getClubID();
+                    clubFound=true;
+                    Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
+                    messageLabel.setText("REQUEST SENT");
+                    messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    dashboardButtonClubAdvisorSignin.setDisable(false);
+                    dashboardButtonClubAdvisorSignin.setOpacity(1.0);
+                    dashboardLabelClubAdvisorSignin.setOpacity(1.0);
+                    requestClubAdvisorRoleButtonSignInTwo.setDisable(true);
+                    studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+                    positionSigInClubAdvisorScreen.clear();
+                    clubIDSigInClubAdvisorScreen.clear();
+                }
             }
-        }
-        if (studentIDValid && positionValid && clubIDValid) {//if the above inputs done by the user is valid the data will be stored
-            studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            positionSigInClubAdvisorScreen.clear();
-            clubIDSigInClubAdvisorScreen.clear();
-            // Hammad complete this part this is linked with the database u have to store these data there
+        }if (!clubFound){
+            messageLabel.setText("CLUB DOESNT EXIST");
+            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        }if (!studentFound){
+            messageLabel.setText("Student Doesnt exist".toUpperCase());
+            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
         }
     }
 
@@ -548,16 +583,15 @@ public class Controller {
         }
         passwordValid = checkPassword(passwordLoginInput, errorPasswordLoginInput);
         if (IDValid && passwordValid) {
-            boolean found=false;
-            idInput=IDLoginInput.getText().toString();
-            passwordInput=passwordLoginInput.getText().toString();
+            boolean found = false;
+            idInput = IDLoginInput.getText().toString();
+            passwordInput = passwordLoginInput.getText().toString();
             //read from the database for exsisting records
             if (sessionUser.equals("Student")){
                         registeredStudents=Student.loadStudentsFromDatabase();
                         for (Student student:registeredStudents){
                             if (student.getStudentID().equals(idInput)){
                                 if(student.getPassword().equals(passwordInput)){
-                                    text = (student.greetUser().toString());
                                     found=true;
                                     onDashboardStudentsAndTeachersScreenButtonClicked(event);
                                 }
@@ -565,22 +599,24 @@ public class Controller {
                             errorPasswordLoginInput.setText("Incorrect Password");
                         }
             }
-            if (sessionUser.equals("Teacher")){
-                registeredTeachers=Teacher.loadTeachersFromDatabase();
-                if (registeredTeachers.size()>0){
-                    for (Teacher teacher:registeredTeachers){
-                        if (teacher.getStaffID().equals(idInput)){
-                            if(teacher.getPassword().equals(passwordInput)){
-                                text=teacher.greetUser();
-                                found=true;
+            if (sessionUser.equals("Teacher")) {
+                registeredTeachers = Teacher.loadTeachersFromDatabase();
+                if (registeredTeachers.size() > 0) {
+                    for (Teacher teacher : registeredTeachers) {
+                        if (teacher.getStaffID().equals(idInput)) {
+                            if (teacher.getPassword().equals(passwordInput)) {
+                                found = true;
+                                Controller controller = Controller.getInstance(); // Get the singleton instance
+                                controller.setSessionID(idInput);
                                 onTeacherPopUScreenButtonClicked(event);
+                            } else {
+                                errorPasswordLoginInput.setText("Incorrect Password");
                             }
-                            errorPasswordLoginInput.setText("Incorrect ID or Password");
                         }
                     }
                 }
-
             }
+
             if (sessionUser.equals("ClubAdvisor")){
                 registeredStudents=Student.loadStudentsFromDatabase();
                 registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
@@ -615,8 +651,13 @@ public class Controller {
     public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
         refreshButtonTeacherPopUp.setOpacity(0.00);
         refreshButtonTeacherPopUp.setDisable(true);
-
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
         boolean haveNotification=false;
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        if (!requests.isEmpty()){
+            haveNotification=true;
+        }
 
         if (!haveNotification){
             approveButtonTeacherScreen.setOpacity(0.00);
@@ -626,15 +667,65 @@ public class Controller {
             messageTeacherPopUpScreen.setText("No notifications");
             studentNameTeacherPopUpScreen.setText("");
             clubNameTeacherPopUpScreen.setText("");
+        }else{
+            String[] request = requests.get(0);
+            String studentID = request[3];
+            String studentName = "";
+            String clubID = request[1];
+            String clubName="";
+            for (Student student: registeredStudents) {
+                if (student.getStudentID().equals(studentID)){
+                    studentName = student.getFirstName()+" "+student.getLastName();
+                }
+            }
+            for (Club club: registeredClubs) {
+                if (club.getClubID().equals(clubID)){
+                    clubName = club.getClubName();
+                }
+            }
+            studentNameTeacherPopUpScreen.setText(studentName);
+            clubNameTeacherPopUpScreen.setText(clubName);
+            studentNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
+            clubNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
         }
 
     }
     public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException {
         //code to approve the club advisor
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        String[] request = requests.get(0);
+
+        ArrayList<String> exisitngClubAdvisorIDs = new ArrayList<String>();
+        for (ClubAdvisor clubAdvisor :registeredClubAdvisors){
+            exisitngClubAdvisorIDs.add(clubAdvisor.getClubAdvisorID());
+        }
+        String newClubAdvisorID;
+
+        do {
+            newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();
+        } while (exisitngClubAdvisorIDs.contains(newClubAdvisorID));
+        ClubAdvisor clubAdvisor = new ClubAdvisor(newClubAdvisorID,request[3],request[1],request[4]);
+        clubAdvisor.insertIntoClubAdvisorTable();
+
+        Club.deleteRequest(request[0]);//Delete the request once done
+        approveButtonTeacherScreen.setOpacity(0.00);
+        approveButtonTeacherScreen.setDisable(true);
+        rejectButtonTeacherScreen.setOpacity(0.00);
+        rejectButtonTeacherScreen.setDisable(true);
+        messageTeacherPopUpScreen.setText("No notifications");
+        studentNameTeacherPopUpScreen.setText("");
+        clubNameTeacherPopUpScreen.setText("");
         onTeacherPopUpCloseButtonClicked(event);
     }
     public void onRejectButtonTeacherScreenClicked(ActionEvent event) throws IOException {
-        //test
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        String[] request = requests.get(0);
+
+        Club.deleteRequest(request[0]);
         onTeacherPopUpCloseButtonClicked(event);
     }
 
