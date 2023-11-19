@@ -153,12 +153,12 @@ public class Club {
         }
     }
 
-    public void removeStudent(Student s){
-        students.remove(s);//remove the student from the database
+    public void removeStudent(Student student){
+        students.remove(student);//remove the student from the database
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM clubsMembership WHERE StudentID = ? AND ClubID = ?")) {// deketes the row where the student ID is equal to the on e entered
 
-            preparedStatement.setString(1, s.getStudentID());
+            preparedStatement.setString(1, student.getStudentID());
             preparedStatement.setString(2,getClubID());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
