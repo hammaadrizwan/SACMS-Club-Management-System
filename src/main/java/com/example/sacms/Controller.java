@@ -427,6 +427,76 @@ public class Controller {
     public void onUserIconHideButtonClicked (ActionEvent event) throws IOException {
         userIconButtonOptionPane.setOpacity(0.00);//hides the buttons
     }
+
+    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
+        boolean eventNameValid=false;
+        boolean eventDateValid;
+        boolean eventTimeValid;
+        boolean clubIDValid;
+        boolean eventLocationValid;
+        boolean eventDescriptionValid;
+        String eventNameInput=eventNameEventCreationInput.getText();
+        String eventDateInput=eventDateEventCreationInput.getText();
+        String eventTimeInput=eventTimeEventCreationInput.getText();
+        String clubIDInput=clubIDEventCreationInput.getText();
+        String eventLocationInput=locationEventCreationInput.getText();
+        String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
+
+        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")  ){
+            eventNameValid=false;
+            errorEventNameEventCreationInput.setText("Cannot be empty");
+        }else{
+            eventNameValid= true;
+            errorEventNameEventCreationInput.setText("");
+        }
+        eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
+        eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
+        clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
+
+        ArrayList<String> registeredClubsID = new ArrayList<>();
+        for (Club club :registeredClubs){
+            registeredClubsID.add(club.getClubID());
+        }
+        if (!registeredClubsID.contains(clubIDEventCreationInput.getText())){
+            clubIDValid=false;
+            errorClubIDEventCreationInput.setText("Club not Found");
+        }else{
+            clubIDValid=true;
+            errorClubIDEventCreationInput.setText("");
+        }
+        eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
+        eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
+        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
+            ArrayList registeredEventsID = new ArrayList<>();
+            for (Event eventInfomation:registeredevents){
+                registeredEventsID.add(eventInfomation.getEventID());
+            }
+            String newEventID;
+            do {
+                newEventID = Event.generateEventID();//
+            } while (registeredEventsID.contains(newEventID));
+            Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,clubIDInput,eventDescriptionInput);//updated the club table
+            newEvent.insertEvent();
+
+            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+
+            eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+            eventDateEventCreationInput.clear();
+            eventTimeEventCreationInput.clear();
+            clubIDEventCreationInput.clear();
+            locationEventCreationInput.clear();
+            eventDescriptionEventCreationInput.clear();
+
+        }else{
+            messageLabel.setText("Doesnt go in");
+            messageLabel.setStyle("-fx-background-color: red;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        }
+
+    }
+
     @FXML
     public void onLogInScreenButtonClicked(ActionEvent event) throws IOException {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));

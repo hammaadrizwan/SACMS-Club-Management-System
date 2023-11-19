@@ -83,6 +83,26 @@ public class Event {
 
         return stringBuilder.toString();
     }
+
+    public void insertEvent(){
+        String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
+            preparedStatement.setString(1,getEventID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(2,getEventName());
+            preparedStatement.setString(3,getEventDate());
+            preparedStatement.setString(4,getEventTime());
+            preparedStatement.setString(5, getEventLocation());
+            preparedStatement.setString(6, getClubID());
+            preparedStatement.setString(7, getEventDescription());
+
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String generateAttendanceID() {
 
         int idLength = 9;//Mmebreshoip ID of 10 digits
