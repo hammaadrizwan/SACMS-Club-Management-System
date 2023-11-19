@@ -46,7 +46,7 @@ public class Controller {
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
-    private Button requestClubAdvisorRoleButtonSignInTwo,dashboardButtonClubAdvisorSignin,refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
+    private Button refreshReportViewButton,requestClubAdvisorRoleButtonSignInTwo,dashboardButtonClubAdvisorSignin,refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
     @FXML
     private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
 
@@ -94,6 +94,18 @@ public class Controller {
     @FXML
     private TableColumn<String, String> emailColumnClubAdvisorTable;
 
+    @FXML
+    private TableView<String> reportsTable;
+    @FXML
+    private TableColumn<String, String> clubNameReportColumn;
+    @FXML
+    private TableColumn<String, String> NoOfClubMembersColumn;
+    @FXML
+    private TableColumn<String, String> NoOfClubEventsHeldColumn;
+    @FXML
+    private TableColumn<String, String> recentEventNameColumn;
+    @FXML
+    private TableColumn<String, String> recentEventAttendance;
 
 
 
@@ -1432,8 +1444,53 @@ public class Controller {
 
     //report View Methods
     public void onRefreshReportsViewButtonClicked(ActionEvent event) throws IOException {
+        refreshReportViewButton.setDisable(true);
+        refreshReportViewButton.setOpacity(0.0);
+        reportsTable.getItems().clear();
+        reportsTable.getColumns().clear();
+        String query = "SELECT c.ClubName, COUNT(DISTINCT cm.StudentID) AS NumberOfClubMembers, COUNT(DISTINCT e.EventID) AS NumberOfEventsHeld, MAX(e.EventName) AS RecentEventName, COUNT(DISTINCT ea.StudentID) AS RecentEventAttendance FROM Club c LEFT JOIN ClubsMembership cm ON c.ClubID = cm.ClubID LEFT JOIN Events e ON c.ClubID = e.ClubID LEFT JOIN EventAttendance ea ON e.EventID = ea.EventID GROUP BY c.ClubID;";
+        ArrayList<String[]> reportInformation = new ArrayList<>();// loads the infor from the Database
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    String[] row = new String[5];
+                    row[0] = results.getString("ClubName");
+                    row[1] = results.getString("NumberOfClubMembers");
+                    row[2] = results.getString("NumberOfEventsHeld");
+                    row[3] = results.getString("RecentEventName");
+                    row[4] = results.getString("RecentEventAttendance");
+                    reportInformation.add(row);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ObservableList<String> data = FXCollections.observableArrayList();//the obsevable list is being crated
+        for (String[] row : reportInformation) {//rows are being joined with the comma
+            data.add(String.join(", ", row));
+        }
+
+        reportsTable.setItems(data);//sets the table with this data observalbe list
+
+        clubNameReportColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[0]));//each cell is going to store the values of a simple string Property and is considering only the 0 element
+        NoOfClubMembersColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[1]));
+        NoOfClubEventsHeldColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[2]));
+        recentEventNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[3]));
+        recentEventAttendance.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().split(", ")[4]));
+
+        // Add columns to the TableView
+        reportsTable.getColumns().addAll(clubNameReportColumn, NoOfClubMembersColumn, NoOfClubEventsHeldColumn, recentEventNameColumn, recentEventAttendance);
+
 
     }
+    public void onDownloadReportClicked(ActionEvent event){
+
+    }
+
     public void onRefreshClubsInchargeListClicked(ActionEvent event) throws IOException {
         refreshClubsInchargeList.setOpacity(0.0);
         refreshClubsInchargeList.setDisable(true);
