@@ -63,13 +63,13 @@
                 <Font name="System Bold" size="42.0" />
             </font>
         </Label>
-        <TableView layoutX="28.0" layoutY="229.0" prefHeight="422.0" prefWidth="997.0">
+        <TableView fx:id="reportsTable" layoutX="28.0" layoutY="229.0" prefHeight="422.0" prefWidth="997.0">
             <columns>
-                <TableColumn prefWidth="217.0" text="Club Name" />
-                <TableColumn prefWidth="186.0" text="Number of Club Members" />
-                <TableColumn prefWidth="192.0" text="Number of Club Events Held" />
-                <TableColumn prefWidth="237.0" text="Recent Event" />
-                <TableColumn prefWidth="164.0" text="Recent Event Attendance" />
+                <TableColumn fx:id="clubNameReportColumn" prefWidth="217.0" text="Club Name" />
+                <TableColumn fx:id="NoOfClubMembersColumn" prefWidth="186.0" text="Number of Club Members" />
+                <TableColumn fx:id="NoOfClubEventsHeldColumn" prefWidth="192.0" text="Number of Club Events Held" />
+                <TableColumn fx:id="recentEventNameColumn" prefWidth="237.0" text="Recent Event" />
+                <TableColumn fx:id="recentEventAttendance" prefWidth="157.0" text="Recent Event Attendance" />
             </columns>
         </TableView>
       <Button fx:id="refreshReportViewButton" layoutX="190.0" layoutY="262.0" mnemonicParsing="false" onAction="#onRefreshReportsViewButtonClicked" prefHeight="346.0" prefWidth="682.0" style="-fx-background-color: white;" text="Refresh Clubs">

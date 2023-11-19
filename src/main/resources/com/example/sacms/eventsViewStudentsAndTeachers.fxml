@@ -72,7 +72,7 @@
                <TableColumn fx:id="eventDateColumn" prefWidth="107.0" text="Date" />
                <TableColumn fx:id="eventTimeColumn" prefWidth="79.0" text="Time" />
                <TableColumn fx:id="eventLocationColumn" prefWidth="85.0" text="Location" />
-               <TableColumn fx:id="clubIDColumn" prefWidth="167.0" text="Club ID" />
+               <TableColumn fx:id="eventDescriptionColumn" prefWidth="167.0" text="Description" />
            </columns>
        </TableView>
       <Button layoutX="486.0" layoutY="136.0" mnemonicParsing="false" onAction="#onCheckInEventsViewOptionClicked" prefHeight="44.0" prefWidth="126.0" style="-fx-background-color: #55CB68; -fx-background-radius: 15;" text="CHECK IN" textFill="WHITE">

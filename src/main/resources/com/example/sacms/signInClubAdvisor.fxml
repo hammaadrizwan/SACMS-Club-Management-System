@@ -80,5 +80,15 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
+      <Button fx:id="dashboardButtonClubAdvisorSignin" disable="true" layoutX="155.0" layoutY="537.0" mnemonicParsing="false" onAction="#onDashboardStudentsAndTeachersScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="312.0" style="-fx-background-color: #AC94f4; -fx-background-radius: 20;" text="CONTINUE AS STUDENT" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Button>
+      <Label fx:id="dashboardLabelClubAdvisorSignin" layoutX="119.0" layoutY="606.0" opacity="0.0" prefHeight="30.0" prefWidth="416.0" text="While you wait for approval, continue as a student " textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

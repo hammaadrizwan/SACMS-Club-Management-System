@@ -17,14 +17,14 @@ public class Event {
     private String clubID;
     private ArrayList<Student> students;
 
-    public Event(String eventID, String eventName, String eventDate, String eventTime, String eventLocation, String eventDescription, String clubID) {
+    public Event(String eventID, String eventName, String eventDate, String eventTime, String eventLocation, String clubID ,String eventDescription) {
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventTime = eventTime;
         this.eventLocation = eventLocation;
-        this.eventDescription = eventDescription;
         this.clubID = clubID;
+        this.eventDescription = eventDescription;
         this.students=loadStudentsOfEvent(getEventID());
 
     }
@@ -83,6 +83,26 @@ public class Event {
 
         return stringBuilder.toString();
     }
+
+    public void insertEvent(){
+        String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
+            preparedStatement.setString(1,getEventID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(2,getEventName());
+            preparedStatement.setString(3,getEventDate());
+            preparedStatement.setString(4,getEventTime());
+            preparedStatement.setString(5, getEventLocation());
+            preparedStatement.setString(6, getClubID());
+            preparedStatement.setString(7, getEventDescription());
+
+            preparedStatement.executeUpdate();//push
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String generateAttendanceID() {
 
         int idLength = 9;//Mmebreshoip ID of 10 digits
@@ -227,24 +247,6 @@ public class Event {
         return existingAttendanceIDs;
     }
 
-    public void insertEvent(){
-        String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
-        try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
-            preparedStatement.setString(1,getEventID());//inserts the Membership ID,student ID and the club ID to the table
-            preparedStatement.setString(2,getEventName());
-            preparedStatement.setString(3,getEventDate());
-            preparedStatement.setString(4,getEventTime());
-            preparedStatement.setString(5, getEventLocation());
-            preparedStatement.setString(6, getClubID());
-            preparedStatement.setString(7, getEventDescription());
-
-            preparedStatement.executeUpdate();//push
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public void deleteEvent(String eventID){
         String deleteEventAttendanceQuery = "Delete from eventattendance where eventattendance.eventid = ?;";
         String deleteEventQuery = "Delete from events where eventid = ?;";
@@ -289,6 +291,5 @@ public class Event {
             throw new RuntimeException(e);
         }
     }
-
 
 }
