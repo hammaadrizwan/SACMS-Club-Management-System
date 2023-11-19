@@ -16,9 +16,6 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
     public String getStaffID() {
         return staffID;
     }
-    public boolean approveClubAdvisor(String clubAdvisorID){
-        return false;
-    }//to approve a clubAdvisor
     @Override
     public String greetUser(){//polymorphism is used as the teacher has a different implementation
         String greeting="Welcome Teacher, "+getFirstName()+" "+getLastName()+"!";

@@ -36,10 +36,6 @@ public class Club {
         return clubID;
     }
 
-    public void displayReport() {
-
-    }
-
     public void insertIntoClubs(){
         String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
         try (Connection connection = Database.getConnection();
