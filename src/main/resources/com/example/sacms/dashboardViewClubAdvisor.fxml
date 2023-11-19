@@ -13,18 +13,18 @@
             <Image url="@../images/Logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardStudentsAndTeachersScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="133.0" text="Button" />
-      <Button fx:id="clubScreenButtonDashboard" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
+      <Button fx:id="" layoutX="27.0" layoutY="26.0" mnemonicParsing="false" onAction="#onDashboardScreenButtonClicked" opacity="0.0" prefHeight="62.0" prefWidth="133.0" text="Button" />
+      <Button fx:id="clubScreenButtonDashboard" layoutX="604.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClubsViewClubAdvisorScreenButtonClicked" prefHeight="58.0" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="CLUBS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="eventScreenButtonDashboard" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
+      <Button fx:id="eventScreenButtonDashboard" layoutX="712.0" layoutY="26.0" mnemonicParsing="false" onAction="#onEventsViewScreenButtonClicked" prefHeight="58.0" prefWidth="113.0" style="-fx-background-color: FFFFFF;" text="EVENTS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="reportsScreenButtonDashboard" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsStudentAndTeacherScreenButtonClicked" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
+      <Button fx:id="reportsScreenButtonDashboard" layoutX="825.0" layoutY="26.0" mnemonicParsing="false" onAction="#onReportsScreenButtonClicked" prefHeight="58.0" prefWidth="126.0" style="-fx-background-color: FFFFFF;" text="REPORTS">
          <font>
             <Font name="Noto Sans Regular" size="22.0" />
          </font>
@@ -81,7 +81,7 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="todayEventOneOrganisingClubName" layoutX="311.0" prefHeight="50.0" prefWidth="168.0" wrapText="true">
+            <Label fx:id="todayEventOneOrganisingClubName" layoutX="305.0" prefHeight="50.0" prefWidth="177.0" text="Esports Club" wrapText="true">
                <font>
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
@@ -150,7 +150,7 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="todayEventTwoOrganisingClubName" layoutX="307.0" prefHeight="50.0" prefWidth="168.0" wrapText="true">
+            <Label fx:id="todayEventTwoOrganisingClubName" layoutX="303.0" prefHeight="50.0" prefWidth="177.0" text="Esports Club" wrapText="true">
                <font>
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
@@ -174,7 +174,7 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="tomorrowEventOneOrganisingClubName" layoutX="309.0" prefHeight="50.0" prefWidth="168.0" text="Geography club" wrapText="true">
+            <Label fx:id="tomorrowEventOneOrganisingClubName" layoutX="303.0" prefHeight="50.0" prefWidth="177.0" text="Geography club" wrapText="true">
                <font>
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
@@ -186,7 +186,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" layoutX="2.0" layoutY="82.0" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="572.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
+      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="666.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

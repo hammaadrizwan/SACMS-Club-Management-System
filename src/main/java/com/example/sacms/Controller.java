@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Controller {
     public String sessionUser;
@@ -30,7 +32,7 @@ public class Controller {
     private Stage stage;//main stage where all our windows appear
     private Scene scene;//changes depending on the users requirement each scene is a window
     @FXML
-    private AnchorPane userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
+    private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane,checkInEventsPane,checkOutEventsPane,deleteEventsPane,todayEventOnePane,todayEventTwoPane,tomorrowEventOnePane,userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
     private TextField clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
@@ -38,15 +40,13 @@ public class Controller {
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
     @FXML
-    private Label errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
+    private Label notificationLabel,todayEventOneTime,todayEventOneName,todayEventOneOrganisingClubName,tomorrowEventOneTime,tomorrowEventOneName,tomorrowEventOneOrganisingClubName,todayEventTwoTime,todayEventTwoName,todayEventTwoOrganisingClubName,errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
     private Label dashboardLabelClubAdvisorSignin,errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
     private Button requestClubAdvisorRoleButtonSignInTwo,dashboardButtonClubAdvisorSignin,refreshClubsInchargeList,refreshClubsViewButton,refreshButtonStudentsAndTeachersDashboard,refreshButtonTeacherPopUp,rejectButtonTeacherScreen,approveButtonTeacherScreen, refreshEventsViewButton;
-    @FXML
-    private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane,checkInEventsPane,checkOutEventsPane,deleteEventsPane;
     @FXML
     private ChoiceBox<String> clubTeacherIDInputClubCreationScreen;
 
@@ -74,7 +74,7 @@ public class Controller {
     @FXML
     private TableColumn<Event, String> eventLocationColumn;
     @FXML
-    private TableColumn<Event, String> clubIDColumn;
+    private TableColumn<Event, String> eventDescriptionColumn;
 
 
     @FXML
@@ -133,7 +133,7 @@ public class Controller {
 
     @FXML
     public void onDashboardScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboardClubAdvisor.fxml"));
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("dashboardViewClubAdvisor.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
         this.stage.setTitle("Dashboard");
@@ -177,6 +177,98 @@ public class Controller {
         dayLabelDashboard.setText(formattedDate);
         timeLabelDashboard.setText(formattedTime);
         userNameLabelDashboard.setText("");
+
+        ArrayList<Event> registeredEvents = Event.loadEventsFromDatabase();
+        ArrayList<Event> todaysEvents = new ArrayList<>();
+        ArrayList<Event> tomorrowEvents = new ArrayList<>();
+
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date = currentDate.format(formatter);
+        String tomorrowDate = tomorrow.format(formatter);
+
+
+        for (Event eventExisting:registeredEvents){
+            if (eventExisting.getEventDate().equals(date)){
+                todaysEvents.add(eventExisting);
+            }
+            else if(eventExisting.getEventDate().equals(tomorrowDate)){
+                tomorrowEvents.add(eventExisting);
+            }
+
+        }
+        Collections.sort(todaysEvents, Comparator.comparing(eventTime -> LocalTime.parse(eventTime.getEventTime())));
+
+        // Sort tomorrow's events by time
+        Collections.sort(tomorrowEvents, Comparator.comparing(eventTime -> LocalTime.parse(eventTime.getEventTime())));
+
+
+
+        if (todaysEvents.size() > 0) {//have to sort todays event
+            int numberOfEventsToDisplay = Math.min(todaysEvents.size(), 2);
+            for (int i = 0; i < numberOfEventsToDisplay; i++) {
+                Event sortEvent = todaysEvents.get(i);
+                String eventName = sortEvent.getEventName();
+                String eventTime = sortEvent.getEventTime();
+                String clubID = sortEvent.getClubID();
+                String clubName = "";
+                for (Club club : registeredClubs) {
+                    if (club.getClubID().equals(clubID)) {
+                        clubName=(club.getClubName());
+                        break;
+                    }
+                }
+
+                // Set the values based on the index
+                if (i == 0) {
+                    todayEventOneTime.setText(sortEvent.getEventTime());
+                    todayEventOneName.setText(sortEvent.getEventName());
+                    todayEventOneOrganisingClubName.setText(clubName);
+                    todayEventOnePane.setOpacity(1.0);
+                } else if (i == 1) {
+                    todayEventTwoTime.setText(eventTime);
+                    todayEventTwoName.setText(eventName);
+                    todayEventTwoOrganisingClubName.setText(clubName);
+                    todayEventTwoPane.setOpacity(1.0);
+                }
+            }
+
+            if (tomorrowEvents != null) {
+                Event tomorrowFirstEvent = tomorrowEvents.get(0);//have to find the next closest event
+
+                tomorrowEventOneTime.setText(tomorrowFirstEvent.getEventTime());
+                tomorrowEventOneName.setText(tomorrowFirstEvent.getEventName());
+                String clubName = "";
+                for (Club club : registeredClubs) {
+                    if (club.getClubID().equals(tomorrowFirstEvent.getClubID())) {
+                        clubName = club.getClubName();
+                    }
+                }
+                tomorrowEventOneOrganisingClubName.setText(clubName);
+                tomorrowEventOnePane.setOpacity(1.0);
+            } else {
+                tomorrowEventOnePane.setOpacity(0.0);
+            }
+
+
+        }
+        boolean studentFound = false;
+        Controller controller = Controller.getInstance();
+        String loggedInStudentID = controller.getSessionID();
+        for (ClubAdvisor clubAdvisor:registeredClubAdvisors){
+            if (clubAdvisor.getStudentID().equals(loggedInStudentID)){
+                studentFound=true;
+            }
+        }
+        if (studentFound==true){
+            notificationLabel.setText("You have Club Advisor Privileges! Check out the Club Incharge list to findout your ClubAdvisorID");
+        }else{
+            notificationLabel.setText("No Notifications");
+        }
+
+
     }
 
     @FXML
@@ -374,64 +466,6 @@ public class Controller {
         messageLabel.setOpacity(1.0);
     }
 
-
-    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean eventNameValid=false;
-        boolean eventDateValid;
-        boolean eventTimeValid;
-        boolean clubIDValid;
-        boolean eventLocationValid;
-        boolean eventDescriptionValid;
-        String eventNameInput=eventNameEventCreationInput.getText();
-        String eventDateInput=eventDateEventCreationInput.getText();
-        String eventTimeInput=eventTimeEventCreationInput.getText();
-        String clubIDInput=clubIDEventCreationInput.getText();
-        String eventLocationInput=locationEventCreationInput.getText();
-        String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
-
-        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")  ){
-            eventNameValid=false;
-            errorEventNameEventCreationInput.setText("Cannot be empty");
-        }else{
-            eventNameValid= true;
-        }
-        eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
-        eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
-        clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
-        ArrayList<String> registeredClubsID = new ArrayList<>();
-        for (Club club :registeredClubs){
-            registeredClubsID.add(club.getClubID());
-        }
-        if (!registeredClubsID.contains(clubIDEditEventInput)){
-            clubIDValid=false;
-        }
-        eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
-        eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
-        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
-            ArrayList registeredEventsID = new ArrayList<>();
-            for (Event eventInfomation:registeredevents){
-                registeredEventsID.add(eventInfomation.getEventID());
-            }
-            String newEventID;
-            do {
-                newEventID = Event.generateEventID();//
-            } while (registeredEventsID.contains(newEventID));
-            Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,eventDescriptionInput,clubIDInput);//updated the club table
-            newEvent.insertEvent();
-
-            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-
-            eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            eventDateEventCreationInput.clear();
-            eventTimeEventCreationInput.clear();
-            clubIDEventCreationInput.clear();
-            eventDescriptionEventCreationInput.clear();
-
-        }
-    }
-
     public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
         messageLabel.setText("");
         boolean studentIDValid;
@@ -594,6 +628,8 @@ public class Controller {
                                 if(student.getPassword().equals(passwordInput)){
                                     found=true;
                                     onDashboardStudentsAndTeachersScreenButtonClicked(event);
+                                    Controller controller = Controller.getInstance(); // Get the singleton instance
+                                    controller.setSessionID(idInput);
                                 }
                             }
                             errorPasswordLoginInput.setText("Incorrect Password");
@@ -1111,10 +1147,10 @@ public class Controller {
         eventDateColumn.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
         eventTimeColumn.setCellValueFactory(new PropertyValueFactory<>("eventTime"));
         eventLocationColumn.setCellValueFactory(new PropertyValueFactory<>("eventLocation"));
-        clubIDColumn.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
+        eventDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
 
 
-        eventsViewTable.getColumns().addAll(eventIDColumn, eventNameColumn, eventDateColumn, eventTimeColumn, eventLocationColumn, clubIDColumn);
+        eventsViewTable.getColumns().addAll(eventIDColumn, eventNameColumn, eventDateColumn, eventTimeColumn, eventLocationColumn, eventDescriptionColumn);
 
 
         eventsViewTable.setItems(registeredEventsToTable);
@@ -1281,7 +1317,7 @@ public class Controller {
         for (Club club :registeredClubs){
             registeredClubsID.add(club.getClubID());
         }
-        if (!registeredClubsID.contains(clubIDEditEventInput)){
+        if (!registeredClubsID.contains(clubIDEditEventInput.getText())){
             clubIDValid=false;
         }
 
