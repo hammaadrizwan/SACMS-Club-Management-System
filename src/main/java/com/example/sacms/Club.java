@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Club {
+public class Club implements Report {
     private String clubName;
     private String clubDescription;
     private String clubID;
@@ -349,6 +349,14 @@ public class Club {
         }
         return existingRequestsIds;
     }
+    @Override
+    public String displayReport(){
+        String studentCount = "Total number of students: ";
+        ArrayList<Student> student = loadStudentsOfClub(getClubID());
+        studentCount+= String.valueOf(student.size());
+        return studentCount;
+    }
+
 
 
 }

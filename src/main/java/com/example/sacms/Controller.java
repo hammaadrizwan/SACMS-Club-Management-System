@@ -15,6 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -247,7 +249,7 @@ public class Controller {
                 }
             }
 
-            if (tomorrowEvents != null) {
+            if (!tomorrowEvents.isEmpty()) {
                 Event tomorrowFirstEvent = tomorrowEvents.get(0);//have to find the next closest event
 
                 tomorrowEventOneTime.setText(tomorrowFirstEvent.getEventTime());
@@ -1487,9 +1489,65 @@ public class Controller {
 
 
     }
-    public void onDownloadReportClicked(ActionEvent event){
 
+    public void onDownloadReportClicked(ActionEvent event) {
+        // Assuming you have already initialized registeredClubs and registeredevents
+        ArrayList<Club> existingClubs = registeredClubs;
+        String reportContent="";
+        for (Club club : existingClubs) {
+            String clubName = club.getClubName();
+            String clubReportStudentAttendance = club.displayReport(); // Assuming displayReport returns a string
+            int clubEventCount = 0;
+            for (Event existingEvent : registeredevents) {
+                if (existingEvent.getClubID().equals(club.getClubID())) {
+                    clubEventCount++;
+                }
+            }
+
+            ArrayList<String[]> result = new ArrayList<String[]>();
+
+            try (Connection connection = Database.getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT e.EventName, COUNT(ea.StudentID) AS AttendanceCount FROM Events e LEFT JOIN EventAttendance ea ON e.EventID = ea.EventID WHERE e.ClubID = ? GROUP BY e.EventID, e.EventName;")) {
+
+                preparedStatement.setString(1, club.getClubID());
+
+                try (ResultSet results = preparedStatement.executeQuery()) {
+                    while (results.next()) {
+                        String[] row = new String[2];
+                        row[0] = results.getString("EventName");
+                        row[1] = results.getString("AttendanceCount");
+                        result.add(row);
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String noOfEventsHeld = "Total Number of events Held at : " + String.valueOf(clubEventCount);
+            reportContent+=clubName + "\n" +noOfEventsHeld + "\n"+clubReportStudentAttendance+"\n";
+            reportContent+="Attendance for each event"+"\n";
+            for (String[] row :result){
+                reportContent+="      "+row[0]+"- "+row[1]+"\n";
+            }
+            reportContent += "\n\n";
+
+        }
+        saveReportToFile(reportContent);
     }
+
+    private void saveReportToFile( String content) {
+        String fileName = "report.txt"; // Adjust the file name as needed
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(content);
+            messageLabel.setText("REPORT SAVED AS  report.txt");
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void onRefreshClubsInchargeListClicked(ActionEvent event) throws IOException {
         refreshClubsInchargeList.setOpacity(0.0);
