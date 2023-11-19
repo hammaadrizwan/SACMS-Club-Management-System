@@ -65,9 +65,7 @@ public class Event {
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
-    public void setEventID(String eventID) {
-        this.eventID = eventID;
-    }
+
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
     }
