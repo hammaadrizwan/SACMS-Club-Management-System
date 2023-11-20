@@ -443,7 +443,7 @@ public class Controller {
     }
 
     public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean eventNameValid=false;
+        boolean eventNameValid;
         boolean eventDateValid;
         boolean eventTimeValid;
         boolean clubIDValid;
@@ -456,8 +456,9 @@ public class Controller {
         String eventLocationInput=locationEventCreationInput.getText();
         String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
 
-        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")  ){
+        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")){
             eventNameValid=false;
+            eventNameEventCreationInput.clear();
             errorEventNameEventCreationInput.setText("Cannot be empty");
         }else{
             eventNameValid= true;
@@ -466,24 +467,26 @@ public class Controller {
         eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
         eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
         clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
-
-        ArrayList<String> registeredClubsID = new ArrayList<>();
-        for (Club club :registeredClubs){
-            registeredClubsID.add(club.getClubID());
-        }
-        if (!registeredClubsID.contains(clubIDEventCreationInput.getText())){
-            clubIDValid=false;
-            errorClubIDEventCreationInput.setText("Club not Found");
-        }else{
-            clubIDValid=true;
-            errorClubIDEventCreationInput.setText("");
+        if (clubIDValid) {
+            ArrayList<String> registeredClubsID = new ArrayList<>();
+            for (Club club : registeredClubs) {
+                registeredClubsID.add(club.getClubID());
+            }
+            if (!registeredClubsID.contains(clubIDEventCreationInput.getText())) {
+                clubIDValid = false;
+                clubIDEventCreationInput.clear();
+                errorClubIDEventCreationInput.setText("Club not Found");
+            } else {
+                clubIDValid = true;
+                errorClubIDEventCreationInput.setText("");
+            }
         }
         eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
         eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
         if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
             ArrayList registeredEventsID = new ArrayList<>();
-            for (Event eventInfomation:registeredevents){
-                registeredEventsID.add(eventInfomation.getEventID());
+            for (Event eventInformation:registeredevents){
+                registeredEventsID.add(eventInformation.getEventID());
             }
             String newEventID;
             do {
@@ -504,7 +507,7 @@ public class Controller {
             eventDescriptionEventCreationInput.clear();
 
         }else{
-            messageLabel.setText("Doesnt go in");
+            messageLabel.setText("Doesn't go in");
             messageLabel.setStyle("-fx-background-color: red;-fx-background-radius: 10;-fx-alignment: center");
             messageLabel.setOpacity(1.0);
         }
@@ -558,9 +561,18 @@ public class Controller {
         boolean clubFound = false;
         boolean studentFound = false;
         studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
-        for (Student student: registeredStudents) {
-            if (student.getStudentID().equals(studentIDSigInClubAdvisorScreen.getText())){
-                studentFound=true;
+        if (studentIDValid) {
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentIDSigInClubAdvisorScreen.getText())) {
+                    studentFound = true;
+                    errorStudentIDSigInClubAdvisorScreen.setText("");
+                    break;
+                } else {
+                    errorStudentIDSigInClubAdvisorScreen.setText("Invalid ID");
+                }
+            }
+            if (!studentFound) {
+                studentIDSigInClubAdvisorScreen.clear();
             }
         }
         positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
@@ -621,6 +633,7 @@ public class Controller {
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a studentID or not
                 errorStudentIDSignInStudentInput.setText("Invalid ID");
+                studentIDSignInStudentInput.clear();
                 studentIDValid = false;
             }
             String newStudentID = studentIDSignInStudentInput.getText();
@@ -629,8 +642,10 @@ public class Controller {
                     messageLabel.setText("Duplicate record exists".toUpperCase());
                     messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
                     messageLabel.setOpacity(1.0);
-
+                    errorStudentIDSignInStudentInput.setText("Invalid ID");
+                    studentIDSignInStudentInput.clear();
                     studentIDValid=false;
+                    break;
                 }
             }
         }
@@ -662,6 +677,7 @@ public class Controller {
         if (teacherIDValid) {
             if (!sessionUser.equals("Teacher")) {//To check whether the user has entered a teacherID or not
                 errorTeacherIDSignInTeacherInput.setText("Invalid ID");
+                teacherIDSignInTeacherInput.clear();
                 teacherIDValid = false;
             }
             String newTeacherID = teacherIDSignInTeacherInput.getText();
@@ -670,8 +686,10 @@ public class Controller {
                     messageLabel.setText("Duplicate record exists".toUpperCase());
                     messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
                     messageLabel.setOpacity(1.0);
-
+                    errorTeacherIDSignInTeacherInput.setText("Invalid ID");
+                    teacherIDSignInTeacherInput.clear();
                     teacherIDValid=false;
+                    break;
                 }
             }
         }
@@ -690,12 +708,13 @@ public class Controller {
     public void onLogInButtonClicked(ActionEvent event) throws IOException, InterruptedException {
         boolean IDValid;
         boolean passwordValid;
-        String idInput = null;
-        String passwordInput=null;
+        String idInput;
+        String passwordInput;
         IDValid = checkID(IDLoginInput, errorIDLoginInput);
         if (IDValid) {
             if (sessionUser.equals("Club") || sessionUser.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ ClubAdvisor or teacher ID
                 errorIDLoginInput.setText("Invalid ID");
+                IDLoginInput.clear();
                 IDValid = false;
             }
         }
@@ -866,28 +885,42 @@ public class Controller {
         boolean teacherIDValid = false;
 
         clubNameValid = checkName(clubNameInputClubCreationScreen, errorClubNameInputClubCreationScreen);
+        for (Club club:registeredClubs){
+            if (club.getClubName().equals(clubNameInputClubCreationScreen.getText())){
+                errorClubNameInputClubCreationScreen.setText("There Exists a Club");
+                clubNameInputClubCreationScreen.clear();
+                clubNameValid = false;
+                break;
+            }
+        }
         clubAdvisorIDValid = checkID(clubAdvisorIDInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen);
+        if (clubAdvisorIDValid) {
+            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a clubAdvisorID or not
+                errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
+                clubAdvisorIDValid = false;
+            }
+            String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
+            for (ClubAdvisor clubAdvisor:registeredClubAdvisors){
+                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)){
+                    clubAdvisorIDValid = true;
+                    break;
+                } else {
+                    messageLabel.setText("Club Advisor doesn't exist".toUpperCase());
+                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
+                    clubAdvisorIDInputClubCreationScreen.clear();
+                    clubAdvisorIDValid=false;
+                }
+            }
+        }
         if (clubTeacherIDInputClubCreationScreen.getValue() != null && !clubTeacherIDInputClubCreationScreen.getValue().equals("Please Select")) {
             teacherIDValid = true;
             errorTeacherIDInputClubCreationScreen.setText("");
         } else {
             errorTeacherIDInputClubCreationScreen.setText("Please Select a Teacher");
         }
-
-
-        if (clubAdvisorIDValid) {
-            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a clubAdvisorID or not
-                errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
-                clubAdvisorIDValid = false;
-            }
-        }
-        for (Club club:registeredClubs){
-            if (club.getClubName().equals(clubNameInputClubCreationScreen.getText())){
-                errorClubNameInputClubCreationScreen.setText("There Exists a Club");
-            }
-        }
         clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
-        //teacherIDValid = checkID(clubTeacherIDInputClubCreationScreen, errorTeacherIDInputClubCreationScreen);
         if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
             String clubName = clubNameInputClubCreationScreen.getText();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
@@ -935,6 +968,15 @@ public class Controller {
             clubAdvisorIDInputClubCreationScreen.clear();
         }
     }
+
+
+
+
+    // Start from here
+
+
+
+
     public void onJoinClubClicked(ActionEvent event) throws IOException, InterruptedException {
         boolean studentIDValid;
         boolean clubIDValid;
@@ -1698,6 +1740,7 @@ public class Controller {
         } else {
             IDValid = false;//if the id is not in either of the above formats the id is invalid
             label.setText("Invalid ID");
+            textField.clear();//clears the text field
         }
         return IDValid;
     }
@@ -1712,26 +1755,60 @@ public class Controller {
         } else if (textField.getText().toCharArray().length < 8) {
             label.setText("Password should contain minimum of 8 characters");
             passwordValid = false;
+            textField.clear();//clears the text field
         }
         return passwordValid;
     }
 
+//    public boolean checkDate(TextField textField, Label label) {
+//        // split based on the  (-). if
+//        boolean dateValid = true;
+//        label.setText("");//the error label made invisible at the start of the validation
+//        if (textField.getText().equals("")) {//checks if the date input field is blank
+//            label.setText("Cannot be empty");//display a message to the user to re-enter
+//            dateValid = false;//sets date validity to be false
+//            textField.clear();//clears the text field
+//        } else {
+//            try {
+//                LocalDate.parse(textField.getText());//checks if the date is in the correct format
+//            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
+//                label.setText("Invalid date");//if the date is invalid, a message will be displayed to the user saying its incorrect
+//                dateValid = false;
+//                textField.clear();//clears the text field
+//            }
+//        }
+//        return dateValid;
+//    }
+
     public boolean checkDate(TextField textField, Label label) {
-        // split based on the  (-). if
         boolean dateValid = true;
-        label.setText("");//the error label made invisible at the start of the validation
-        if (textField.getText().equals("")) {//checks if the date input field is blank
-            label.setText("Cannot be empty");//display a message to the user to re-enter
-            dateValid = false;//sets date validity to be false
-            textField.clear();//clears the text field
-        } else {
+        label.setText(""); // Make the error label invisible at the start of the validation
+        String dateStr = textField.getText();
+        String[] dateComponents = dateStr.split("-");
+        if (dateStr.equals("")) { // Check if the date input field is blank
+            label.setText("Cannot be empty"); // Displaying a message to the user to re-enter
+            dateValid = false; // Set date validity to be false
+            textField.clear(); // Clears the text field
+        } else if (dateComponents.length == 3) {
             try {
-                LocalDate.parse(textField.getText());//checks if the date is in the correct format
-            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
-                label.setText("Invalid date");//if the date is invalid, a message will be displayed to the user saying its incorrect
+                int year = Integer.parseInt(dateComponents[0]);
+                int month = Integer.parseInt(dateComponents[1]);
+                int day = Integer.parseInt(dateComponents[2]);
+                // Check if the date is valid
+                if (year < 2000 || year > 2030 || month < 1 || month > 12 || day < 1 || day > LocalDate.of(year, month, 1).lengthOfMonth()) {
+                    label.setText("Invalid Date");
+                    dateValid = false;
+                    textField.clear();
+                }
+            } catch (NumberFormatException | DateTimeParseException e) {
+                label.setText("Invalid date format");
                 dateValid = false;
-                textField.clear();//clears the text field
+                textField.clear();
             }
+        } else {
+            label.setText("Invalid date format");
+            dateValid = false;
+            textField.clear();
         }
         return dateValid;
     }
