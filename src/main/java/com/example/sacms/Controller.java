@@ -359,6 +359,7 @@ public class Controller {
 
     @FXML
     public void onScheduleEventButtonOneClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("eventCreation.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -369,6 +370,7 @@ public class Controller {
     }
     @FXML
     public void onCreateClubButtonOneClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubCreation.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -442,443 +444,8 @@ public class Controller {
         userIconButtonOptionPane.setOpacity(0.00);//hides the buttons
     }
 
-    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
-        boolean eventNameValid;
-        boolean eventDateValid;
-        boolean eventTimeValid;
-        boolean clubIDValid;
-        boolean eventLocationValid;
-        boolean eventDescriptionValid;
-        String eventNameInput=eventNameEventCreationInput.getText();
-        String eventDateInput=eventDateEventCreationInput.getText();
-        String eventTimeInput=eventTimeEventCreationInput.getText();
-        String clubIDInput=clubIDEventCreationInput.getText();
-        String eventLocationInput=locationEventCreationInput.getText();
-        String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
-
-        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")){
-            eventNameValid=false;
-            eventNameEventCreationInput.clear();
-            errorEventNameEventCreationInput.setText("Cannot be empty");
-        }else{
-            eventNameValid= true;
-            errorEventNameEventCreationInput.setText("");
-        }
-        eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
-        eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
-        clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
-        if (clubIDValid) {
-            ArrayList<String> registeredClubsID = new ArrayList<>();
-            for (Club club : registeredClubs) {
-                registeredClubsID.add(club.getClubID());
-            }
-            if (!registeredClubsID.contains(clubIDEventCreationInput.getText())) {
-                clubIDValid = false;
-                clubIDEventCreationInput.clear();
-                errorClubIDEventCreationInput.setText("Club not Found");
-            } else {
-                clubIDValid = true;
-                errorClubIDEventCreationInput.setText("");
-            }
-        }
-        eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
-        eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
-        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
-            ArrayList registeredEventsID = new ArrayList<>();
-            for (Event eventInformation:registeredevents){
-                registeredEventsID.add(eventInformation.getEventID());
-            }
-            String newEventID;
-            do {
-                newEventID = Event.generateEventID();//
-            } while (registeredEventsID.contains(newEventID));
-            Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,clubIDInput,eventDescriptionInput);//updated the club table
-            newEvent.insertEvent();
-
-            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-
-            eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            eventDateEventCreationInput.clear();
-            eventTimeEventCreationInput.clear();
-            clubIDEventCreationInput.clear();
-            locationEventCreationInput.clear();
-            eventDescriptionEventCreationInput.clear();
-
-        }else{
-            messageLabel.setText("Doesn't go in");
-            messageLabel.setStyle("-fx-background-color: red;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-        }
-
-    }
-
-    @FXML
-    public void onLogInScreenButtonClicked(ActionEvent event) throws IOException {
-        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        this.scene = new Scene(root);
-        this.stage.setTitle("Login");
-        this.stage.setScene(this.scene);
-        this.stage.show();
-        this.stage.setResizable(false);
-    }
-
-    //Club Creation SCREEN
-    public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException, InterruptedException {
-        registeredTeachers = Teacher.loadTeachersFromDatabase();
-        registeredClubs = Club.loadClubsFromDatabase();
-        ArrayList<String> teacherIDs = new ArrayList<>();
-        for (Teacher teacher : registeredTeachers) {
-            boolean teacherExists = false;
-
-            for (Club club : registeredClubs) {
-                if (club.getTeacherIncharge().equals(teacher.getStaffID())) {
-                    teacherExists = true;
-                    break; // No need to continue checking once we find a match
-                }
-            }
-
-            if (!teacherExists) {
-                teacherIDs.add(teacher.getStaffID());
-            }
-        }
-        for (String teacher:teacherIDs){
-            clubTeacherIDInputClubCreationScreen.getItems().add(teacher);
-        }
-        clubTeacherIDInputClubCreationScreen.setValue("Please Select");
-        messageLabel.setText("AVAILABLE TEACHERS LOADED");
-        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-        messageLabel.setOpacity(1.0);
-    }
-
-    public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
-        messageLabel.setText("");
-        boolean studentIDValid;
-        boolean positionValid;
-        boolean clubIDValid;
-        boolean clubFound = false;
-        boolean studentFound = false;
-        studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
-        if (studentIDValid) {
-            for (Student student : registeredStudents) {
-                if (student.getStudentID().equals(studentIDSigInClubAdvisorScreen.getText())) {
-                    studentFound = true;
-                    errorStudentIDSigInClubAdvisorScreen.setText("");
-                    break;
-                } else {
-                    errorStudentIDSigInClubAdvisorScreen.setText("Invalid ID");
-                }
-            }
-            if (!studentFound) {
-                studentIDSigInClubAdvisorScreen.clear();
-            }
-        }
-        positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
-        clubIDValid = checkID(clubIDSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen);
-        if (studentIDValid && positionValid && clubIDValid && studentFound) {//if the above inputs done by the user is valid the data will be stored
-            String requestID;
-            do {
-                requestID=Club.generateRequestID();
-            }while (Club.loadExistingRequestsIds().contains(requestID));
-            String teacherID="";
-            String clubID="";
-            for (Club club:registeredClubs){
-                if (club.getClubID().equals(clubIDSigInClubAdvisorScreen.getText())){
-                    teacherID=club.getTeacherIncharge();
-                    clubID=club.getClubID();
-                    clubFound=true;
-                    Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
-                    messageLabel.setText("REQUEST SENT");
-                    messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    dashboardButtonClubAdvisorSignin.setDisable(false);
-                    dashboardButtonClubAdvisorSignin.setOpacity(1.0);
-                    dashboardLabelClubAdvisorSignin.setOpacity(1.0);
-                    requestClubAdvisorRoleButtonSignInTwo.setDisable(true);
-                    studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-                    positionSigInClubAdvisorScreen.clear();
-                    clubIDSigInClubAdvisorScreen.clear();
-                }
-            }
-        }if (!clubFound){
-            messageLabel.setText("CLUB DOESNT EXIST");
-            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-        }if (!studentFound){
-            messageLabel.setText("Student Doesnt exist".toUpperCase());
-            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-        }
-    }
-
-    public void onStudentSignInTwoButtonClicked(ActionEvent event) throws IOException, InterruptedException {
-        boolean firstNameValid;
-        boolean lastNameValid;
-        boolean DOBValid;
-        boolean classValid;
-        boolean emailValid;
-        boolean contactNoValid;
-        boolean passwordValid;
-        boolean studentIDValid;
-        firstNameValid = checkName(firstNameSignInStudentInput, errorFirstNameSignInStudentInput);
-        lastNameValid = checkName(lastNameSignInStudentInput, errorLastNameSignInStudentInput);
-        DOBValid = checkDate(dateSignInStudentInput, errorDateSignInStudentInput);
-        classValid = checkClass(classSignInStudentInput, errorClassSignInStudentInput);
-        emailValid = checkEmail(emailSignInStudentInput, errorEmailSignInStudentInput);
-        contactNoValid = checkContactNo(contactNoSignInStudentInput, errorContactNoSignInStudentInput);
-        passwordValid = checkPassword(passwordSignInStudentInput, errorPasswordSignInStudentInput);
-        studentIDValid = checkID(studentIDSignInStudentInput, errorStudentIDSignInStudentInput);
-        if (studentIDValid) {
-            if (!sessionUser.equals("Student")) {//To check whether the user has entered a studentID or not
-                errorStudentIDSignInStudentInput.setText("Invalid ID");
-                studentIDSignInStudentInput.clear();
-                studentIDValid = false;
-            }
-            String newStudentID = studentIDSignInStudentInput.getText();
-            for (Student student:registeredStudents){
-                if (student.getStudentID().equals(newStudentID)){
-                    messageLabel.setText("Duplicate record exists".toUpperCase());
-                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    errorStudentIDSignInStudentInput.setText("Invalid ID");
-                    studentIDSignInStudentInput.clear();
-                    studentIDValid=false;
-                    break;
-                }
-            }
-        }
-        if (firstNameValid && lastNameValid && DOBValid && classValid && emailValid && contactNoValid && passwordValid && studentIDValid) {//if the above inputs done by the user is valid the data will be stored
-            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),emailSignInStudentInput.getText(), passwordSignInStudentInput.getText(), dateSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), studentIDSignInStudentInput.getText(),classSignInStudentInput.getText());
-            student.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
-            messageLabel.setText(student.greetUser().toUpperCase());
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-
-            onDashboardStudentsAndTeachersScreenButtonClicked(event);
-        }
-    }
-
-    public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws IOException, SQLException, InterruptedException {
-        boolean firstNameValid;
-        boolean lastNameValid;
-        boolean DOBValid;
-        boolean contactNoValid;
-        boolean emailValid;
-        boolean teacherIDValid;
-        boolean passwordValid;
-        firstNameValid = checkName(firstNameSignInTeacherInput, errorFirstNameSignInTeacherInput);
-        lastNameValid = checkName(lastNameSignInTeacherInput, errorLastNameSignInTeacherInput);
-        DOBValid = checkDate(dateSignInTeacherInput, errorDateSignInTeacherInput);
-        contactNoValid = checkContactNo(contactNoSignInTeacherInput, errorContactNoSignInTeacherInput);
-        emailValid = checkEmail(emailSignInTeacherInput, errorEmailSignInTeacherInput);
-        teacherIDValid = checkID(teacherIDSignInTeacherInput, errorTeacherIDSignInTeacherInput);
-        if (teacherIDValid) {
-            if (!sessionUser.equals("Teacher")) {//To check whether the user has entered a teacherID or not
-                errorTeacherIDSignInTeacherInput.setText("Invalid ID");
-                teacherIDSignInTeacherInput.clear();
-                teacherIDValid = false;
-            }
-            String newTeacherID = teacherIDSignInTeacherInput.getText();
-            for (Teacher teacher:registeredTeachers){
-                if (teacher.getStaffID().equals(newTeacherID)){
-                    messageLabel.setText("Duplicate record exists".toUpperCase());
-                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    errorTeacherIDSignInTeacherInput.setText("Invalid ID");
-                    teacherIDSignInTeacherInput.clear();
-                    teacherIDValid=false;
-                    break;
-                }
-            }
-        }
-        passwordValid = checkPassword(passwordSignInTeacherInput, errorPasswordSignInTeacherInput);
-        if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && teacherIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
-            Teacher teacher = new Teacher(firstNameSignInTeacherInput.getText(),lastNameSignInTeacherInput.getText(),emailSignInTeacherInput.getText(),passwordSignInTeacherInput.getText(),dateSignInTeacherInput.getText(),contactNoSignInTeacherInput.getText(),teacherIDSignInTeacherInput.getText());
-            teacher.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
-            messageLabel.setText(teacher.greetUser().toUpperCase());
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-
-            onDashboardStudentsAndTeachersScreenButtonClicked(event);
-        }
-    }
-
-    public void onLogInButtonClicked(ActionEvent event) throws IOException, InterruptedException {
-        boolean IDValid;
-        boolean passwordValid;
-        String idInput;
-        String passwordInput;
-        IDValid = checkID(IDLoginInput, errorIDLoginInput);
-        if (IDValid) {
-            if (sessionUser.equals("Club") || sessionUser.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ ClubAdvisor or teacher ID
-                errorIDLoginInput.setText("Invalid ID");
-                IDLoginInput.clear();
-                IDValid = false;
-            }
-        }
-        passwordValid = checkPassword(passwordLoginInput, errorPasswordLoginInput);
-        if (IDValid && passwordValid) {
-            boolean found = false;
-            idInput = IDLoginInput.getText().toString();
-            passwordInput = passwordLoginInput.getText().toString();
-            //read from the database for exsisting records
-            if (sessionUser.equals("Student")){
-                        registeredStudents=Student.loadStudentsFromDatabase();
-                        for (Student student:registeredStudents){
-                            if (student.getStudentID().equals(idInput)){
-                                if(student.getPassword().equals(passwordInput)){
-                                    found=true;
-                                    onDashboardStudentsAndTeachersScreenButtonClicked(event);
-                                    Controller controller = Controller.getInstance(); // Get the singleton instance
-                                    controller.setSessionID(idInput);
-                                }
-                            }
-                            errorPasswordLoginInput.setText("Incorrect Password");
-                        }
-            }
-            if (sessionUser.equals("Teacher")) {
-                registeredTeachers = Teacher.loadTeachersFromDatabase();
-                if (registeredTeachers.size() > 0) {
-                    for (Teacher teacher : registeredTeachers) {
-                        if (teacher.getStaffID().equals(idInput)) {
-                            if (teacher.getPassword().equals(passwordInput)) {
-                                found = true;
-                                Controller controller = Controller.getInstance(); // Get the singleton instance
-                                controller.setSessionID(idInput);
-                                onTeacherPopUScreenButtonClicked(event);
-                            } else {
-                                errorPasswordLoginInput.setText("Incorrect Password");
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (sessionUser.equals("ClubAdvisor")){
-                registeredStudents=Student.loadStudentsFromDatabase();
-                registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
-                if (registeredClubAdvisors.size()>0){
-                    for (ClubAdvisor clubAdvisor:registeredClubAdvisors) {
-                        if (clubAdvisor.getClubAdvisorID().equals(idInput)){
-                            String studentId=clubAdvisor.getStudentID();
-                            for (Student student:registeredStudents) {
-                                if (student.getStudentID().equals(studentId) && student.getPassword().equals(passwordInput)){
-                                    found=true;
-                                    onDashboardScreenButtonClicked(event);
-
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-            if (!found){
-                messageLabel.setText("Not available".toUpperCase());
-                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                messageLabel.setOpacity(1.0);
-
-            }
-
-        }
-    }
-
-    public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
-
-    public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
-        refreshButtonTeacherPopUp.setOpacity(0.00);
-        refreshButtonTeacherPopUp.setDisable(true);
-        Controller controller = Controller.getInstance(); // Get the singleton instance
-        String loggedInTeacherID = controller.getSessionID();
-        boolean haveNotification=false;
-        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
-        if (!requests.isEmpty()){
-            haveNotification=true;
-        }
-
-        if (!haveNotification){
-            approveButtonTeacherScreen.setOpacity(0.00);
-            approveButtonTeacherScreen.setDisable(true);
-            rejectButtonTeacherScreen.setOpacity(0.00);
-            rejectButtonTeacherScreen.setDisable(true);
-            messageTeacherPopUpScreen.setText("No notifications");
-            studentNameTeacherPopUpScreen.setText("");
-            clubNameTeacherPopUpScreen.setText("");
-        }else{
-            String[] request = requests.get(0);
-            String studentID = request[3];
-            String studentName = "";
-            String clubID = request[1];
-            String clubName="";
-            for (Student student: registeredStudents) {
-                if (student.getStudentID().equals(studentID)){
-                    studentName = student.getFirstName()+" "+student.getLastName();
-                }
-            }
-            for (Club club: registeredClubs) {
-                if (club.getClubID().equals(clubID)){
-                    clubName = club.getClubName();
-                }
-            }
-            studentNameTeacherPopUpScreen.setText(studentName);
-            clubNameTeacherPopUpScreen.setText(clubName);
-            studentNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
-            clubNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
-        }
-
-    }
-    public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException {
-        //code to approve the club advisor
-        Controller controller = Controller.getInstance(); // Get the singleton instance
-        String loggedInTeacherID = controller.getSessionID();
-        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
-        String[] request = requests.get(0);
-
-        ArrayList<String> exisitngClubAdvisorIDs = new ArrayList<String>();
-        for (ClubAdvisor clubAdvisor :registeredClubAdvisors){
-            exisitngClubAdvisorIDs.add(clubAdvisor.getClubAdvisorID());
-        }
-        String newClubAdvisorID;
-
-        do {
-            newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();
-        } while (exisitngClubAdvisorIDs.contains(newClubAdvisorID));
-        ClubAdvisor clubAdvisor = new ClubAdvisor(newClubAdvisorID,request[3],request[1],request[4]);
-        clubAdvisor.insertIntoClubAdvisorTable();
-
-        Club.deleteRequest(request[0]);//Delete the request once done
-        approveButtonTeacherScreen.setOpacity(0.00);
-        approveButtonTeacherScreen.setDisable(true);
-        rejectButtonTeacherScreen.setOpacity(0.00);
-        rejectButtonTeacherScreen.setDisable(true);
-        messageTeacherPopUpScreen.setText("No notifications");
-        studentNameTeacherPopUpScreen.setText("");
-        clubNameTeacherPopUpScreen.setText("");
-        onTeacherPopUpCloseButtonClicked(event);
-    }
-    public void onRejectButtonTeacherScreenClicked(ActionEvent event) throws IOException {
-        Controller controller = Controller.getInstance(); // Get the singleton instance
-        String loggedInTeacherID = controller.getSessionID();
-        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
-        String[] request = requests.get(0);
-
-        Club.deleteRequest(request[0]);
-        onTeacherPopUpCloseButtonClicked(event);
-    }
-
-    //Clubs View Methods
-    public void onJoinClubsViewOptionClicked(ActionEvent event) throws IOException {
-        joinClubsPane.setOpacity(1.0);
-        leaveClubsPane.setOpacity(0.0);
-
-    }
-    public void onLeaveClubsViewOptionClicked(ActionEvent event) throws IOException {
-        joinClubsPane.setOpacity(0.0);
-        leaveClubsPane.setOpacity(1.0);
-    }
     public void onCreateClubButtonTwoClicked (ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
         boolean clubNameValid;
         boolean clubAdvisorIDValid;
         boolean clubDescriptionValid;
@@ -969,21 +536,462 @@ public class Controller {
         }
     }
 
+    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        boolean eventNameValid;
+        boolean eventDateValid;
+        boolean eventTimeValid;
+        boolean clubIDValid;
+        boolean eventLocationValid;
+        boolean eventDescriptionValid;
+        String eventNameInput=eventNameEventCreationInput.getText();
+        String eventDateInput=eventDateEventCreationInput.getText();
+        String eventTimeInput=eventTimeEventCreationInput.getText();
+        String clubIDInput=clubIDEventCreationInput.getText();
+        String eventLocationInput=locationEventCreationInput.getText();
+        String eventDescriptionInput=eventDescriptionEventCreationInput.getText();
 
+        if (eventNameEventCreationInput.getText().equals(null) || eventNameEventCreationInput.getText().equals("")){
+            eventNameValid=false;
+            eventNameEventCreationInput.clear();
+            errorEventNameEventCreationInput.setText("Cannot be empty");
+        }else{
+            eventNameValid= true;
+            errorEventNameEventCreationInput.setText("");
+        }
+        eventDateValid = checkDate(eventDateEventCreationInput, errorEventDateEventCreationInput);
+        eventTimeValid = checkTime(eventTimeEventCreationInput, errorEventTimeEventCreationInput);
+        clubIDValid = checkID(clubIDEventCreationInput, errorClubIDEventCreationInput);
+        if (clubIDValid) {
+            ArrayList<String> registeredClubsID = new ArrayList<>();
+            for (Club club : registeredClubs) {
+                registeredClubsID.add(club.getClubID());
+            }
+            if (!registeredClubsID.contains(clubIDEventCreationInput.getText())) {
+                clubIDValid = false;
+                clubIDEventCreationInput.clear();
+                errorClubIDEventCreationInput.setText("Club not Found");
+            } else {
+                clubIDValid = true;
+                errorClubIDEventCreationInput.setText("");
+            }
+        }
+        eventDescriptionValid = checkDescription(eventDescriptionEventCreationInput, errorEventDescriptionEventCreationInput);
+        eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
+        if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
+            ArrayList registeredEventsID = new ArrayList<>();
+            for (Event eventInformation:registeredevents){
+                registeredEventsID.add(eventInformation.getEventID());
+            }
+            String newEventID;
+            do {
+                newEventID = Event.generateEventID();//
+            } while (registeredEventsID.contains(newEventID));
+            Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,clubIDInput,eventDescriptionInput);//updated the club table
+            newEvent.insertEvent();
 
+            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
 
-    // Start from here
+            eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+            eventDateEventCreationInput.clear();
+            eventTimeEventCreationInput.clear();
+            clubIDEventCreationInput.clear();
+            locationEventCreationInput.clear();
+            eventDescriptionEventCreationInput.clear();
 
+        }else{
+            messageLabel.setText("Doesn't go in");
+            messageLabel.setStyle("-fx-background-color: red;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        }
 
+    }
 
+    @FXML
+    public void onLogInScreenButtonClicked(ActionEvent event) throws IOException {
+        Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.scene = new Scene(root);
+        this.stage.setTitle("Login");
+        this.stage.setScene(this.scene);
+        this.stage.show();
+        this.stage.setResizable(false);
+    }
+
+    //Club Creation SCREEN
+    public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
+        registeredTeachers = Teacher.loadTeachersFromDatabase();
+        registeredClubs = Club.loadClubsFromDatabase();
+        ArrayList<String> teacherIDs = new ArrayList<>();
+        for (Teacher teacher : registeredTeachers) {
+            boolean teacherExists = false;
+
+            for (Club club : registeredClubs) {
+                if (club.getTeacherIncharge().equals(teacher.getStaffID())) {
+                    teacherExists = true;
+                    break; // No need to continue checking once we find a match
+                }
+            }
+
+            if (!teacherExists) {
+                teacherIDs.add(teacher.getStaffID());
+            }
+        }
+        for (String teacher:teacherIDs){
+            clubTeacherIDInputClubCreationScreen.getItems().add(teacher);
+        }
+        clubTeacherIDInputClubCreationScreen.setValue("Please Select");
+        messageLabel.setText("AVAILABLE TEACHERS LOADED");
+        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+        messageLabel.setOpacity(1.0);
+    }
+
+    public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        boolean studentIDValid;
+        boolean positionValid;
+        boolean clubIDValid;
+        boolean clubFound = false;
+        boolean studentFound = false;
+        studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
+        if (studentIDValid) {
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentIDSigInClubAdvisorScreen.getText())) {
+                    studentFound = true;
+                    errorStudentIDSigInClubAdvisorScreen.setText("");
+                    break;
+                } else {
+                    errorStudentIDSigInClubAdvisorScreen.setText("Invalid ID");
+                }
+            }
+            if (!studentFound) {
+                studentIDSigInClubAdvisorScreen.clear();
+            }
+        }
+        positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
+        clubIDValid = checkID(clubIDSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen);
+        if (studentIDValid && positionValid && clubIDValid && studentFound) {//if the above inputs done by the user is valid the data will be stored
+            String requestID;
+            do {
+                requestID=Club.generateRequestID();
+            }while (Club.loadExistingRequestsIds().contains(requestID));
+            String teacherID="";
+            String clubID="";
+            for (Club club:registeredClubs){
+                if (club.getClubID().equals(clubIDSigInClubAdvisorScreen.getText())){
+                    teacherID=club.getTeacherIncharge();
+                    clubID=club.getClubID();
+                    clubFound=true;
+                    Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
+                    messageLabel.setText("REQUEST SENT");
+                    messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    dashboardButtonClubAdvisorSignin.setDisable(false);
+                    dashboardButtonClubAdvisorSignin.setOpacity(1.0);
+                    dashboardLabelClubAdvisorSignin.setOpacity(1.0);
+                    requestClubAdvisorRoleButtonSignInTwo.setDisable(true);
+                    studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+                    positionSigInClubAdvisorScreen.clear();
+                    clubIDSigInClubAdvisorScreen.clear();
+                }
+            }
+        }if (!clubFound){
+            messageLabel.setText("CLUB DOESNT EXIST");
+            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        }if (!studentFound){
+            messageLabel.setText("Student Doesnt exist".toUpperCase());
+            messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+        }
+    }
+
+    public void onStudentSignInTwoButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
+        boolean firstNameValid;
+        boolean lastNameValid;
+        boolean DOBValid;
+        boolean classValid;
+        boolean emailValid;
+        boolean contactNoValid;
+        boolean passwordValid;
+        boolean studentIDValid;
+        firstNameValid = checkName(firstNameSignInStudentInput, errorFirstNameSignInStudentInput);
+        lastNameValid = checkName(lastNameSignInStudentInput, errorLastNameSignInStudentInput);
+        DOBValid = checkDate(dateSignInStudentInput, errorDateSignInStudentInput);
+        classValid = checkClass(classSignInStudentInput, errorClassSignInStudentInput);
+        emailValid = checkEmail(emailSignInStudentInput, errorEmailSignInStudentInput);
+        contactNoValid = checkContactNo(contactNoSignInStudentInput, errorContactNoSignInStudentInput);
+        passwordValid = checkPassword(passwordSignInStudentInput, errorPasswordSignInStudentInput);
+        studentIDValid = checkID(studentIDSignInStudentInput, errorStudentIDSignInStudentInput);
+        if (studentIDValid) {
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a studentID or not
+                errorStudentIDSignInStudentInput.setText("Invalid ID");
+                studentIDSignInStudentInput.clear();
+                studentIDValid = false;
+            }
+            String newStudentID = studentIDSignInStudentInput.getText();
+            for (Student student:registeredStudents){
+                if (student.getStudentID().equals(newStudentID)){
+                    messageLabel.setText("Duplicate record exists".toUpperCase());
+                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    errorStudentIDSignInStudentInput.setText("Invalid ID");
+                    studentIDSignInStudentInput.clear();
+                    studentIDValid=false;
+                    break;
+                }
+            }
+        }
+        if (firstNameValid && lastNameValid && DOBValid && classValid && emailValid && contactNoValid && passwordValid && studentIDValid) {//if the above inputs done by the user is valid the data will be stored
+            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),emailSignInStudentInput.getText(), passwordSignInStudentInput.getText(), dateSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), studentIDSignInStudentInput.getText(),classSignInStudentInput.getText());
+            student.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
+            messageLabel.setText(student.greetUser().toUpperCase());
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+
+            onDashboardStudentsAndTeachersScreenButtonClicked(event);
+        }
+    }
+
+    public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws IOException, SQLException, InterruptedException {
+        messageLabel.setOpacity(0.0);
+        boolean firstNameValid;
+        boolean lastNameValid;
+        boolean DOBValid;
+        boolean contactNoValid;
+        boolean emailValid;
+        boolean teacherIDValid;
+        boolean passwordValid;
+        firstNameValid = checkName(firstNameSignInTeacherInput, errorFirstNameSignInTeacherInput);
+        lastNameValid = checkName(lastNameSignInTeacherInput, errorLastNameSignInTeacherInput);
+        DOBValid = checkDate(dateSignInTeacherInput, errorDateSignInTeacherInput);
+        contactNoValid = checkContactNo(contactNoSignInTeacherInput, errorContactNoSignInTeacherInput);
+        emailValid = checkEmail(emailSignInTeacherInput, errorEmailSignInTeacherInput);
+        teacherIDValid = checkID(teacherIDSignInTeacherInput, errorTeacherIDSignInTeacherInput);
+        if (teacherIDValid) {
+            if (!sessionUser.equals("Teacher")) {//To check whether the user has entered a teacherID or not
+                errorTeacherIDSignInTeacherInput.setText("Invalid ID");
+                teacherIDSignInTeacherInput.clear();
+                teacherIDValid = false;
+            }
+            String newTeacherID = teacherIDSignInTeacherInput.getText();
+            for (Teacher teacher:registeredTeachers){
+                if (teacher.getStaffID().equals(newTeacherID)){
+                    messageLabel.setText("Duplicate record exists".toUpperCase());
+                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                    messageLabel.setOpacity(1.0);
+                    errorTeacherIDSignInTeacherInput.setText("Invalid ID");
+                    teacherIDSignInTeacherInput.clear();
+                    teacherIDValid=false;
+                    break;
+                }
+            }
+        }
+        passwordValid = checkPassword(passwordSignInTeacherInput, errorPasswordSignInTeacherInput);
+        if (firstNameValid && lastNameValid && DOBValid && contactNoValid && emailValid && teacherIDValid && passwordValid) {//if the above inputs done by the user is valid the data will be stored
+            Teacher teacher = new Teacher(firstNameSignInTeacherInput.getText(),lastNameSignInTeacherInput.getText(),emailSignInTeacherInput.getText(),passwordSignInTeacherInput.getText(),dateSignInTeacherInput.getText(),contactNoSignInTeacherInput.getText(),teacherIDSignInTeacherInput.getText());
+            teacher.insertToDatabase();//creates a teacher object and then inserts into the databse, and redirects to the home screen
+            messageLabel.setText(teacher.greetUser().toUpperCase());
+            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+            messageLabel.setOpacity(1.0);
+
+            onDashboardStudentsAndTeachersScreenButtonClicked(event);
+        }
+    }
+
+    public void onLogInButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
+        boolean IDValid;
+        boolean passwordValid;
+        String idInput;
+        String passwordInput;
+        IDValid = checkID(IDLoginInput, errorIDLoginInput);
+        if (IDValid) {
+            if (sessionUser.equals("Club") || sessionUser.equals("Event")) {//To check whether the user has entered a club/ event ID instead of student/ ClubAdvisor or teacher ID
+                errorIDLoginInput.setText("Invalid ID");
+                IDLoginInput.clear();
+                IDValid = false;
+            }
+        }
+        passwordValid = checkPassword(passwordLoginInput, errorPasswordLoginInput);
+        if (IDValid && passwordValid) {
+            boolean found = false;
+            idInput = IDLoginInput.getText().toString();
+            passwordInput = passwordLoginInput.getText().toString();
+            //read from the database for exsisting records
+            if (sessionUser.equals("Student")){
+                        registeredStudents=Student.loadStudentsFromDatabase();
+                        for (Student student:registeredStudents){
+                            if (student.getStudentID().equals(idInput)){
+                                if(student.getPassword().equals(passwordInput)){
+                                    found=true;
+                                    onDashboardStudentsAndTeachersScreenButtonClicked(event);
+                                    Controller controller = Controller.getInstance(); // Get the singleton instance
+                                    controller.setSessionID(idInput);
+                                }
+                            }
+                            errorPasswordLoginInput.setText("Incorrect Password");
+                        }
+            }
+            if (sessionUser.equals("Teacher")) {
+                registeredTeachers = Teacher.loadTeachersFromDatabase();
+                if (registeredTeachers.size() > 0) {
+                    for (Teacher teacher : registeredTeachers) {
+                        if (teacher.getStaffID().equals(idInput)) {
+                            if (teacher.getPassword().equals(passwordInput)) {
+                                found = true;
+                                Controller controller = Controller.getInstance(); // Get the singleton instance
+                                controller.setSessionID(idInput);
+                                onTeacherPopUScreenButtonClicked(event);
+                            } else {
+                                errorPasswordLoginInput.setText("Incorrect Password");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (sessionUser.equals("ClubAdvisor")){
+                registeredStudents=Student.loadStudentsFromDatabase();
+                registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+                if (registeredClubAdvisors.size()>0){
+                    for (ClubAdvisor clubAdvisor:registeredClubAdvisors) {
+                        if (clubAdvisor.getClubAdvisorID().equals(idInput)){
+                            String studentId=clubAdvisor.getStudentID();
+                            for (Student student:registeredStudents) {
+                                if (student.getStudentID().equals(studentId) && student.getPassword().equals(passwordInput)){
+                                    found=true;
+                                    onDashboardScreenButtonClicked(event);
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            if (!found){
+                messageLabel.setText("Not available".toUpperCase());
+                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
+            }
+
+        }
+    }
+
+    public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
+
+    public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+        refreshButtonTeacherPopUp.setOpacity(0.00);
+        refreshButtonTeacherPopUp.setDisable(true);
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
+        boolean haveNotification=false;
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        if (!requests.isEmpty()){
+            haveNotification=true;
+        }
+
+        if (!haveNotification){
+            approveButtonTeacherScreen.setOpacity(0.00);
+            approveButtonTeacherScreen.setDisable(true);
+            rejectButtonTeacherScreen.setOpacity(0.00);
+            rejectButtonTeacherScreen.setDisable(true);
+            messageTeacherPopUpScreen.setText("No notifications");
+            studentNameTeacherPopUpScreen.setText("");
+            clubNameTeacherPopUpScreen.setText("");
+        }else{
+            String[] request = requests.get(0);
+            String studentID = request[3];
+            String studentName = "";
+            String clubID = request[1];
+            String clubName="";
+            for (Student student: registeredStudents) {
+                if (student.getStudentID().equals(studentID)){
+                    studentName = student.getFirstName()+" "+student.getLastName();
+                }
+            }
+            for (Club club: registeredClubs) {
+                if (club.getClubID().equals(clubID)){
+                    clubName = club.getClubName();
+                }
+            }
+            studentNameTeacherPopUpScreen.setText(studentName);
+            clubNameTeacherPopUpScreen.setText(clubName);
+            studentNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
+            clubNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
+        }
+
+    }
+    public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException {
+        //code to approve the club advisor
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        String[] request = requests.get(0);
+
+        ArrayList<String> exisitngClubAdvisorIDs = new ArrayList<String>();
+        for (ClubAdvisor clubAdvisor :registeredClubAdvisors){
+            exisitngClubAdvisorIDs.add(clubAdvisor.getClubAdvisorID());
+        }
+        String newClubAdvisorID;
+
+        do {
+            newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();
+        } while (exisitngClubAdvisorIDs.contains(newClubAdvisorID));
+        ClubAdvisor clubAdvisor = new ClubAdvisor(newClubAdvisorID,request[3],request[1],request[4]);
+        clubAdvisor.insertIntoClubAdvisorTable();
+
+        Club.deleteRequest(request[0]);//Delete the request once done
+        approveButtonTeacherScreen.setOpacity(0.00);
+        approveButtonTeacherScreen.setDisable(true);
+        rejectButtonTeacherScreen.setOpacity(0.00);
+        rejectButtonTeacherScreen.setDisable(true);
+        messageTeacherPopUpScreen.setText("No notifications");
+        studentNameTeacherPopUpScreen.setText("");
+        clubNameTeacherPopUpScreen.setText("");
+        onTeacherPopUpCloseButtonClicked(event);
+    }
+    public void onRejectButtonTeacherScreenClicked(ActionEvent event) throws IOException {
+        Controller controller = Controller.getInstance(); // Get the singleton instance
+        String loggedInTeacherID = controller.getSessionID();
+        ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
+        String[] request = requests.get(0);
+
+        Club.deleteRequest(request[0]);
+        onTeacherPopUpCloseButtonClicked(event);
+    }
+
+    //Clubs View Methods
+    public void onJoinClubsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorStudentIdInputClubsScreen.setText("");
+        errorJoinClubsLabel.setText("");
+        joinClubsPane.setOpacity(1.0);
+        leaveClubsPane.setOpacity(0.0);
+
+    }
+    public void onLeaveClubsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorStudentIdInputClubsScreen.setText("");
+        errorleaveClubsLabel1.setText("");
+        joinClubsPane.setOpacity(0.0);
+        leaveClubsPane.setOpacity(1.0);
+    }
 
     public void onJoinClubClicked(ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
         boolean studentIDValid;
         boolean clubIDValid;
         studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
                 errorStudentIdInputClubsScreen.setText("Invalid ID");
+                studentIdInputClubsScreen.clear();
                 studentIDValid = false;
             }
         }
@@ -991,6 +999,7 @@ public class Controller {
         if (clubIDValid) {
             if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
                 errorJoinClubsLabel.setText("Invalid ID");
+                clubIDInputJoinClubsStudetnsAndTeachers.clear();
                 clubIDValid = false;
             }
         }
@@ -1039,10 +1048,12 @@ public class Controller {
 
             if (!clubFound) {
                 errorJoinClubsLabel.setText("Club Not Available");
+                clubIDInputJoinClubsStudetnsAndTeachers.clear();
             }
         }
     }
     public void onLeaveClubClicked(ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
         boolean studentIDValid;
         boolean clubIDValid;
         studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
@@ -1093,6 +1104,7 @@ public class Controller {
 
             if (!clubFound) {
                 errorleaveClubsLabel1.setText("Club Not Available");
+                clubIDInputLeaveClubsStudetnsAndTeachers.clear();
             }
         }
     }
@@ -1130,22 +1142,30 @@ public class Controller {
 
     //Events View Methods Students and Teachers
     public void onCheckInEventsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorStudentIDEventsLabel.setText("");
+        errorCheckInEventsLabel.setText("");
         checkInEventsPane.setOpacity(1.0);
         checkOutEventsPane.setOpacity(0.0);
 
     }
     public void onCheckOutEventsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorStudentIDEventsLabel.setText("");
+        errorCheckOutEventsLabel.setText("");
         checkOutEventsPane.setOpacity(1.0);
         checkInEventsPane.setOpacity(0.0);
 
     }
     public void onCheckInEventClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         boolean studentIDValid;
         boolean eventIDValid;
         studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
                 errorStudentIDEventsLabel.setText("Invalid ID");
+                studentIdInputEventsScreen.clear();
                 studentIDValid = false;
             }
         }
@@ -1153,6 +1173,7 @@ public class Controller {
         if (eventIDValid) {
             if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
                 errorCheckInEventsLabel.setText("Invalid ID");
+                eventIDCheckIn.clear();
                 eventIDValid = false;
             }
         }
@@ -1200,17 +1221,20 @@ public class Controller {
             }
 
             if (!eventFound) {
-                errorJoinClubsLabel.setText("Event Not Available");
+                errorCheckInEventsLabel.setText("Event Not Available");
+                eventIDCheckIn.clear();
             }
         }
     }
     public void onCheckOutEventClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         boolean studentIDValid;
         boolean eventIDValid;
         studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
                 errorStudentIDEventsLabel.setText("Invalid ID");
+                studentIdInputEventsScreen.clear();
                 studentIDValid = false;
             }
         }
@@ -1218,6 +1242,7 @@ public class Controller {
         if (eventIDValid) {
             if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
                 errorCheckOutEventsLabel.setText("Invalid ID");
+                eventIDCheckOut.clear();
                 eventIDValid = false;
             }
         }
@@ -1254,7 +1279,8 @@ public class Controller {
             }
 
             if (!eventFound) {
-                errorleaveClubsLabel1.setText("Event Not Available");
+                errorCheckOutEventsLabel.setText("Event Not Available");
+                eventIDCheckOut.clear();
             }
         }
     }
@@ -1289,6 +1315,7 @@ public class Controller {
 
     //Events View Methods Club Advisors
     public void onEditEventsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("editEventScreen.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -1299,16 +1326,21 @@ public class Controller {
     }
 
     public void onDeleteEventsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorClubAdvisorIdInputEventsLabel.setText("");
+        errorEventIDDelete.setText("");
         deleteEventsPane.setOpacity(1.0);
     }
 
     public void onDeleteButtonClickedEventsScreen(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         boolean clubAdvisorIDValid;
         boolean eventIDValid;
         clubAdvisorIDValid = checkID(clubAdvisorIdInputEventsScreen, errorClubAdvisorIdInputEventsLabel);
         if (clubAdvisorIDValid) {
             if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
                 errorClubAdvisorIdInputEventsLabel.setText("Invalid ID");
+                clubAdvisorIdInputEventsScreen.clear();
                 clubAdvisorIDValid = false;
             }
         }
@@ -1316,6 +1348,7 @@ public class Controller {
         if (eventIDValid) {
             if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
                 errorEventIDDelete.setText("Invalid ID");
+                eventIDDelete.clear();
                 eventIDValid = false;
             }
         }
@@ -1354,16 +1387,21 @@ public class Controller {
     }
     //clubs View Methods Club Advisors
     public void onDeleteClubsViewOptionClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
+        errorClubAdvisorIDInputClubsScreen.setText("");
+        errorDeleteClubsLabel.setText("");
         deleteClubsPane.setOpacity(1.0);
     }
 
     public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException, InterruptedException {
+        messageLabel.setOpacity(0.0);
         boolean clubAdvisorIDValid;
         boolean clubIDValid;
         clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen);
         if (clubAdvisorIDValid) {
             if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
                 errorClubAdvisorIDInputClubsScreen.setText("Invalid ID");
+                clubAdvisorIDInputClubsScreen.clear();
                 clubAdvisorIDValid = false;
             }
         }
@@ -1371,6 +1409,7 @@ public class Controller {
         if (clubIDValid) {
             if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
                 errorDeleteClubsLabel.setText("Invalid ID");
+                clubIDDeleteInput.clear();
                 clubIDValid = false;
             }
         }
@@ -1398,11 +1437,13 @@ public class Controller {
                     }
                     if (!clubAdvisorAvailable) {
                         errorDeleteClubsLabel.setText("Not a member of this club");
+                        clubAdvisorIDInputClubsScreen.clear();
                         break;
 
                     }
                 } else {
                     errorDeleteClubsLabel.setText("Club Not Available");
+                    clubIDDeleteInput.clear();
                 }
             }
         }
@@ -1410,6 +1451,7 @@ public class Controller {
 
 
     public void onUpdateEventButtonClicked(ActionEvent event) throws IOException {
+        messageLabel.setOpacity(0.0);
         boolean eventNameValid;
         boolean eventDateValid;
         boolean eventTimeValid;
@@ -1422,6 +1464,7 @@ public class Controller {
 
         if (eventNameEditEventInput.getText().equals(null) || eventNameEditEventInput.getText().equals("")  ){
             eventNameValid=false;
+            eventNameEditEventInput.clear();
             errorEventNameEditEventInput.setText("Cannot be empty");
         }else{
             eventNameValid= true;
@@ -1429,6 +1472,7 @@ public class Controller {
         }
         if (locationEventEditInput.getText().equals(null) || locationEventEditInput.getText().equals("")  ){
             eventLocationValid=false;
+            locationEventEditInput.clear();
             errorLocationEventEditInput.setText("Cannot be empty");
         }else{
             eventLocationValid= true;
@@ -1438,15 +1482,17 @@ public class Controller {
         eventTimeValid = checkTime(eventTimeEditEventInput, errorEventTimeEditEventInput);
         eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);
         clubIDValid = checkID(clubIDEditEventInput, errorClubIDEditEventInput);
-
-        ArrayList<String> registeredClubsID = new ArrayList<>();
-        for (Club club :registeredClubs){
-            registeredClubsID.add(club.getClubID());
+        if (clubIDValid) {
+            ArrayList<String> registeredClubsID = new ArrayList<>();
+            for (Club club : registeredClubs) {
+                registeredClubsID.add(club.getClubID());
+            }
+            if (!registeredClubsID.contains(clubIDEditEventInput.getText())) {
+                clubIDEditEventInput.clear();
+                errorClubIDEditEventInput.setText("Invalid ID");
+                clubIDValid = false;
+            }
         }
-        if (!registeredClubsID.contains(clubIDEditEventInput.getText())){
-            clubIDValid=false;
-        }
-
         eventDescriptionValid = checkDescription(eventDescriptionEditEventInput, errorEventDescriptionEditEventInput);
         if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
             String eventIDInput=eventIDEditEventInput.getText();
@@ -1685,7 +1731,7 @@ public class Controller {
             textField.clear();//clears the text field
         } else {//checks whether there is at least one string in the contactNo, since contactNo cannot contain any string characters
             char[] contactNoCharacters = textField.getText().toCharArray();//converts the string to a sequence of characters
-            if (contactNoCharacters.length == 10) {//checks whether the contact number has only 10 digits
+            if (contactNoCharacters.length == 9) {//checks whether the contact number has only 10 digits
                 for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
                     if (!Character.isDigit(character)) {//using the Character objects in built isDigit() method to check whether the character is not a digit
                         contactNoValid = false;//if it is then contactNo input will be invalid and the loop will break
@@ -1759,26 +1805,6 @@ public class Controller {
         }
         return passwordValid;
     }
-
-//    public boolean checkDate(TextField textField, Label label) {
-//        // split based on the  (-). if
-//        boolean dateValid = true;
-//        label.setText("");//the error label made invisible at the start of the validation
-//        if (textField.getText().equals("")) {//checks if the date input field is blank
-//            label.setText("Cannot be empty");//display a message to the user to re-enter
-//            dateValid = false;//sets date validity to be false
-//            textField.clear();//clears the text field
-//        } else {
-//            try {
-//                LocalDate.parse(textField.getText());//checks if the date is in the correct format
-//            } catch (DateTimeParseException e) {//exception handling to catch for DateTimeParseException error
-//                label.setText("Invalid date");//if the date is invalid, a message will be displayed to the user saying its incorrect
-//                dateValid = false;
-//                textField.clear();//clears the text field
-//            }
-//        }
-//        return dateValid;
-//    }
 
     public boolean checkDate(TextField textField, Label label) {
         boolean dateValid = true;
