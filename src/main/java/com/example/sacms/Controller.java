@@ -786,6 +786,8 @@ public class Controller {
     }
 
     public void onLogInButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+        errorPasswordLoginInput.setText("");
+        errorIDLoginInput.setText("");
         messageLabel.setOpacity(0.0);
         boolean IDValid;
         boolean passwordValid;
@@ -801,69 +803,81 @@ public class Controller {
         }
         passwordValid = checkPassword(passwordLoginInput, errorPasswordLoginInput);
         if (IDValid && passwordValid) {
-            boolean found = false;
+            boolean IDFound = false;
+            boolean empty = true;
             idInput = IDLoginInput.getText().toString();
             passwordInput = passwordLoginInput.getText().toString();
             //read from the database for exsisting records
             if (sessionUser.equals("Student")){
-                        registeredStudents=Student.loadStudentsFromDatabase();
-                        String test = (String) checkIfExists(IDLoginInput,registeredStudents);
-                        System.out.println(test);
-                        for (Student student:registeredStudents){
-                            if (student.getStudentID().equals(idInput)){
-                                if(student.getPassword().equals(passwordInput)){
-                                    found=true;
-                                    onDashboardStudentsAndTeachersScreenButtonClicked(event);
-                                    Controller controller = Controller.getInstance(); // Get the singleton instance
-                                    controller.setSessionID(idInput);
-                                }
-                            }
-                            errorPasswordLoginInput.setText("Incorrect Password");
-                        }
-            }
-            if (sessionUser.equals("Teacher")) {
-                registeredTeachers = Teacher.loadTeachersFromDatabase();
-                if (registeredTeachers.size() > 0) {
-                    for (Teacher teacher : registeredTeachers) {
-                        if (teacher.getStaffID().equals(idInput)) {
-                            if (teacher.getPassword().equals(passwordInput)) {
-                                found = true;
+                if (registeredStudents.size()>0) {
+                    empty = false;
+                    for (Student student : registeredStudents) {
+                        if (student.getStudentID().equals(idInput)) {
+                            IDFound = true;
+                            if (student.getPassword().equals(passwordInput)) {
+                                onDashboardStudentsAndTeachersScreenButtonClicked(event);
                                 Controller controller = Controller.getInstance(); // Get the singleton instance
                                 controller.setSessionID(idInput);
-                                onTeacherPopUScreenButtonClicked(event);
-                            } else {
-                                errorPasswordLoginInput.setText("Incorrect Password");
+                                break;
                             }
                         }
                     }
                 }
             }
-
-            if (sessionUser.equals("ClubAdvisor")){
-                registeredStudents=Student.loadStudentsFromDatabase();
-                registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
+            else if (sessionUser.equals("Teacher")) {
+                if (registeredTeachers.size()>0) {
+                    empty = false;
+                    for (Teacher teacher : registeredTeachers) {
+                        if (teacher.getStaffID().equals(idInput)) {
+                            IDFound = true;
+                            if (teacher.getPassword().equals(passwordInput)) {
+                                Controller controller = Controller.getInstance(); // Get the singleton instance
+                                controller.setSessionID(idInput);
+                                onTeacherPopUScreenButtonClicked(event);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (sessionUser.equals("ClubAdvisor")){
                 if (registeredClubAdvisors.size()>0){
+                    empty = false;
                     for (ClubAdvisor clubAdvisor:registeredClubAdvisors) {
                         if (clubAdvisor.getClubAdvisorID().equals(idInput)){
                             String studentId=clubAdvisor.getStudentID();
                             for (Student student:registeredStudents) {
-                                if (student.getStudentID().equals(studentId) && student.getPassword().equals(passwordInput)){
-                                    found=true;
-                                    onDashboardScreenButtonClicked(event);
-
+                                if (student.getStudentID().equals(studentId)) {
+                                    IDFound = true;
+                                    if (student.getPassword().equals(passwordInput)) {
+                                        onDashboardScreenButtonClicked(event);
+                                        break;
+                                    }
                                 }
-
                             }
                         }
                     }
                 }
             }
-            if (!found){
+            if (empty) {
+                errorIDLoginInput.setText("Please sign in");
+                errorPasswordLoginInput.setText("");
+                IDLoginInput.clear();
+                passwordLoginInput.clear();
+            }
+            else if (!IDFound){
                 messageLabel.setText("Not available".toUpperCase());
                 messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
                 messageLabel.setOpacity(1.0);
+                IDLoginInput.clear();
+                passwordLoginInput.clear();
+                errorIDLoginInput.setText("");
+                errorPasswordLoginInput.setText("");
+            } else {
+                errorIDLoginInput.setText("");
+                errorPasswordLoginInput.setText("Incorrect password");
+                passwordLoginInput.clear();
             }
-
         }
     }
 
@@ -969,36 +983,51 @@ public class Controller {
 
     public void onJoinClubClicked(ActionEvent event) throws IOException, InterruptedException {
         messageLabel.setOpacity(0.0);
+        String studentID = studentIdInputClubsScreen.getText();
+        String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
         boolean studentIDValid;
         boolean clubIDValid;
         studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
+                studentIDValid = false;
+            }
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentID)) {
+                    studentIDValid = true;
+                    break;
+                } else {
+                    studentIDValid = false;
+                }
+            }
+            if (!studentIDValid) {
                 errorStudentIdInputClubsScreen.setText("Invalid ID");
                 studentIdInputClubsScreen.clear();
-                studentIDValid = false;
             }
         }
         clubIDValid = checkID(clubIDInputJoinClubsStudetnsAndTeachers, errorJoinClubsLabel);
         if (clubIDValid) {
             if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
+                clubIDValid = false;
+            }
+            for (Club club : registeredClubs) {
+                if (club.getClubID().equals(clubID)) {
+                    clubIDValid = true;
+                    break;
+                } else {
+                    clubIDValid = false;
+                }
+            }
+            if (!clubIDValid) {
                 errorJoinClubsLabel.setText("Invalid ID");
                 clubIDInputJoinClubsStudetnsAndTeachers.clear();
-                clubIDValid = false;
             }
         }
         if (studentIDValid && clubIDValid) {
-            String studentID = studentIdInputClubsScreen.getText();
-            String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
-            registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
             boolean studentAvailable = false;
-            boolean clubFound = false;
-
             for (Club club : registeredClubs) {
                 if (club.getClubID().equals(clubID)) {
-                    clubFound = true;//check if teh clubID is an exxsisting one so we can then proceed
                     ArrayList<Student> availableStudentsAtClub = club.loadStudentsOfClub(clubID);//returns the list of students in that club
-
                     for (Student student : availableStudentsAtClub) {//checks in that list if the student is available then we can say they are already in it
                         if (student.getStudentID().equals(studentID)) {
                             studentAvailable = true;
@@ -1024,45 +1053,59 @@ public class Controller {
                             }
                         }
                     }
-
                     // No need to check other clubs once a match is found
                     break;
                 }
-            }
-
-            if (!clubFound) {
-                errorJoinClubsLabel.setText("Club Not Available");
-                clubIDInputJoinClubsStudetnsAndTeachers.clear();
             }
         }
     }
     public void onLeaveClubClicked(ActionEvent event) throws IOException, InterruptedException {
         messageLabel.setOpacity(0.0);
+        String studentID = studentIdInputClubsScreen.getText();
+        String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
         boolean studentIDValid;
         boolean clubIDValid;
         studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
-                errorStudentIdInputClubsScreen.setText("Invalid ID");
                 studentIDValid = false;
+            }
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentID)) {
+                    studentIDValid = true;
+                    break;
+                } else {
+                    studentIDValid = false;
+                }
+            }
+            if (!studentIDValid) {
+                errorStudentIdInputClubsScreen.setText("Invalid ID");
+                studentIdInputClubsScreen.clear();
             }
         }
         clubIDValid = checkID(clubIDInputLeaveClubsStudetnsAndTeachers, errorleaveClubsLabel1);
         if (clubIDValid) {
             if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
-                errorleaveClubsLabel1.setText("Invalid ID");
                 clubIDValid = false;
+            }
+            for (Club club : registeredClubs) {
+                if (club.getClubID().equals(clubID)) {
+                    clubIDValid = true;
+                    break;
+                } else {
+                    clubIDValid = false;
+                }
+            }
+            if (!clubIDValid) {
+                errorleaveClubsLabel1.setText("Invalid ID");
+                clubIDInputLeaveClubsStudetnsAndTeachers.clear();
             }
         }
         if (studentIDValid && clubIDValid) {
-            String studentID = studentIdInputClubsScreen.getText();
-            String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
-            boolean clubFound = false;
             registeredStudents = Student.loadStudentsFromDatabase();
             boolean studentAvailable = false;
             for (Club club : registeredClubs) {// if leave then the opposite of join
                 if (club.getClubID().equals(clubID)) {
-                    clubFound = true;
                     for (Student student : club.loadStudentsOfClub(clubID)) {
                         if (student.getStudentID().equals(studentID)) {
                             club.removeStudent(student);
@@ -1084,11 +1127,6 @@ public class Controller {
                         break;
                     }
                 }
-            }
-
-            if (!clubFound) {
-                errorleaveClubsLabel1.setText("Club Not Available");
-                clubIDInputLeaveClubsStudetnsAndTeachers.clear();
             }
         }
     }
@@ -1143,36 +1181,51 @@ public class Controller {
     }
     public void onCheckInEventClicked(ActionEvent event) throws IOException {
         messageLabel.setOpacity(0.0);
+        String studentID=studentIdInputEventsScreen.getText();
+        String eventID = eventIDCheckIn.getText();
         boolean studentIDValid;
         boolean eventIDValid;
         studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
         if (studentIDValid) {
-            if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
+                studentIDValid = false;
+            }
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentID)) {
+                    studentIDValid = true;
+                    break;
+                } else {
+                    studentIDValid = false;
+                }
+            }
+            if (!studentIDValid) {
                 errorStudentIDEventsLabel.setText("Invalid ID");
                 studentIdInputEventsScreen.clear();
-                studentIDValid = false;
             }
         }
         eventIDValid = checkID(eventIDCheckIn, errorCheckInEventsLabel);
         if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
+            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Club ID
+                eventIDValid = false;
+            }
+            for (Event event1 : registeredevents) {
+                if (event1.getEventID().equals(eventID)) {
+                    eventIDValid = true;
+                    break;
+                } else {
+                    eventIDValid = false;
+                }
+            }
+            if (!eventIDValid) {
                 errorCheckInEventsLabel.setText("Invalid ID");
                 eventIDCheckIn.clear();
-                eventIDValid = false;
             }
         }
         if (studentIDValid && eventIDValid) {
-            String studentID=studentIdInputEventsScreen.getText();
-            String eventID = eventIDCheckIn.getText();
-            registeredStudents = Student.loadStudentsFromDatabase();//loads the studebts from the database
             boolean studentAvailable = false;
-            boolean eventFound = false;
-
             for (Event eventInformation : registeredevents) {
                 if (eventInformation.getEventID().equals(eventID)) {
-                    eventFound = true;//check if teh clubID is an exxsisting one so we can then proceed
                     ArrayList<Student> availableStudentsAtEvent = eventInformation.loadStudentsOfEvent(eventID);//returns the list of students in that club
-
                     for (Student student : availableStudentsAtEvent) {//checks in that list if the student is available then we can say they are already in it
                         if (student.getStudentID().equals(studentID)) {
                             studentAvailable = true;
@@ -1184,7 +1237,6 @@ public class Controller {
                             break; // No need to continue checking
                         }
                     }
-
                     if (!studentAvailable) {
                         for (Student student : registeredStudents) {
                             if (student.getStudentID().equals(studentID)) {//else we get their records and then add it to the club Class
@@ -1198,47 +1250,58 @@ public class Controller {
                             }
                         }
                     }
-
                     // No need to check other clubs once a match is found
                     break;
                 }
-            }
-
-            if (!eventFound) {
-                errorCheckInEventsLabel.setText("Event Not Available");
-                eventIDCheckIn.clear();
             }
         }
     }
     public void onCheckOutEventClicked(ActionEvent event) throws IOException {
         messageLabel.setOpacity(0.0);
+        String studentID=studentIdInputEventsScreen.getText();
+        String eventID = eventIDCheckOut.getText();
         boolean studentIDValid;
         boolean eventIDValid;
         studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
         if (studentIDValid) {
-            if (!sessionUser.equals("Student")) {//To check whether the user has entered a Student ID
+            if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
+                studentIDValid = false;
+            }
+            for (Student student : registeredStudents) {
+                if (student.getStudentID().equals(studentID)) {
+                    studentIDValid = true;
+                    break;
+                } else {
+                    studentIDValid = false;
+                }
+            }
+            if (!studentIDValid) {
                 errorStudentIDEventsLabel.setText("Invalid ID");
                 studentIdInputEventsScreen.clear();
-                studentIDValid = false;
             }
         }
         eventIDValid = checkID(eventIDCheckOut, errorCheckOutEventsLabel);
         if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
+            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Club ID
+                eventIDValid = false;
+            }
+            for (Event event1 : registeredevents) {
+                if (event1.getEventID().equals(eventID)) {
+                    eventIDValid = true;
+                    break;
+                } else {
+                    eventIDValid = false;
+                }
+            }
+            if (!eventIDValid) {
                 errorCheckOutEventsLabel.setText("Invalid ID");
                 eventIDCheckOut.clear();
-                eventIDValid = false;
             }
         }
         if (studentIDValid && eventIDValid) {
-            String studentID=studentIdInputEventsScreen.getText();
-            String eventID = eventIDCheckOut.getText();
-            boolean eventFound = false;
-            registeredStudents = Student.loadStudentsFromDatabase();
             boolean studentAvailable = false;
             for (Event eventInformation : registeredevents) {// if leave then the opposite of join
                 if (eventInformation.getEventID().equals(eventID)) {
-                    eventFound = true;
                     for (Student student : eventInformation.loadStudentsOfEvent(eventID)) {
                         if (student.getStudentID().equals(studentID)) {
                             eventInformation.removeStudent(student);
@@ -1260,11 +1323,6 @@ public class Controller {
                         break;
                     }
                 }
-            }
-
-            if (!eventFound) {
-                errorCheckOutEventsLabel.setText("Event Not Available");
-                eventIDCheckOut.clear();
             }
         }
     }
@@ -1337,35 +1395,39 @@ public class Controller {
             }
         }
         if (clubAdvisorIDValid && eventIDValid) {
+            boolean clubAdvisorFound = false;
+            boolean eventsFound = false;
             String clubAdvisorID = clubAdvisorIdInputEventsScreen.getText();
-            String eventID = eventIDDelete.getText();
-            registeredClubAdvisors = ClubAdvisor.loadClubAdvisorsFromDatabase();
-            boolean clubAdvisorAvailable = false;
+            String eventsID = eventIDDelete.getText();
             for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
-                    for (Event eventInformation : registeredevents) {
-                        if (eventInformation.getEventID().equals(eventID)) {
-                            eventInformation.deleteEvent(eventID);
-                            clubAdvisorAvailable = true;
-                            messageLabel.setText("Event deleted successfully".toUpperCase());
-                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                            messageLabel.setOpacity(1.0);
-                            eventIDDelete.clear();
-                            clubAdvisorIdInputEventsScreen.clear();
-                            refreshEventsViewButton.setDisable(false);
-                            refreshEventsViewButton.setOpacity(1.0);
-                            break;
-                        }
-
-                    }
-                    if (!clubAdvisorAvailable) {
-                        errorEventIDDelete.setText("Not a member of this club");
-                        break;
-
-                    }
-                } else {
-                    errorEventIDDelete.setText("Club Not Available");
+                    clubAdvisorFound=true;
+                    break;
                 }
+            }
+            for (Event event_1 : registeredevents) {
+                if (event_1.getEventID().equals(eventsID)) {
+                    eventsFound=true;
+                    if (eventsFound  && clubAdvisorFound) {
+                        event_1.deleteEvent(eventsID);
+                        messageLabel.setText("event deleted successfully".toUpperCase());
+                        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                        messageLabel.setOpacity(1.0);
+                        eventIDDelete.clear();
+                        clubAdvisorIdInputEventsScreen.clear();
+                        refreshEventsViewButton.setDisable(false);
+                        refreshEventsViewButton.setOpacity(1.0);
+                        break;
+                    }
+                }
+            }
+            if (!eventsFound){
+                errorEventIDDelete.setText("Event Not Available");
+                eventIDDelete.clear();
+            }
+            if (!clubAdvisorFound){
+                errorClubAdvisorIdInputEventsLabel.setText("Club Advisor Not Available");
+                clubAdvisorIdInputEventsScreen.clear();
             }
         }
     }
@@ -1403,8 +1465,6 @@ public class Controller {
         if (clubAdvisorIDValid && clubIDValid) {
             String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
             String clubID = clubIDDeleteInput.getText();
-            registeredClubAdvisors = ClubAdvisor.loadClubAdvisorsFromDatabase();
-            boolean clubAdvisorAvailable = false;
             for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
                     clubAdvisorFound=true;
@@ -1414,22 +1474,26 @@ public class Controller {
             for (Club club : registeredClubs) {
                 if (club.getClubID().equals(clubID)) {
                     clubFound=true;
-
+                    if (clubFound  && clubAdvisorFound) {
+                        club.deleteClub(clubID);
+                        messageLabel.setText("club deleted successfully".toUpperCase());
+                        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                        messageLabel.setOpacity(1.0);
+                        clubIDDeleteInput.clear();
+                        clubAdvisorIDInputClubsScreen.clear();
+                        refreshClubsViewButton.setDisable(false);
+                        refreshClubsViewButton.setOpacity(1.0);
+                        break;
+                    }
                 }
             }
             if (!clubFound){
                 errorDeleteClubsLabel.setText("Club Not Available");
                 clubIDDeleteInput.clear();
             }
-            if (clubFound && clubAdvisorFound){
-                Club.deleteClub(clubID);
-                messageLabel.setText("club deleted successfully".toUpperCase());
-                messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                messageLabel.setOpacity(1.0);
-                clubIDDeleteInput.clear();
+            if (!clubAdvisorFound){
+                errorClubAdvisorIDInputClubsScreen.setText("Club Advisor Not Available");
                 clubAdvisorIDInputClubsScreen.clear();
-                refreshClubsViewButton.setDisable(false);
-                refreshClubsViewButton.setOpacity(1.0);
             }
         }
     }
@@ -1444,9 +1508,6 @@ public class Controller {
         boolean clubIDValid;
         boolean eventDescriptionValid;
         boolean eventLocationValid;
-
-        boolean eventFound = false;
-
         if (eventNameEditEventInput.getText().equals(null) || eventNameEditEventInput.getText().equals("")  ){
             eventNameValid=false;
             eventNameEditEventInput.clear();
@@ -1466,6 +1527,17 @@ public class Controller {
         eventDateValid = checkDate(eventDateEditEventInput, errorEventDateEditEventInput);
         eventTimeValid = checkTime(eventTimeEditEventInput, errorEventTimeEditEventInput);
         eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);
+        if (eventIDValid) {
+            ArrayList<String> registeredEventsID = new ArrayList<>();
+            for (Event event_1 : registeredevents) {
+                registeredEventsID.add(event_1.getEventID());
+            }
+            if (!registeredEventsID.contains(eventIDEditEventInput.getText())) {
+                eventIDEditEventInput.clear();
+                errorEventIDEditEventInput.setText("Invalid ID");
+                eventIDValid = false;
+            }
+        }
         clubIDValid = checkID(clubIDEditEventInput, errorClubIDEditEventInput);
         if (clubIDValid) {
             ArrayList<String> registeredClubsID = new ArrayList<>();
@@ -1489,7 +1561,6 @@ public class Controller {
             String eventDescriptionInput=eventDescriptionEditEventInput.getText();
             for (Event existingEvent:registeredevents){
                 if (existingEvent.getEventID().equals(eventIDInput)){
-                    eventFound = true;
                     existingEvent.setEventName(eventNameInput);
                     existingEvent.setEventDate(eventDateInput);
                     existingEvent.setEventTime(eventTimeInput);
@@ -1507,12 +1578,8 @@ public class Controller {
                     clubIDEditEventInput.clear();
                     locationEventEditInput.clear();
                     eventDescriptionEditEventInput.clear();
+                    break;
                 }
-            }
-            if (!eventFound){
-                messageLabel.setText("EVENT NOT FOUND");
-                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                messageLabel.setOpacity(1.0);
             }
         }
     }
@@ -1842,50 +1909,4 @@ public class Controller {
         }
         return timeValid;
     }
-    public Object checkIfExists(TextField idInput,Object targetList){
-        for (Object object:(ArrayList<Object>)targetList){
-            if (object.getClass().equals(Student.class)){
-                ArrayList<Student> students = (ArrayList<Student>) targetList;
-                for (Student student:students){
-                    if (student.getStudentID().equals(idInput)){
-                        return student;
-                    }
-                }
-            }
-            if (object.getClass().equals(Club.class)){
-                ArrayList<Club> clubs = (ArrayList<Club>) targetList;
-                for (Club club:clubs){
-                    if (club.getClubID().equals(idInput)){
-                        return club;
-                    }
-                }
-            }
-            if (object.getClass().equals(ClubAdvisor.class)){
-                ArrayList<ClubAdvisor> clubAdvisors = (ArrayList<ClubAdvisor>) targetList;
-                for (ClubAdvisor clubAdvisor:clubAdvisors){
-                    if (clubAdvisor.getClubAdvisorID().equals(idInput)){
-                        return clubAdvisor;
-                    }
-                }
-            }
-            if (object.getClass().equals(Teacher.class)){
-                ArrayList<Teacher> teachers = (ArrayList<Teacher>) targetList;
-                for (Teacher teacher:teachers){
-                    if (teacher.getStaffID().equals(idInput)){
-                        return teacher;
-                    }
-                }
-            }
-            if (object.getClass().equals(Event.class)){
-                ArrayList<Event> events = (ArrayList<Event>) targetList;
-                for (Event event:events){
-                    if (event.getEventID().equals(idInput)){
-                        return event;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
 }
