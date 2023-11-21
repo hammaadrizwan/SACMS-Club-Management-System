@@ -36,15 +36,11 @@ public class Controller {
     @FXML
     private AnchorPane joinClubsPane,leaveClubsPane,deleteClubsPane,checkInEventsPane,checkOutEventsPane,deleteEventsPane,todayEventOnePane,todayEventTwoPane,tomorrowEventOnePane,userIconButtonOptionPane; //This displays the options available to a user when icon is clicked
     @FXML
-    private TextField clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
-    @FXML
-    private TextField clubIDEditEventInput,locationEventEditInput,eventIDDelete,locationEventCreationInput,eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDCheckOut;
+    private TextField clubIDEditEventInput,locationEventEditInput,eventIDDelete,locationEventCreationInput,eventNameEditEventInput, eventDateEditEventInput, eventTimeEditEventInput, eventIDEditEventInput, clubAdvisorIdInputEventsScreen, eventIDCheckOut,clubIDDeleteInput,clubAdvisorIDInputClubsScreen,clubIDInputLeaveClubsStudetnsAndTeachers,clubIDInputJoinClubsStudetnsAndTeachers,studentIdInputClubsScreen,studentIdInputEventsScreen,eventIDCheckIn,clubNameInputClubCreationScreen, clubAdvisorIDInputClubCreationScreen, eventNameEventCreationInput, eventDateEventCreationInput, eventTimeEventCreationInput, clubIDEventCreationInput, studentIDSigInClubAdvisorScreen, positionSigInClubAdvisorScreen, clubIDSigInClubAdvisorScreen, firstNameSignInStudentInput, lastNameSignInStudentInput, dateSignInStudentInput, classSignInStudentInput, emailSignInStudentInput, contactNoSignInStudentInput, passwordSignInStudentInput, studentIDSignInStudentInput, firstNameSignInTeacherInput, lastNameSignInTeacherInput, dateSignInTeacherInput, contactNoSignInTeacherInput, emailSignInTeacherInput, teacherIDSignInTeacherInput, passwordSignInTeacherInput, IDLoginInput, passwordLoginInput;
     @FXML
     private TextArea clubDescriptionInputClubCreationScreen, eventDescriptionEventCreationInput, eventDescriptionEditEventInput;
     @FXML
-    private Label notificationLabel,todayEventOneTime,todayEventOneName,todayEventOneOrganisingClubName,tomorrowEventOneTime,tomorrowEventOneName,tomorrowEventOneOrganisingClubName,todayEventTwoTime,todayEventTwoName,todayEventTwoOrganisingClubName,errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
-    @FXML
-    private Label dashboardLabelClubAdvisorSignin,errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel;
+    private Label dashboardLabelClubAdvisorSignin,errorClubIDEditEventInput,errorEventNameEditEventInput, errorEventDateEditEventInput, errorEventTimeEditEventInput, errorEventIDEditEventInput, errorEventDescriptionEditEventInput, errorClubAdvisorIDInputClubsScreen, errorStudentIdInputClubsScreen, errorClubAdvisorIdInputEventsLabel, errorStudentIDEventsLabel, errorCheckInEventsLabel, errorCheckOutEventsLabel,notificationLabel,todayEventOneTime,todayEventOneName,todayEventOneOrganisingClubName,tomorrowEventOneTime,tomorrowEventOneName,tomorrowEventOneOrganisingClubName,todayEventTwoTime,todayEventTwoName,todayEventTwoOrganisingClubName,errorLocationEventEditInput,errorEventIDDelete,errorLocationEventCreationInput,messageLabel,userNameLabelDashboard,errorDeleteClubsLabel,errorJoinClubsLabel,errorleaveClubsLabel1,dayLabelDashboard,timeLabelDashboard,errorClubNameInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen, errorTeacherIDInputClubCreationScreen, errorEventNameEventCreationInput, errorEventDateEventCreationInput, errorEventTimeEventCreationInput, errorClubIDEventCreationInput, errorEventDescriptionEventCreationInput, errorStudentIDSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen, errorFirstNameSignInStudentInput, errorLastNameSignInStudentInput, errorDateSignInStudentInput, errorClassSignInStudentInput, errorEmailSignInStudentInput, errorContactNoSignInStudentInput, errorPasswordSignInStudentInput, errorStudentIDSignInStudentInput, errorFirstNameSignInTeacherInput, errorLastNameSignInTeacherInput, errorDateSignInTeacherInput, errorContactNoSignInTeacherInput, errorEmailSignInTeacherInput, errorTeacherIDSignInTeacherInput, errorPasswordSignInTeacherInput, errorIDLoginInput, errorPasswordLoginInput;
     @FXML
     private Text messageTeacherPopUpScreen,studentNameTeacherPopUpScreen,clubNameTeacherPopUpScreen;
     @FXML
@@ -80,35 +76,21 @@ public class Controller {
 
 
     @FXML
-    private TableView<String> clubAdvisorTable;
+    private TableView<String> clubAdvisorTable,reportsTable;
     @FXML
-    private TableColumn<String, String> clubAdvisorIDColumnClubAdvisorTable;
+    private TableColumn<String, String> clubAdvisorIDColumnClubAdvisorTable,clubNameReportColumn;
     @FXML
-    private TableColumn<String, String> clubNameColumnClubAdvisorTable;
+    private TableColumn<String, String> clubNameColumnClubAdvisorTable,NoOfClubMembersColumn;
     @FXML
-    private TableColumn<String, String> studentIDColumnClubAdvisorTable;
+    private TableColumn<String, String> studentIDColumnClubAdvisorTable,NoOfClubEventsHeldColumn;
     @FXML
-    private TableColumn<String, String> nameColumnClubAdvisorTable;
+    private TableColumn<String, String> nameColumnClubAdvisorTable,recentEventNameColumn;
     @FXML
-    private TableColumn<String, String> contactNoColumnClubAdvisorTable;
+    private TableColumn<String, String> contactNoColumnClubAdvisorTable,recentEventAttendance;
     @FXML
     private TableColumn<String, String> positionColumnClubAdvisorTable;
     @FXML
     private TableColumn<String, String> emailColumnClubAdvisorTable;
-
-    @FXML
-    private TableView<String> reportsTable;
-    @FXML
-    private TableColumn<String, String> clubNameReportColumn;
-    @FXML
-    private TableColumn<String, String> NoOfClubMembersColumn;
-    @FXML
-    private TableColumn<String, String> NoOfClubEventsHeldColumn;
-    @FXML
-    private TableColumn<String, String> recentEventNameColumn;
-    @FXML
-    private TableColumn<String, String> recentEventAttendance;
-
 
 
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
@@ -1395,9 +1377,10 @@ public class Controller {
 
     public void onDeleteButtonClickedClubsScreen(ActionEvent event) throws IOException, InterruptedException {
         messageLabel.setOpacity(0.0);
-        boolean clubAdvisorIDValid;
+        boolean clubAdvisorIDValid;//check if the CA and the C exists
         boolean clubIDValid;
-        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen);
+        boolean clubFound=false;
+        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen); // checks
         if (clubAdvisorIDValid) {
             if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
                 errorClubAdvisorIDInputClubsScreen.setText("Invalid ID");
@@ -1422,8 +1405,9 @@ public class Controller {
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
                     for (Club club : registeredClubs) {
                         if (club.getClubID().equals(clubID)) {
-                            club.deleteClub(clubID);
                             clubAdvisorAvailable = true;
+                            clubFound=true;
+                            club.deleteClub(clubID);
                             messageLabel.setText("club deleted successfully".toUpperCase());
                             messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
                             messageLabel.setOpacity(1.0);
@@ -1441,9 +1425,10 @@ public class Controller {
                         break;
 
                     }
-                } else {
-                    errorDeleteClubsLabel.setText("Club Not Available");
-                    clubIDDeleteInput.clear();
+                    if (!clubFound){
+                        errorDeleteClubsLabel.setText("Club Not Available");
+                        clubIDDeleteInput.clear();
+                    }
                 }
             }
         }
