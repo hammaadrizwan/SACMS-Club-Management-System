@@ -214,7 +214,7 @@ public class Club implements Report {
         return students; // return the list of students
     }
 
-    public void deleteClub(String clubID){
+    public static void deleteClub(String clubID){
         createRequestTableOnDatabase();
         String deleteRequestQuery = "Delete from request where request.clubId = ?;";
         String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";//to delete a club first we remove them from the club advisor thenclub membership and finally in the club id

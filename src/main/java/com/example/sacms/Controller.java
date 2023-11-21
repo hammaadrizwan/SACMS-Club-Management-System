@@ -807,6 +807,8 @@ public class Controller {
             //read from the database for exsisting records
             if (sessionUser.equals("Student")){
                         registeredStudents=Student.loadStudentsFromDatabase();
+                        String test = (String) checkIfExists(IDLoginInput,registeredStudents);
+                        System.out.println(test);
                         for (Student student:registeredStudents){
                             if (student.getStudentID().equals(idInput)){
                                 if(student.getPassword().equals(passwordInput)){
@@ -1379,8 +1381,10 @@ public class Controller {
         messageLabel.setOpacity(0.0);
         boolean clubAdvisorIDValid;//check if the CA and the C exists
         boolean clubIDValid;
-        boolean clubFound=false;
-        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen); // checks
+        boolean clubFound=false;//check if the club is found
+        boolean clubAdvisorFound=false;//check if the club is found
+
+        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen); // checks the ID whether its valid
         if (clubAdvisorIDValid) {
             if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
                 errorClubAdvisorIDInputClubsScreen.setText("Invalid ID");
@@ -1403,33 +1407,29 @@ public class Controller {
             boolean clubAdvisorAvailable = false;
             for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
-                    for (Club club : registeredClubs) {
-                        if (club.getClubID().equals(clubID)) {
-                            clubAdvisorAvailable = true;
-                            clubFound=true;
-                            club.deleteClub(clubID);
-                            messageLabel.setText("club deleted successfully".toUpperCase());
-                            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                            messageLabel.setOpacity(1.0);
-                            clubIDDeleteInput.clear();
-                            clubAdvisorIDInputClubsScreen.clear();
-                            refreshClubsViewButton.setDisable(false);
-                            refreshClubsViewButton.setOpacity(1.0);
-                            break;
-                        }
-
-                    }
-                    if (!clubAdvisorAvailable) {
-                        errorDeleteClubsLabel.setText("Not a member of this club");
-                        clubAdvisorIDInputClubsScreen.clear();
-                        break;
-
-                    }
-                    if (!clubFound){
-                        errorDeleteClubsLabel.setText("Club Not Available");
-                        clubIDDeleteInput.clear();
-                    }
+                    clubAdvisorFound=true;
+                    break;
                 }
+            }
+            for (Club club : registeredClubs) {
+                if (club.getClubID().equals(clubID)) {
+                    clubFound=true;
+
+                }
+            }
+            if (!clubFound){
+                errorDeleteClubsLabel.setText("Club Not Available");
+                clubIDDeleteInput.clear();
+            }
+            if (clubFound && clubAdvisorFound){
+                Club.deleteClub(clubID);
+                messageLabel.setText("club deleted successfully".toUpperCase());
+                messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
+                clubIDDeleteInput.clear();
+                clubAdvisorIDInputClubsScreen.clear();
+                refreshClubsViewButton.setDisable(false);
+                refreshClubsViewButton.setOpacity(1.0);
             }
         }
     }
@@ -1841,6 +1841,19 @@ public class Controller {
             }
         }
         return timeValid;
+    }
+    public Object checkIfExists(TextField idInput,Object targetList){
+        for (Object object:(ArrayList<Object>)targetList){
+            if (object.getClass().equals(Student.class)){
+                System.out.println("Object is student using .equals");
+                break;
+            }else if (object.getClass()==(Student.class)){
+                System.out.println("Object is student using ==");
+                break;
+            }
+            System.out.println(object.getClass().toString());
+        }
+        return "";
     }
 
 }
