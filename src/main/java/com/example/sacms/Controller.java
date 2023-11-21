@@ -1845,15 +1845,47 @@ public class Controller {
     public Object checkIfExists(TextField idInput,Object targetList){
         for (Object object:(ArrayList<Object>)targetList){
             if (object.getClass().equals(Student.class)){
-                System.out.println("Object is student using .equals");
-                break;
-            }else if (object.getClass()==(Student.class)){
-                System.out.println("Object is student using ==");
-                break;
+                ArrayList<Student> students = (ArrayList<Student>) targetList;
+                for (Student student:students){
+                    if (student.getStudentID().equals(idInput)){
+                        return student;
+                    }
+                }
             }
-            System.out.println(object.getClass().toString());
+            if (object.getClass().equals(Club.class)){
+                ArrayList<Club> clubs = (ArrayList<Club>) targetList;
+                for (Club club:clubs){
+                    if (club.getClubID().equals(idInput)){
+                        return club;
+                    }
+                }
+            }
+            if (object.getClass().equals(ClubAdvisor.class)){
+                ArrayList<ClubAdvisor> clubAdvisors = (ArrayList<ClubAdvisor>) targetList;
+                for (ClubAdvisor clubAdvisor:clubAdvisors){
+                    if (clubAdvisor.getClubAdvisorID().equals(idInput)){
+                        return clubAdvisor;
+                    }
+                }
+            }
+            if (object.getClass().equals(Teacher.class)){
+                ArrayList<Teacher> teachers = (ArrayList<Teacher>) targetList;
+                for (Teacher teacher:teachers){
+                    if (teacher.getStaffID().equals(idInput)){
+                        return teacher;
+                    }
+                }
+            }
+            if (object.getClass().equals(Event.class)){
+                ArrayList<Event> events = (ArrayList<Event>) targetList;
+                for (Event event:events){
+                    if (event.getEventID().equals(idInput)){
+                        return event;
+                    }
+                }
+            }
         }
-        return "";
+        return null;
     }
 
 }
