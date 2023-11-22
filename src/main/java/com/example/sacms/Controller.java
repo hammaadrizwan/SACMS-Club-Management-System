@@ -432,26 +432,23 @@ public class Controller {
         boolean clubAdvisorIDValid;
         boolean clubDescriptionValid;
         boolean teacherIDValid = false;
-
-        clubNameValid = checkName(clubNameInputClubCreationScreen, errorClubNameInputClubCreationScreen);
+        String existingStudentID = "";
+        clubNameValid = checkName(clubNameInputClubCreationScreen, errorClubNameInputClubCreationScreen);//to check if the Club id is valid
         for (Club club:registeredClubs){
             if (club.getClubName().equals(clubNameInputClubCreationScreen.getText())){
-                errorClubNameInputClubCreationScreen.setText("There Exists a Club");
+                errorClubNameInputClubCreationScreen.setText("There Exists a Club");//if there exsists a club then doesnt get added
                 clubNameInputClubCreationScreen.clear();
                 clubNameValid = false;
                 break;
             }
         }
-        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen);
+        clubAdvisorIDValid = checkID(clubAdvisorIDInputClubCreationScreen, errorClubAdvisorIDInputClubCreationScreen);//checks the club advisor id
         if (clubAdvisorIDValid) {
-            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a clubAdvisorID or not
-                errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
-                clubAdvisorIDValid = false;
-            }
             String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
             for (ClubAdvisor clubAdvisor:registeredClubAdvisors){
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)){
                     clubAdvisorIDValid = true;
+                    existingStudentID = clubAdvisor.getStudentID();//if the clubAdvisor is found then loop breaks
                     break;
                 } else {
                     messageLabel.setText("Club Advisor doesn't exist".toUpperCase());
@@ -459,17 +456,22 @@ public class Controller {
                     messageLabel.setOpacity(1.0);
                     errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
                     clubAdvisorIDInputClubCreationScreen.clear();
+
                     clubAdvisorIDValid=false;
+
                 }
             }
         }
+
         if (clubTeacherIDInputClubCreationScreen.getValue() != null && !clubTeacherIDInputClubCreationScreen.getValue().equals("Please Select")) {
             teacherIDValid = true;
             errorTeacherIDInputClubCreationScreen.setText("");
         } else {
             errorTeacherIDInputClubCreationScreen.setText("Please Select a Teacher");
         }
+
         clubDescriptionValid = checkDescription(clubDescriptionInputClubCreationScreen, errorClubDescriptionInputClubCreationScreen);
+
         if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
             String clubName = clubNameInputClubCreationScreen.getText();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
             String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
@@ -479,33 +481,22 @@ public class Controller {
 
             ArrayList registeredClubsID = new ArrayList<>();
             for (Club club:registeredClubs){
-                registeredClubsID.add(club.getClubID());
+                registeredClubsID.add(club.getClubID());//stores existing list of clubID's
             }
             do {
-                clubID = Club.generateClubID();//
+                clubID = Club.generateClubID();//generete a new clubID
             } while (registeredClubsID.contains(clubID));
-            Club club = new Club(clubID,clubName,clubDescription,clubTeacherID);//updated the club table
-            club.insertIntoClubs();
-            //update the clubAdvisor Table
+            Club club = new Club(clubID,clubName,clubDescription,clubTeacherID);
+            club.insertIntoClubs();//updated the club table
+
             ArrayList registeredClubsAdvisorIDs = new ArrayList<>();
             String newClubAdvisorID;
             for (ClubAdvisor clubAdvisor:registeredClubAdvisors){
                 registeredClubsAdvisorIDs.add(clubAdvisor.getClubAdvisorID());
             }
             do {
-                newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();//
+                newClubAdvisorID = ClubAdvisor.generateClubAdvisorID();//generate a new ID
             } while (registeredClubsAdvisorIDs.contains(newClubAdvisorID));
-
-            String existingStudentID = "";
-            for (ClubAdvisor clubAdvisor: registeredClubAdvisors) {
-                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)){
-                    for (Student student: registeredStudents) {
-                        if (clubAdvisor.getStudentID().equals(student.getStudentID())){
-                            existingStudentID=student.getStudentID();
-                        }
-                    }
-                }
-            }
             ClubAdvisor newClubAdvisor = new ClubAdvisor(newClubAdvisorID,existingStudentID,clubID,"Founder Member");
             newClubAdvisor.insertIntoClubAdvisorTable();
             messageLabel.setText("ClUB CREATED SUCCESSFULLY");
@@ -515,6 +506,7 @@ public class Controller {
             clubNameInputClubCreationScreen.clear();
             clubDescriptionInputClubCreationScreen.clear();
             clubAdvisorIDInputClubCreationScreen.clear();
+            errorClubAdvisorIDInputClubCreationScreen.setText("");
         }
     }
 
@@ -1007,9 +999,6 @@ public class Controller {
         }
         clubIDValid = checkID(clubIDInputJoinClubsStudetnsAndTeachers, errorJoinClubsLabel);
         if (clubIDValid) {
-            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
-                clubIDValid = false;
-            }
             for (Club club : registeredClubs) {
                 if (club.getClubID().equals(clubID)) {
                     clubIDValid = true;
@@ -1085,9 +1074,6 @@ public class Controller {
         }
         clubIDValid = checkID(clubIDInputLeaveClubsStudetnsAndTeachers, errorleaveClubsLabel1);
         if (clubIDValid) {
-            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
-                clubIDValid = false;
-            }
             for (Club club : registeredClubs) {
                 if (club.getClubID().equals(clubID)) {
                     clubIDValid = true;
@@ -1205,9 +1191,6 @@ public class Controller {
         }
         eventIDValid = checkID(eventIDCheckIn, errorCheckInEventsLabel);
         if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Club ID
-                eventIDValid = false;
-            }
             for (Event event1 : registeredevents) {
                 if (event1.getEventID().equals(eventID)) {
                     eventIDValid = true;
@@ -1282,9 +1265,6 @@ public class Controller {
         }
         eventIDValid = checkID(eventIDCheckOut, errorCheckOutEventsLabel);
         if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Club ID
-                eventIDValid = false;
-            }
             for (Event event1 : registeredevents) {
                 if (event1.getEventID().equals(eventID)) {
                     eventIDValid = true;
@@ -1379,21 +1359,7 @@ public class Controller {
         boolean clubAdvisorIDValid;
         boolean eventIDValid;
         clubAdvisorIDValid = checkID(clubAdvisorIdInputEventsScreen, errorClubAdvisorIdInputEventsLabel);
-        if (clubAdvisorIDValid) {
-            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
-                errorClubAdvisorIdInputEventsLabel.setText("Invalid ID");
-                clubAdvisorIdInputEventsScreen.clear();
-                clubAdvisorIDValid = false;
-            }
-        }
         eventIDValid = checkID(eventIDDelete, errorEventIDDelete);
-        if (eventIDValid) {
-            if (!sessionUser.equals("Event")) {//To check whether the user has entered a Event ID
-                errorEventIDDelete.setText("Invalid ID");
-                eventIDDelete.clear();
-                eventIDValid = false;
-            }
-        }
         if (clubAdvisorIDValid && eventIDValid) {
             boolean clubAdvisorFound = false;
             boolean eventsFound = false;
@@ -1449,21 +1415,7 @@ public class Controller {
         boolean clubAdvisorFound=false;//check if the club is found
 
         clubAdvisorIDValid = checkID(clubAdvisorIDInputClubsScreen, errorClubAdvisorIDInputClubsScreen); // checks the ID whether its valid
-        if (clubAdvisorIDValid) {
-            if (!sessionUser.equals("ClubAdvisor")) {//To check whether the user has entered a Club advisor ID
-                errorClubAdvisorIDInputClubsScreen.setText("Invalid ID");
-                clubAdvisorIDInputClubsScreen.clear();
-                clubAdvisorIDValid = false;
-            }
-        }
         clubIDValid = checkID(clubIDDeleteInput, errorDeleteClubsLabel);
-        if (clubIDValid) {
-            if (!sessionUser.equals("Club")) {//To check whether the user has entered a Club ID
-                errorDeleteClubsLabel.setText("Invalid ID");
-                clubIDDeleteInput.clear();
-                clubIDValid = false;
-            }
-        }
         if (clubAdvisorIDValid && clubIDValid) {
             String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
             String clubID = clubIDDeleteInput.getText();
