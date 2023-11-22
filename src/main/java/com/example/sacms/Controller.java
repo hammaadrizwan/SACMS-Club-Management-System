@@ -1828,6 +1828,10 @@ public class Controller {
             label.setText("ID should contain maximum 5 characters");//display a message to the user to re-enter
             IDValid = false;//sets ID validity to be false
             textField.clear();//clears the text field
+        } else if (textField.getText().toCharArray().length <=4) {//checks if the ID input field is more than 5 digits
+            label.setText("ID should contain atleast 5 characters");//display a message to the user to re-enter
+            IDValid = false;//sets ID validity to be false
+            textField.clear();//clears the text field
         } else if (textField.getText().toUpperCase().toCharArray()[0] == 'S') {
             sessionUser = "Student";
         } else if (textField.getText().toUpperCase().toCharArray()[0] == 'T') {
@@ -1838,10 +1842,6 @@ public class Controller {
             sessionUser = "Club";
         } else if (textField.getText().toUpperCase().toCharArray()[0] == 'E') {
             sessionUser = "Event";
-        } else {
-            IDValid = false;//if the id is not in either of the above formats the id is invalid
-            label.setText("Invalid ID");
-            textField.clear();//clears the text field
         }
         return IDValid;
     }

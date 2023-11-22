@@ -217,11 +217,13 @@ public class Club implements Report {
     public static void deleteClub(String clubID){
         createRequestTableOnDatabase();
         String deleteRequestQuery = "Delete from request where request.clubId = ?;";
+        String deleteEventQuery = "Delete from events where events.clubId = ?;";
         String deleteClubAdvisorQuery = "Delete from clubadvisor where clubadvisor.clubid = ?;";//to delete a club first we remove them from the club advisor thenclub membership and finally in the club id
         String deleteClubMembershipQuery = "Delete from clubsmembership where clubsmembership.clubid = ?;";
         String deleteClubQuery = "Delete from club where clubid = ?;";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedDeleteRequestQueryStatement = connection.prepareStatement(deleteRequestQuery);
+             PreparedStatement preparedDeletedeleteEventQueryStatement = connection.prepareStatement(deleteEventQuery);
              PreparedStatement preparedDeleteClubAdvisorQueryStatement = connection.prepareStatement(deleteClubAdvisorQuery);
              PreparedStatement preparedDeleteClubMembershipQueryStatement = connection.prepareStatement(deleteClubMembershipQuery);
              PreparedStatement preparedDeleteClubQueryStatement = connection.prepareStatement(deleteClubQuery)) {
@@ -230,6 +232,9 @@ public class Club implements Report {
 
             preparedDeleteRequestQueryStatement.setString(1,clubID);
             preparedDeleteRequestQueryStatement.executeUpdate();
+
+            preparedDeletedeleteEventQueryStatement.setString(1,clubID);
+            preparedDeletedeleteEventQueryStatement.executeUpdate();
 
             preparedDeleteClubAdvisorQueryStatement.setString(1,clubID);
             preparedDeleteClubAdvisorQueryStatement.executeUpdate();
