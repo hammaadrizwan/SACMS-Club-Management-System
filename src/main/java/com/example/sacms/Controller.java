@@ -456,9 +456,7 @@ public class Controller {
                     messageLabel.setOpacity(1.0);
                     errorClubAdvisorIDInputClubCreationScreen.setText("Invalid ID");
                     clubAdvisorIDInputClubCreationScreen.clear();
-
                     clubAdvisorIDValid=false;
-
                 }
             }
         }
@@ -597,8 +595,7 @@ public class Controller {
     //Club Creation SCREEN
     public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException, InterruptedException {
         messageLabel.setOpacity(0.0);
-        registeredTeachers = Teacher.loadTeachersFromDatabase();
-        registeredClubs = Club.loadClubsFromDatabase();
+        clubTeacherIDInputClubCreationScreen.getItems().clear();
         ArrayList<String> teacherIDs = new ArrayList<>();
         for (Teacher teacher : registeredTeachers) {
             boolean teacherExists = false;
@@ -630,6 +627,7 @@ public class Controller {
         boolean clubIDValid;
         boolean clubFound = false;
         boolean studentFound = false;
+        boolean positionFound = false;
         studentIDValid = checkID(studentIDSigInClubAdvisorScreen, errorStudentIDSigInClubAdvisorScreen);
         if (studentIDValid) {
             for (Student student : registeredStudents) {
@@ -648,12 +646,12 @@ public class Controller {
         positionValid = checkName(positionSigInClubAdvisorScreen, errorPositionSigInClubAdvisorScreen);
         clubIDValid = checkID(clubIDSigInClubAdvisorScreen, errorClubIDSigInClubAdvisorScreen);
         if (studentIDValid && positionValid && clubIDValid && studentFound) {//if the above inputs done by the user is valid the data will be stored
+            String teacherID;
+            String clubID;
             String requestID;
             do {
                 requestID=Club.generateRequestID();
             }while (Club.loadExistingRequestsIds().contains(requestID));
-            String teacherID="";
-            String clubID="";
             for (Club club:registeredClubs){
                 if (club.getClubID().equals(clubIDSigInClubAdvisorScreen.getText())){
                     teacherID=club.getTeacherIncharge();
@@ -695,6 +693,17 @@ public class Controller {
         boolean studentIDValid;
         firstNameValid = checkName(firstNameSignInStudentInput, errorFirstNameSignInStudentInput);
         lastNameValid = checkName(lastNameSignInStudentInput, errorLastNameSignInStudentInput);
+        for (Student student : registeredStudents) {
+            if (student.getFirstName().equals(firstNameSignInStudentInput.getText()) && student.getLastName().equals(lastNameSignInStudentInput.getText())) {
+                errorFirstNameSignInStudentInput.setText("Invalid name");
+                errorLastNameSignInStudentInput.setText("Invalid name");
+                firstNameSignInStudentInput.clear();
+                lastNameSignInStudentInput.clear();
+                firstNameValid = false;
+                lastNameValid = false;
+                break;
+            }
+        }
         DOBValid = checkDate(dateSignInStudentInput, errorDateSignInStudentInput);
         classValid = checkClass(classSignInStudentInput, errorClassSignInStudentInput);
         emailValid = checkEmail(emailSignInStudentInput, errorEmailSignInStudentInput);
@@ -703,6 +712,9 @@ public class Controller {
         studentIDValid = checkID(studentIDSignInStudentInput, errorStudentIDSignInStudentInput);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a studentID or not
+                messageLabel.setText("Duplicate record exists".toUpperCase());
+                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
                 errorStudentIDSignInStudentInput.setText("Invalid ID");
                 studentIDSignInStudentInput.clear();
                 studentIDValid = false;
@@ -742,6 +754,20 @@ public class Controller {
         boolean passwordValid;
         firstNameValid = checkName(firstNameSignInTeacherInput, errorFirstNameSignInTeacherInput);
         lastNameValid = checkName(lastNameSignInTeacherInput, errorLastNameSignInTeacherInput);
+        for (Teacher teacher : registeredTeachers) {
+            if (teacher.getFirstName().equals(firstNameSignInTeacherInput.getText()) && teacher.getLastName().equals(lastNameSignInTeacherInput.getText())) {
+                messageLabel.setText("Duplicate record exists".toUpperCase());
+                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
+                errorFirstNameSignInTeacherInput.setText("Invalid name");
+                errorLastNameSignInTeacherInput.setText("Invalid name");
+                firstNameSignInTeacherInput.clear();
+                lastNameSignInTeacherInput.clear();
+                firstNameValid = false;
+                lastNameValid = false;
+                break;
+            }
+        }
         DOBValid = checkDate(dateSignInTeacherInput, errorDateSignInTeacherInput);
         contactNoValid = checkContactNo(contactNoSignInTeacherInput, errorContactNoSignInTeacherInput);
         emailValid = checkEmail(emailSignInTeacherInput, errorEmailSignInTeacherInput);
@@ -1781,7 +1807,7 @@ public class Controller {
             IDValid = false;//sets ID validity to be false
             textField.clear();//clears the text field
         } else if (textField.getText().toCharArray().length <=4) {//checks if the ID input field is more than 5 digits
-            label.setText("ID should contain atleast 5 characters");//display a message to the user to re-enter
+            label.setText("ID should contain at least 5 characters");//display a message to the user to re-enter
             IDValid = false;//sets ID validity to be false
             textField.clear();//clears the text field
         } else if (textField.getText().toUpperCase().toCharArray()[0] == 'S') {
@@ -1794,6 +1820,10 @@ public class Controller {
             sessionUser = "Club";
         } else if (textField.getText().toUpperCase().toCharArray()[0] == 'E') {
             sessionUser = "Event";
+        } else {
+            IDValid = false;//if the id is not in either of the above formats the id is invalid
+            label.setText("Invalid ID");
+            textField.clear();//clears the text field
         }
         return IDValid;
     }
