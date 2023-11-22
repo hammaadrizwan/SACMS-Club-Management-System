@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
+<AnchorPane prefHeight="680.0" prefWidth="1050.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sacms.Controller">
    <children>
       <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="27.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -86,7 +88,7 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="todayEventOneButton" layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="39.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
+            <Button fx:id="todayEventOneButton" disable="true" layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="39.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -155,7 +157,7 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Button layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
+            <Button disable="true" layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -179,14 +181,14 @@
                   <Font name="Noto Sans Regular" size="20.0" />
                </font>
             </Label>
-            <Button layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
+            <Button disable="true" layoutX="483.0" layoutY="6.0" mnemonicParsing="false" onAction="#onEventsViewStudentsAndTeacherScreenButtonClicked" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: #55cb68; -fx-background-radius: 10;" text="JOIN" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="666.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
+      <Button fx:id="refreshButtonStudentsAndTeachersDashboard" mnemonicParsing="false" onAction="#onRefreshDashboardScreenButtonClicked" opacity="0.96" prefHeight="663.0" prefWidth="1040.0" style="-fx-background-color: white;" text="Refresh">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

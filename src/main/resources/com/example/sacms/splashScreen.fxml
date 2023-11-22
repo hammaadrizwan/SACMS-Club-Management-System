@@ -13,7 +13,7 @@
          <image>
             <Image url="@../images/Logo.png" />
          </image></ImageView>
-      <Label layoutX="344.0" layoutY="395.0" prefHeight="45.0" prefWidth="394.0" text="School Activity Club Managment System">
+      <Label layoutX="355.0" layoutY="395.0" prefHeight="46.0" prefWidth="383.0" text="School Activity Club Managment System">
          <font>
             <Font name="Noto Sans Regular" size="20.0" />
          </font>

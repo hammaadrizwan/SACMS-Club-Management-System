@@ -1399,14 +1399,16 @@ public class Controller {
             boolean eventsFound = false;
             String clubAdvisorID = clubAdvisorIdInputEventsScreen.getText();
             String eventsID = eventIDDelete.getText();
+            String clubID = null;
             for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
                 if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
                     clubAdvisorFound=true;
+                    clubID = clubAdvisor.getClubID();
                     break;
                 }
             }
             for (Event event_1 : registeredevents) {
-                if (event_1.getEventID().equals(eventsID)) {
+                if (event_1.getEventID().equals(eventsID) && event_1.getClubID().equals(clubID)) {
                     eventsFound=true;
                     if (eventsFound  && clubAdvisorFound) {
                         event_1.deleteEvent(eventsID);
@@ -1466,11 +1468,12 @@ public class Controller {
             String clubAdvisorID = clubAdvisorIDInputClubsScreen.getText();
             String clubID = clubIDDeleteInput.getText();
             for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
-                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
+                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID) && clubAdvisor.getClubID().equals(clubID)) {
                     clubAdvisorFound=true;
                     break;
                 }
             }
+
             for (Club club : registeredClubs) {
                 if (club.getClubID().equals(clubID)) {
                     clubFound=true;
@@ -1492,7 +1495,7 @@ public class Controller {
                 clubIDDeleteInput.clear();
             }
             if (!clubAdvisorFound){
-                errorClubAdvisorIDInputClubsScreen.setText("Club Advisor Not Available");
+                errorClubAdvisorIDInputClubsScreen.setText("Incorrect club advisor");
                 clubAdvisorIDInputClubsScreen.clear();
             }
         }
@@ -1873,7 +1876,7 @@ public class Controller {
                 int month = Integer.parseInt(dateComponents[1]);
                 int day = Integer.parseInt(dateComponents[2]);
                 // Check if the date is valid
-                if (year < 2000 || year > 2030 || month < 1 || month > 12 || day < 1 || day > LocalDate.of(year, month, 1).lengthOfMonth()) {
+                if (year < 1970 || year > 2030 || month < 1 || month > 12 || day < 1 || day > LocalDate.of(year, month, 1).lengthOfMonth()) {
                     label.setText("Invalid Date");
                     dateValid = false;
                     textField.clear();

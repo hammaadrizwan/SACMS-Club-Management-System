@@ -1,23 +1,27 @@
-Math Club
-Total Number of events Held at : 4
-Total number of students: 1
-Attendance for each event
-      Workshop 3- 1
-      Workshop 2- 0
-      Installation- 0
-      Orientation- 0
-
-
-Geography Society
+MMM
 Total Number of events Held at : 0
 Total number of students: 0
 Attendance for each event
 
 
-Esports Society
-Total Number of events Held at : 1
+Math
+Total Number of events Held at : 3
+Total number of students: 1
+Attendance for each event
+      tomorrow event 2- 0
+      today 1- 0
+      workshop 2- 0
+
+
+MMM
+Total Number of events Held at : 0
 Total number of students: 0
 Attendance for each event
-      Installation- 0
+
+
+MMM
+Total Number of events Held at : 0
+Total number of students: 0
+Attendance for each event
 
 
