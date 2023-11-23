@@ -601,7 +601,7 @@ public class Controller {
             boolean teacherExists = false;
 
             for (Club club : registeredClubs) {
-                if (club.getTeacherIncharge().equals(teacher.getStaffID())) {
+                if (club.getTeacherID().equals(teacher.getStaffID())) {
                     teacherExists = true;
                     break; // No need to continue checking once we find a match
                 }
@@ -654,7 +654,7 @@ public class Controller {
             }while (Club.loadExistingRequestsIds().contains(requestID));
             for (Club club:registeredClubs){
                 if (club.getClubID().equals(clubIDSigInClubAdvisorScreen.getText())){
-                    teacherID=club.getTeacherIncharge();
+                    teacherID=club.getTeacherID();
                     clubID=club.getClubID();
                     clubFound=true;
                     Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());

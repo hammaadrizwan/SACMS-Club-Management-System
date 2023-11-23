@@ -1,27 +1,31 @@
-MMM
-Total Number of events Held at : 0
-Total number of students: 0
-Attendance for each event
-
-
-Math
+Chess Club
 Total Number of events Held at : 3
-Total number of students: 1
+Total number of students: 10
 Attendance for each event
-      tomorrow event 2- 0
-      today 1- 0
-      workshop 2- 0
+      Chess Tournament- 2
+      Strategy Workshop- 1
+      Chess Club Meeting- 1
 
 
-MMM
-Total Number of events Held at : 0
-Total number of students: 0
+Debate Society
+Total Number of events Held at : 1
+Total number of students: 4
 Attendance for each event
+      Debate Competition- 1
 
 
-MMM
-Total Number of events Held at : 0
-Total number of students: 0
+Science Club
+Total Number of events Held at : 2
+Total number of students: 5
 Attendance for each event
+      Science Fair- 1
+      Astronomy Night- 1
+
+
+Art Club
+Total Number of events Held at : 1
+Total number of students: 3
+Attendance for each event
+      Art Exhibition- 1
 
 

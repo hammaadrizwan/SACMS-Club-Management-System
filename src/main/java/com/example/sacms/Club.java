@@ -11,23 +11,28 @@ public class Club implements Report {
     private String clubName;
     private String clubDescription;
     private String clubID;
-    private String teacherIncharge;
+    private String teacherID;
     private ArrayList<Student> students;
-
+    private ArrayList<Event> events;//composition
+    private ArrayList<ClubAdvisor> clubAdvisors;//composition
+    private Teacher teacher;//aggregation
 
     Club(String clubID,String clubName, String clubDescription, String teacherIncharge){//To get it from the database
         this.clubID=clubID;
         this.clubDescription=clubDescription;
         this.clubName=clubName;
-        this.teacherIncharge = teacherIncharge;
+        this.teacherID = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
+        this.events=loadEventsOfClub(getClubID());
+        this.clubAdvisors=loadClubAdvisorsOfClub(getClubID());
+        this.teacher = loadTeacherOfClub(teacherIncharge);
     }
 
     public String getClubName() {
         return clubName;
     }
-    public String getTeacherIncharge() {
-        return teacherIncharge;
+    public String getTeacherID() {
+        return teacherID;
     }
     public String getClubDescription() {
         return clubDescription;
@@ -43,7 +48,7 @@ public class Club implements Report {
             preparedStatement.setString(1,getClubID());//inserts the Membership ID,student ID and the club ID to the table
             preparedStatement.setString(2,getClubName());
             preparedStatement.setString(3,getClubDescription());
-            preparedStatement.setString(4, getTeacherIncharge());
+            preparedStatement.setString(4, getTeacherID());
 
             preparedStatement.executeUpdate();//push
 
@@ -84,7 +89,7 @@ public class Club implements Report {
                     "    ClubID VARCHAR(5) PRIMARY KEY," +
                     "    ClubName VARCHAR(255)," +
                     "    Description VARCHAR(255)," +
-                    "    TeacherID VARCHAR(5)," +
+                    "    Teacher VARCHAR(5)," +
                     "    FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID)" +
                     ");";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
@@ -212,6 +217,95 @@ public class Club implements Report {
             e.printStackTrace();
         }
         return students; // return the list of students
+    }
+    public static ArrayList<Event> loadEventsOfClub(String clubID) {
+        ArrayList<Event> events = new ArrayList<>();//Loads all the students from the database who are the members of that club
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT Events.EventID, Events.EventName, Events.Date, Events.Time, Events.Location, Events.ClubID, Events.EventDescription" +
+                             "FROM Events" +
+                             "JOIN Club ON club.ClubID = Events.ClubID" +
+                             "WHERE club.ClubID =?")) {
+
+            preparedStatement.setString(1, clubID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    Event event = new Event(
+                            results.getString("EventID"),
+                            results.getString("EventName"),
+                            results.getString("Date"),
+                            results.getString("Time"),
+                            results.getString("Location"),
+                            results.getString("ClubID"),
+                            results.getString("EventDescription")
+                    );//finally creates an object of the student class
+                    events.add(event);//adds to the students list
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events; // return the list of students
+    }
+    public static ArrayList<ClubAdvisor> loadClubAdvisorsOfClub(String clubID) {
+        ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();//Loads all the students from the database who are the members of that club
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT ClubAdvisor.ClubAdvisorID, ClubAdvisor.StudentID, ClubAdvisor.ClubID, ClubAdvisor.Position" +
+                             "FROM ClubAdvisor" +
+                             "JOIN Club ON club.ClubID = ClubAdvisor.ClubID" +
+                             "WHERE club.ClubID =?")) {
+
+            preparedStatement.setString(1, clubID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    ClubAdvisor clubAdvisor = new ClubAdvisor(
+                            results.getString("ClubAdvisorID"),
+                            results.getString("StudentID"),
+                            results.getString("ClubID"),
+                            results.getString("Position")
+                    );//finally creates an object of the student class
+                    clubAdvisors.add(clubAdvisor);//adds to the students list
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubAdvisors; // return the list of students
+    }
+    public static Teacher loadTeacherOfClub(String teacherID) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT  Teacher.FirstName, Teacher.LastName, Teacher.Email, Teacher.Password, Teacher.DateOfBirth, Teacher.ContactNo,Teacher.TeacherID" +
+                             "FROM Teacher" +
+                             "JOIN Club ON club.TeacherID = Teacher.ClubID" +
+                             "WHERE club.TeacherID =?")) {
+
+            preparedStatement.setString(1, teacherID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
+
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    Teacher teacher = new Teacher(
+                            results.getString("firstName"),
+                            results.getString("lastName"),
+                            results.getString("email"),
+                            results.getString("password"),
+                            results.getString("dateOfBirth"),
+                            results.getString("contactNo"),
+                            results.getString("staffID")
+                    );
+                    return teacher;//finally creates an object of the student class
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // return the list of students
     }
 
     public static void deleteClub(String clubID){
