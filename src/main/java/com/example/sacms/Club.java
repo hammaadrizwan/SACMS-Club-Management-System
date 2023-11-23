@@ -249,7 +249,7 @@ public class Club implements Report {
         }
         return events; // return the list of students
     }
-    public static ArrayList<ClubAdvisor> loadClubAdvisorsOfClub(String clubID) {
+    public ArrayList<ClubAdvisor> loadClubAdvisorsOfClub(String clubID) {
         ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();//Loads all the students from the database who are the members of that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(

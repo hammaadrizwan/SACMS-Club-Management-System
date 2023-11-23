@@ -650,6 +650,7 @@ public class Controller {
             String teacherID;
             String clubID;
             String requestID;
+            ArrayList<ClubAdvisor> clubAdvisorDetails;
             do {
                 requestID=Club.generateRequestID();
             }while (Club.loadExistingRequestsIds().contains(requestID));
@@ -658,6 +659,17 @@ public class Controller {
                     teacherID=club.getTeacherID();
                     clubID=club.getClubID();
                     clubFound=true;
+                    clubAdvisorDetails = club.loadClubAdvisorsOfClub(clubID);
+                    for (ClubAdvisor clubAdvisor : clubAdvisorDetails) {
+                        clubAdvisor.getPosition().equals(positionSigInClubAdvisorScreen.getText());
+                        positionFound = true;
+                        break;
+                    }
+                    if (positionFound) {
+                        errorPositionSigInClubAdvisorScreen.setText("Invalid position");
+                        positionSigInClubAdvisorScreen.clear();
+                        break;
+                    }
                     Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
                     messageLabel.setText("REQUEST SENT");
                     messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
