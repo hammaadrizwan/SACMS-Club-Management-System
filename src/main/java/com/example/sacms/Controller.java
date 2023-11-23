@@ -661,26 +661,31 @@ public class Controller {
                     clubFound=true;
                     clubAdvisorDetails = club.loadClubAdvisorsOfClub(clubID);
                     for (ClubAdvisor clubAdvisor : clubAdvisorDetails) {
-                        clubAdvisor.getPosition().equals(positionSigInClubAdvisorScreen.getText());
-                        positionFound = true;
-                        break;
+                        if (clubAdvisor.getPosition().equals(positionSigInClubAdvisorScreen.getText())){
+                            positionFound = true;
+                            break;
+                        }
                     }
                     if (positionFound) {
                         errorPositionSigInClubAdvisorScreen.setText("Invalid position");
                         positionSigInClubAdvisorScreen.clear();
                         break;
                     }
-                    Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
-                    messageLabel.setText("REQUEST SENT");
-                    messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    dashboardButtonClubAdvisorSignin.setDisable(false);
-                    dashboardButtonClubAdvisorSignin.setOpacity(1.0);
-                    dashboardLabelClubAdvisorSignin.setOpacity(1.0);
-                    requestClubAdvisorRoleButtonSignInTwo.setDisable(true);
-                    studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-                    positionSigInClubAdvisorScreen.clear();
-                    clubIDSigInClubAdvisorScreen.clear();
+                    else{
+                        errorPositionSigInClubAdvisorScreen.setText("");
+                        Club.addRequest(requestID,clubID,teacherID,studentIDSigInClubAdvisorScreen.getText(),positionSigInClubAdvisorScreen.getText());
+                        messageLabel.setText("REQUEST SENT");
+                        messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                        messageLabel.setOpacity(1.0);
+                        dashboardButtonClubAdvisorSignin.setDisable(false);
+                        dashboardButtonClubAdvisorSignin.setOpacity(1.0);
+                        dashboardLabelClubAdvisorSignin.setOpacity(1.0);
+                        requestClubAdvisorRoleButtonSignInTwo.setDisable(true);
+                        studentIDSigInClubAdvisorScreen.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+                        positionSigInClubAdvisorScreen.clear();
+                        clubIDSigInClubAdvisorScreen.clear();
+                        break;
+                    }
                 }
             }
         }if (!clubFound){

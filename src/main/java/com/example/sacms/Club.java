@@ -222,10 +222,7 @@ public class Club implements Report {
         ArrayList<Event> events = new ArrayList<>();//Loads all the students from the database who are the members of that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT Events.EventID, Events.EventName, Events.Date, Events.Time, Events.Location, Events.ClubID, Events.EventDescription" +
-                             "FROM Events" +
-                             "JOIN Club ON club.ClubID = Events.ClubID" +
-                             "WHERE club.ClubID =?")) {
+                     "SELECT Events.EventID, Events.EventName, Events.Date, Events.Time, Events.Location, Events.ClubID, Events.EventDescription FROM Events JOIN Club ON club.ClubID = Events.ClubID WHERE club.ClubID =?")) {
 
             preparedStatement.setString(1, clubID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
 
@@ -253,10 +250,7 @@ public class Club implements Report {
         ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();//Loads all the students from the database who are the members of that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT ClubAdvisor.ClubAdvisorID, ClubAdvisor.StudentID, ClubAdvisor.ClubID, ClubAdvisor.Position" +
-                             "FROM ClubAdvisor" +
-                             "JOIN Club ON club.ClubID = ClubAdvisor.ClubID" +
-                             "WHERE club.ClubID =?")) {
+                     "SELECT ClubAdvisor.ClubAdvisorID, ClubAdvisor.StudentID, ClubAdvisor.ClubID, ClubAdvisor.Position FROM ClubAdvisor JOIN Club ON club.ClubID = ClubAdvisor.ClubID WHERE club.ClubID =?")) {
 
             preparedStatement.setString(1, clubID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
 
@@ -280,10 +274,7 @@ public class Club implements Report {
     public static Teacher loadTeacherOfClub(String teacherID) {
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT  Teacher.FirstName, Teacher.LastName, Teacher.Email, Teacher.Password, Teacher.DateOfBirth, Teacher.ContactNo,Teacher.TeacherID" +
-                             "FROM Teacher" +
-                             "JOIN Club ON club.TeacherID = Teacher.ClubID" +
-                             "WHERE club.TeacherID =?")) {
+                     "SELECT  Teacher.FirstName, Teacher.LastName, Teacher.Email, Teacher.Password, Teacher.DateOfBirth, Teacher.ContactNo,Teacher.TeacherID FROM Teacher JOIN Club ON club.TeacherID = Teacher.TeacherID WHERE club.TeacherID =?")) {
 
             preparedStatement.setString(1, teacherID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
 
@@ -296,7 +287,7 @@ public class Club implements Report {
                             results.getString("password"),
                             results.getString("dateOfBirth"),
                             results.getString("contactNo"),
-                            results.getString("staffID")
+                            results.getString("teacherID")
                     );
                     return teacher;//finally creates an object of the student class
                 }

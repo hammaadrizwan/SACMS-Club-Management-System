@@ -16,6 +16,7 @@ public class Event {
     private String eventDescription;
     private String clubID;
     private ArrayList<Student> students;
+    private Club club;
 
     public Event(String eventID, String eventName, String eventDate, String eventTime, String eventLocation, String clubID ,String eventDescription) {
         this.eventID = eventID;
@@ -26,7 +27,7 @@ public class Event {
         this.clubID = clubID;
         this.eventDescription = eventDescription;
         this.students=loadStudentsOfEvent(getEventID());
-
+        //this.club=loadClubOfEvent(getEventID());
     }
 
     public String getEventName() {
@@ -244,6 +245,27 @@ public class Event {
         }
         return existingAttendanceIDs;
     }
+
+    /*public void loadClubOfEvent(String eventID){
+        Club club = null;
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Club.ClubID, Club.ClubName, Club.Description, Club.Description, Club.Teacher" +
+                     "FROM Club" +
+                     "JOIN Events ON Events.ClubID = Events.ClubID" +
+                     "WHERE club.ClubID =?");
+             ResultSet results = preparedStatement.executeQuery()) {
+
+
+            while (results.next()) {
+                existingAttendanceIDs.add(results.getString("AttendanceID"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return existingAttendanceIDs;
+    }*/
+
 
     public void deleteEvent(String eventID){
         String deleteEventAttendanceQuery = "Delete from eventattendance where eventattendance.eventid = ?;";
