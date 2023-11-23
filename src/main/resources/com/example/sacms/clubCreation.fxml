@@ -93,7 +93,7 @@
             <Font name="System Bold" size="44.0" />
          </font>
       </Label>
-      <Button layoutX="453.0" layoutY="585.0" mnemonicParsing="false" onAction="#onCreateClubButtonTwoClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="CREATE" textFill="WHITE">
+      <Button layoutX="453.0" layoutY="585.0" mnemonicParsing="false" onAction="#onCreateClubButtonClicked" prefHeight="26.0" prefWidth="165.0" style="-fx-background-color: #000000; -fx-background-radius: 10;" text="CREATE" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>

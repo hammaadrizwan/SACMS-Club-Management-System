@@ -350,8 +350,9 @@ public class Controller {
         this.stage.show();
         this.stage.setResizable(false);
     }
+    //1.4 mapping from create club sequence diagram
     @FXML
-    public void onCreateClubButtonOneClicked(ActionEvent event) throws IOException {
+    public void onCreateClubButtonOptionClicked(ActionEvent event) throws IOException {
         messageLabel.setOpacity(0.0);
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubCreation.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -425,8 +426,8 @@ public class Controller {
     public void onUserIconHideButtonClicked (ActionEvent event) throws IOException {
         userIconButtonOptionPane.setOpacity(0.00);//hides the buttons
     }
-
-    public void onCreateClubButtonTwoClicked (ActionEvent event) throws IOException, InterruptedException {
+    //1.5 mapping from create club sequence diagram
+    public void onCreateClubButtonClicked(ActionEvent event) throws IOException, InterruptedException {
         messageLabel.setOpacity(0.0);
         boolean clubNameValid;
         boolean clubAdvisorIDValid;
@@ -472,12 +473,12 @@ public class Controller {
 
         if (clubNameValid && clubAdvisorIDValid && clubDescriptionValid && teacherIDValid) {//if the above inputs done by the user is valid the data will be stored
             String clubName = clubNameInputClubCreationScreen.getText();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            String clubAdvisorID = clubAdvisorIDInputClubCreationScreen.getText();
             String clubDescription = clubDescriptionInputClubCreationScreen.getText();
             String clubTeacherID = clubTeacherIDInputClubCreationScreen.getValue();
             String clubID;
 
             ArrayList registeredClubsID = new ArrayList<>();
+            //1.5.2 mapping from create club sequence diagram
             for (Club club:registeredClubs){
                 registeredClubsID.add(club.getClubID());//stores existing list of clubID's
             }
@@ -580,7 +581,7 @@ public class Controller {
         }
 
     }
-
+    //1.1 mapped from sequence diagram
     @FXML
     public void onLogInScreenButtonClicked(ActionEvent event) throws IOException {
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("loginScreen.fxml"));
@@ -802,7 +803,7 @@ public class Controller {
             onDashboardStudentsAndTeachersScreenButtonClicked(event);
         }
     }
-
+    //1.2 mapping from sequence diagram
     public void onLogInButtonClicked(ActionEvent event) throws IOException, InterruptedException {
         errorPasswordLoginInput.setText("");
         errorIDLoginInput.setText("");

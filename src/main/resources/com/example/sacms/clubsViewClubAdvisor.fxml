@@ -62,7 +62,7 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button layoutX="497.0" layoutY="150.0" mnemonicParsing="false" onAction="#onCreateClubButtonOneClicked" prefHeight="43.0" prefWidth="133.0" style="-fx-background-color: #000000; -fx-background-radius: 15;" text="CREATE" textFill="WHITE">
+      <Button layoutX="497.0" layoutY="150.0" mnemonicParsing="false" onAction="#onCreateClubButtonOptionClicked" prefHeight="43.0" prefWidth="133.0" style="-fx-background-color: #000000; -fx-background-radius: 15;" text="CREATE" textFill="WHITE">
          <font>
             <Font name="Noto Sans Bold" size="20.0" />
          </font>

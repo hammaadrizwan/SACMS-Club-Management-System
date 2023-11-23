@@ -51,7 +51,7 @@ public class ClubAdvisor{
             e.printStackTrace();
         }
     }
-
+    //1.2.2 mapping from create club sequence diagram
     public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the clubAdvisor database
         createClubAdvisorTableOnDatabase();
         ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();
@@ -81,7 +81,7 @@ public class ClubAdvisor{
 
         return stringBuilder.toString();
     }
-
+    //1.5.2.2.1 mapping from create club sequence diagram
     public void insertIntoClubAdvisorTable(){
         String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";//inserts the values into the database
         try (Connection connection = Database.getConnection();

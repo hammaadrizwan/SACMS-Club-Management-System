@@ -40,7 +40,7 @@ public class Club implements Report {
     public String getClubID() {
         return clubID;
     }
-
+    //1.5.2.1 mapping from create club sequence diagram
     public void insertIntoClubs(){
         String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
         try (Connection connection = Database.getConnection();
