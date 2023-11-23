@@ -1894,4 +1894,96 @@ public class Controller {
         }
         return timeValid;
     }
+
+    public boolean isStudentFirstNameValid(String firstName) {
+        char[] ch = firstName.toCharArray();
+        StringBuilder firstNameBuild = new StringBuilder();
+        for (char c : ch) {
+            if (Character.isDigit(c)) {
+                return false;
+            }
+        }
+        if (firstName.isEmpty()) {
+            return false;
+        }
+
+        return firstName.matches("[a-zA-Z]+");
+    }
+
+    public boolean isStudentLastNameValid(String lastName) {
+        char[] ch = lastName.toCharArray();
+        StringBuilder lastNameBuild = new StringBuilder();
+        for (char c : ch) {
+            if (Character.isDigit(c)) {
+                return false;
+            }
+        }
+        if (lastName.isEmpty()) {
+            return false;
+        }
+
+        return lastName.matches("[a-zA-Z]+");
+    }
+
+    public boolean checkStudentDOB(String dateOfBirth) {
+        if (dateOfBirth.isEmpty()) {
+            return false;
+        }
+        String[] dateComponents = dateOfBirth.split("-");
+        int year = Integer.parseInt(dateComponents[0]);
+        int month = Integer.parseInt(dateComponents[1]);
+        int day = Integer.parseInt(dateComponents[2]);
+
+        if (year < 1970 || year > 2030 || month < 1 || month > 12 || day < 1 || day > LocalDate.of(year, month, 1).lengthOfMonth()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isTeacherEmailValid(String email) {
+        if (email.isEmpty()) {
+            return false;
+        }
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")){
+            return false;
+        }
+
+        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+    }
+
+    public boolean isTeacherContactValid(String contactNumber) {
+        char[] contactNoCharacters = contactNumber.toCharArray();
+        if (contactNoCharacters.length == 9) {//checks whether the contact number has only 10 digits
+            for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
+                if (!Character.isDigit(character)) {
+                    return false;
+                }
+            }
+        }
+        if (contactNumber.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isTeacherPasswordValid(String password) {
+        if (password.isEmpty()){
+            return false;
+        }
+        if (password.toCharArray().length < 8){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isCreateClubAdvisorIDValid(String clubAdvisorID) {
+        if (clubAdvisorID.isEmpty()){
+            return false;
+        }
+        if (clubAdvisorID.toCharArray().length != 5){
+            return false;
+        }
+        return true;
+    }
+
 }
