@@ -23,7 +23,6 @@ public class Club implements Report {
         this.clubName=clubName;
         this.teacherID = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
-        this.events=loadEventsOfClub(getClubID());
         this.clubAdvisors=loadClubAdvisorsOfClub(getClubID());
         this.teacher = loadTeacherOfClub(teacherIncharge);
     }
@@ -39,6 +38,11 @@ public class Club implements Report {
     }
     public String getClubID() {
         return clubID;
+    }public ArrayList<Event> getEvents(){
+        return events;
+    }
+    public  void setEvents(){
+        this.events=loadEventsOfClub(clubID);
     }
     //1.5.2.1 mapping from create club sequence diagram
     public void insertIntoClubs(){

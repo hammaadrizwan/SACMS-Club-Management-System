@@ -27,7 +27,6 @@ public class Event {
         this.clubID = clubID;
         this.eventDescription = eventDescription;
         this.students=loadStudentsOfEvent(getEventID());
-        //this.club=loadClubOfEvent(getEventID());
     }
 
     public String getEventName() {
@@ -69,6 +68,12 @@ public class Event {
 
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
+    }
+    public void setClub(){
+        this.club=loadClubOfEvent();
+    }
+    public Club getClub(){
+        return club;
     }
 
     public static String generateEventID() {
@@ -246,25 +251,27 @@ public class Event {
         return existingAttendanceIDs;
     }
 
-    /*public void loadClubOfEvent(String eventID){
-        Club club = null;
+    public Club loadClubOfEvent()  {
         try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Club.ClubID, Club.ClubName, Club.Description, Club.Description, Club.Teacher" +
-                     "FROM Club" +
-                     "JOIN Events ON Events.ClubID = Events.ClubID" +
-                     "WHERE club.ClubID =?");
-             ResultSet results = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Club.ClubID, Club.ClubName, Club.Description, Club.Description, Club.TeacherID FROM Club JOIN Events ON Events.ClubID = Club.ClubID WHERE Events.EventID =?")) {
 
-
-            while (results.next()) {
-                existingAttendanceIDs.add(results.getString("AttendanceID"));
+            preparedStatement.setString(1, eventID);
+            try(ResultSet results = preparedStatement.executeQuery()){
+                while (results.next()) {
+                    String clubID= results.getString("ClubID");
+                    String clubName=results.getString("ClubName");
+                    String description=results.getString("Description");
+                    String teacherID=results.getString("TeacherID");
+                    club=new Club(clubID,clubName,description,teacherID);
+                    club.loadClubAdvisorsOfClub(clubID);
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return existingAttendanceIDs;
-    }*/
+        return club; // return the list of students
+    }
 
 
     public void deleteEvent(String eventID){

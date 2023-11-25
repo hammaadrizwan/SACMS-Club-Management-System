@@ -96,8 +96,9 @@ public class Controller {
     ArrayList<Teacher> registeredTeachers=Teacher.loadTeachersFromDatabase();
     ArrayList<Student> registeredStudents=Student.loadStudentsFromDatabase();
     ArrayList<ClubAdvisor> registeredClubAdvisors=ClubAdvisor.loadClubAdvisorsFromDatabase();
-    ArrayList<Club> registeredClubs =Club.loadClubsFromDatabase();
-    ArrayList<Event> registeredevents = Event.loadEventsFromDatabase();
+    ArrayList<Club> registeredClubs = Club.loadClubsFromDatabase();
+    ArrayList<Event> registeredEvents = Event.loadEventsFromDatabase();
+
     public static Controller instance;
     public String sessionID;
     public String getSessionID(){//to check whos currently logged in to the system
@@ -174,7 +175,6 @@ public class Controller {
         timeLabelDashboard.setText(formattedTime);
         userNameLabelDashboard.setText("");
 
-        ArrayList<Event> registeredEvents = Event.loadEventsFromDatabase();
         ArrayList<Event> todaysEvents = new ArrayList<>();
         ArrayList<Event> tomorrowEvents = new ArrayList<>();
 
@@ -428,6 +428,7 @@ public class Controller {
     }
     //1.5 mapping from create club sequence diagram
     public void onCreateClubButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+
         messageLabel.setOpacity(0.0);
         boolean clubNameValid;
         boolean clubAdvisorIDValid;
@@ -510,6 +511,8 @@ public class Controller {
     }
 
     public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
+
+
         messageLabel.setOpacity(0.0);
         boolean eventNameValid;
         boolean eventDateValid;
@@ -517,6 +520,7 @@ public class Controller {
         boolean clubIDValid;
         boolean eventLocationValid;
         boolean eventDescriptionValid;
+        boolean eventExist=false;
         String eventNameInput=eventNameEventCreationInput.getText();
         String eventDateInput=eventDateEventCreationInput.getText();
         String eventTimeInput=eventTimeEventCreationInput.getText();
@@ -538,6 +542,7 @@ public class Controller {
         if (clubIDValid) {
             ArrayList<String> registeredClubsID = new ArrayList<>();
             for (Club club : registeredClubs) {
+                club.setEvents();
                 registeredClubsID.add(club.getClubID());
             }
             if (!registeredClubsID.contains(clubIDEventCreationInput.getText())) {
@@ -553,7 +558,7 @@ public class Controller {
         eventLocationValid = checkName(locationEventCreationInput, errorLocationEventCreationInput);
         if (eventNameValid && eventDateValid && eventTimeValid && clubIDValid && eventDescriptionValid && eventLocationValid) {//if the above inputs done by the user is valid the data will be stored
             ArrayList registeredEventsID = new ArrayList<>();
-            for (Event eventInformation:registeredevents){
+            for (Event eventInformation:registeredEvents){
                 registeredEventsID.add(eventInformation.getEventID());
             }
             String newEventID;
@@ -561,23 +566,30 @@ public class Controller {
                 newEventID = Event.generateEventID();//
             } while (registeredEventsID.contains(newEventID));
             Event newEvent = new Event(newEventID,eventNameInput,eventDateInput,eventTimeInput,eventLocationInput,clubIDInput,eventDescriptionInput);//updated the club table
-            newEvent.insertEvent();
+            for (Club registeredClub:registeredClubs) {
+                if (registeredClub.getEvents().contains(newEvent)){
+                    eventExist = true;
+                }
+            }
 
-            messageLabel.setText("EVENT CREATED SUCCESSFULLY");
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
+            if (!eventExist){
+                newEvent.insertEvent();
 
-            eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
-            eventDateEventCreationInput.clear();
-            eventTimeEventCreationInput.clear();
-            clubIDEventCreationInput.clear();
-            locationEventCreationInput.clear();
-            eventDescriptionEventCreationInput.clear();
+                messageLabel.setText("EVENT CREATED SUCCESSFULLY");
+                messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
 
-        }else{
-            messageLabel.setText("Doesn't go in");
-            messageLabel.setStyle("-fx-background-color: red;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
+                eventNameEventCreationInput.clear();//all the text fields will be cleared if the user inputs all valid details so the user can enter new details if he wishes
+                eventDateEventCreationInput.clear();
+                eventTimeEventCreationInput.clear();
+                clubIDEventCreationInput.clear();
+                locationEventCreationInput.clear();
+                eventDescriptionEventCreationInput.clear();
+            }else{
+                messageLabel.setText("Event Exists");
+                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
+                messageLabel.setOpacity(1.0);
+            }
         }
 
     }
@@ -595,6 +607,7 @@ public class Controller {
 
     //Club Creation SCREEN
     public void onLoadStaffIDClubScreationScreenClicked (ActionEvent event) throws IOException, InterruptedException {
+
         messageLabel.setOpacity(0.0);
         clubTeacherIDInputClubCreationScreen.getItems().clear();
         ArrayList<String> teacherIDs = new ArrayList<>();
@@ -622,6 +635,7 @@ public class Controller {
     }
 
     public void onClubAdvisorSignInTwoButtonClicked(ActionEvent event) throws IOException {
+
         messageLabel.setOpacity(0.0);
         boolean studentIDValid;
         boolean positionValid;
@@ -920,6 +934,7 @@ public class Controller {
     public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
 
     public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+
         refreshButtonTeacherPopUp.setOpacity(0.00);
         refreshButtonTeacherPopUp.setDisable(true);
         Controller controller = Controller.getInstance(); // Get the singleton instance
@@ -1018,6 +1033,7 @@ public class Controller {
     }
 
     public void onJoinClubClicked(ActionEvent event) throws IOException, InterruptedException {
+
         messageLabel.setOpacity(0.0);
         String studentID = studentIdInputClubsScreen.getText();
         String clubID = clubIDInputJoinClubsStudetnsAndTeachers.getText();
@@ -1098,6 +1114,7 @@ public class Controller {
         String clubID = clubIDInputLeaveClubsStudetnsAndTeachers.getText();
         boolean studentIDValid;
         boolean clubIDValid;
+
         studentIDValid = checkID(studentIdInputClubsScreen, errorStudentIdInputClubsScreen);
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
@@ -1166,7 +1183,7 @@ public class Controller {
         refreshClubsViewButton.setDisable(true);
         refreshClubsViewButton.setOpacity(0.0);
 
-        registeredClubs = Club.loadClubsFromDatabase();
+
         ObservableList<Club> registeredClubsToTable = FXCollections.observableArrayList(registeredClubs);
 
         // Clear existing columns
@@ -1176,7 +1193,7 @@ public class Controller {
         clubIDColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubID"));
         clubNameColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubName"));
         clubDescriptionColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("clubDescription"));
-        teacherInchargeColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("teacherIncharge"));
+        teacherInchargeColumnClubTable.setCellValueFactory(new PropertyValueFactory<>("teacherID"));
 
         // Add columns to TableView
         clubsViewTable.getColumns().addAll(clubIDColumnClubTable, clubNameColumnClubTable, clubDescriptionColumnClubTable, teacherInchargeColumnClubTable);
@@ -1212,6 +1229,7 @@ public class Controller {
     public void onCheckInEventClicked(ActionEvent event) throws IOException {
         messageLabel.setOpacity(0.0);
         String studentID=studentIdInputEventsScreen.getText();
+
         String eventID = eventIDCheckIn.getText();
         boolean studentIDValid;
         boolean eventIDValid;
@@ -1235,7 +1253,7 @@ public class Controller {
         }
         eventIDValid = checkID(eventIDCheckIn, errorCheckInEventsLabel);
         if (eventIDValid) {
-            for (Event event1 : registeredevents) {
+            for (Event event1 : registeredEvents) {
                 if (event1.getEventID().equals(eventID)) {
                     eventIDValid = true;
                     break;
@@ -1250,7 +1268,7 @@ public class Controller {
         }
         if (studentIDValid && eventIDValid) {
             boolean studentAvailable = false;
-            for (Event eventInformation : registeredevents) {
+            for (Event eventInformation : registeredEvents) {
                 if (eventInformation.getEventID().equals(eventID)) {
                     ArrayList<Student> availableStudentsAtEvent = eventInformation.loadStudentsOfEvent(eventID);//returns the list of students in that club
                     for (Student student : availableStudentsAtEvent) {//checks in that list if the student is available then we can say they are already in it
@@ -1290,6 +1308,7 @@ public class Controller {
         boolean studentIDValid;
         boolean eventIDValid;
         studentIDValid = checkID(studentIdInputEventsScreen, errorStudentIDEventsLabel);
+
         if (studentIDValid) {
             if (!sessionUser.equals("Student")) {//To check whether the user has entered a student ID
                 studentIDValid = false;
@@ -1309,7 +1328,7 @@ public class Controller {
         }
         eventIDValid = checkID(eventIDCheckOut, errorCheckOutEventsLabel);
         if (eventIDValid) {
-            for (Event event1 : registeredevents) {
+            for (Event event1 : registeredEvents) {
                 if (event1.getEventID().equals(eventID)) {
                     eventIDValid = true;
                     break;
@@ -1324,7 +1343,7 @@ public class Controller {
         }
         if (studentIDValid && eventIDValid) {
             boolean studentAvailable = false;
-            for (Event eventInformation : registeredevents) {// if leave then the opposite of join
+            for (Event eventInformation : registeredEvents) {// if leave then the opposite of join
                 if (eventInformation.getEventID().equals(eventID)) {
                     for (Student student : eventInformation.loadStudentsOfEvent(eventID)) {
                         if (student.getStudentID().equals(studentID)) {
@@ -1353,8 +1372,8 @@ public class Controller {
     public void onRefreshEventsViewButtonClicked(ActionEvent event) throws IOException {
         refreshEventsViewButton.setDisable(true);
         refreshEventsViewButton.setOpacity(0.0);
-        registeredevents = Event.loadEventsFromDatabase();
-        ObservableList<Event> registeredEventsToTable = FXCollections.observableArrayList(registeredevents);
+
+        ObservableList<Event> registeredEventsToTable = FXCollections.observableArrayList(registeredEvents);
 
         // Clear existing columns
         eventsViewTable.getColumns().clear();
@@ -1402,6 +1421,7 @@ public class Controller {
         messageLabel.setOpacity(0.0);
         boolean clubAdvisorIDValid;
         boolean eventIDValid;
+
         clubAdvisorIDValid = checkID(clubAdvisorIdInputEventsScreen, errorClubAdvisorIdInputEventsLabel);
         eventIDValid = checkID(eventIDDelete, errorEventIDDelete);
         if (clubAdvisorIDValid && eventIDValid) {
@@ -1409,19 +1429,22 @@ public class Controller {
             boolean eventsFound = false;
             String clubAdvisorID = clubAdvisorIdInputEventsScreen.getText();
             String eventsID = eventIDDelete.getText();
-            String clubID = null;
-            for (ClubAdvisor clubAdvisor : registeredClubAdvisors) {//if leave then the oppposite of join
-                if (clubAdvisor.getClubAdvisorID().equals(clubAdvisorID)) {
-                    clubAdvisorFound=true;
-                    clubID = clubAdvisor.getClubID();
-                    break;
-                }
-            }
-            for (Event event_1 : registeredevents) {
-                if (event_1.getEventID().equals(eventsID) && event_1.getClubID().equals(clubID)) {
+
+            for (Event event_1 : registeredEvents) {
+                if (event_1.getEventID().equals(eventsID)) {
                     eventsFound=true;
+                    event_1.setClub();
+                    ArrayList<ClubAdvisor> clubAdvisors = event_1.getClub().loadClubAdvisorsOfClub(event_1.getClubID());
+                    ArrayList<String> clubAdvisorsIds = new ArrayList<>();
+                    for (ClubAdvisor clubAdvisor:clubAdvisors){
+                        clubAdvisorsIds.add(clubAdvisor.getClubAdvisorID());
+                    }
+                    if (clubAdvisorsIds.contains(clubAdvisorID)){
+                        clubAdvisorFound=true;
+                    }
                     if (eventsFound  && clubAdvisorFound) {
                         event_1.deleteEvent(eventsID);
+                        errorClubAdvisorIdInputEventsLabel.setText("");
                         messageLabel.setText("event deleted successfully".toUpperCase());
                         messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
                         messageLabel.setOpacity(1.0);
@@ -1438,7 +1461,7 @@ public class Controller {
                 eventIDDelete.clear();
             }
             if (!clubAdvisorFound){
-                errorClubAdvisorIdInputEventsLabel.setText("Club Advisor Not Available");
+                errorClubAdvisorIdInputEventsLabel.setText("Not part of this club");
                 clubAdvisorIdInputEventsScreen.clear();
             }
         }
@@ -1507,6 +1530,8 @@ public class Controller {
         boolean clubIDValid;
         boolean eventDescriptionValid;
         boolean eventLocationValid;
+
+
         if (eventNameEditEventInput.getText().equals(null) || eventNameEditEventInput.getText().equals("")  ){
             eventNameValid=false;
             eventNameEditEventInput.clear();
@@ -1528,7 +1553,7 @@ public class Controller {
         eventIDValid = checkID(eventIDEditEventInput, errorEventIDEditEventInput);
         if (eventIDValid) {
             ArrayList<String> registeredEventsID = new ArrayList<>();
-            for (Event event_1 : registeredevents) {
+            for (Event event_1 : registeredEvents) {
                 registeredEventsID.add(event_1.getEventID());
             }
             if (!registeredEventsID.contains(eventIDEditEventInput.getText())) {
@@ -1558,7 +1583,7 @@ public class Controller {
             String eventClubIDInput=clubIDEditEventInput.getText();
             String eventLocationInput=locationEventEditInput.getText();
             String eventDescriptionInput=eventDescriptionEditEventInput.getText();
-            for (Event existingEvent:registeredevents){
+            for (Event existingEvent:registeredEvents){
                 if (existingEvent.getEventID().equals(eventIDInput)){
                     existingEvent.setEventName(eventNameInput);
                     existingEvent.setEventDate(eventDateInput);
@@ -1631,13 +1656,15 @@ public class Controller {
 
     public void onDownloadReportClicked(ActionEvent event) {
         // Assuming you have already initialized registeredClubs and registeredevents
+
         ArrayList<Club> existingClubs = registeredClubs;
+
         String reportContent="";
         for (Club club : existingClubs) {
             String clubName = club.getClubName();
             String clubReportStudentAttendance = club.displayReport(); // Assuming displayReport returns a string
             int clubEventCount = 0;
-            for (Event existingEvent : registeredevents) {
+            for (Event existingEvent : registeredEvents) {
                 if (existingEvent.getClubID().equals(club.getClubID())) {
                     clubEventCount++;
                 }
