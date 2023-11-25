@@ -2004,6 +2004,8 @@ public class Controller {
                     return false;
                 }
             }
+        }else{
+            return false;
         }
         if (contactNumber.isEmpty()) {
             return false;
@@ -2021,11 +2023,11 @@ public class Controller {
         return true;
     }
 
-    public boolean isCreateClubAdvisorIDValid(String clubAdvisorID) {
-        if (clubAdvisorID.isEmpty()){
+    public boolean isCreateClubAdvisorStudentIDValid(String studentID) {
+        if (studentID.isEmpty()){
             return false;
         }
-        if (clubAdvisorID.toCharArray().length != 5){
+        if (studentID.toCharArray().length != 5){
             return false;
         }
         return true;
