@@ -578,9 +578,9 @@ public class Controller {
             for (Club registeredClub:registeredClubs) {//checks if the same event already exists
                 if (registeredClub.getEvents().contains(newEvent)){
                     eventExist = true;
+                    break;
                 }
             }
-
             if (!eventExist){
                 newEvent.insertEvent();
 
@@ -1878,7 +1878,7 @@ public class Controller {
         }
         return timeValid;
     }
-
+    //the below validations are done for the j-unit testing
     public boolean isStudentFirstNameValid(String firstName) {
         char[] ch = firstName.toCharArray();
         StringBuilder firstNameBuild = new StringBuilder();
@@ -1937,8 +1937,8 @@ public class Controller {
 
     public boolean isTeacherContactValid(String contactNumber) {
         char[] contactNoCharacters = contactNumber.toCharArray();
-        if (contactNoCharacters.length == 9) {//checks whether the contact number has only 10 digits
-            for (char character : contactNoCharacters) {//and by using an enhanced for loop the program checks whether a string character is present in the list of characters
+        if (contactNoCharacters.length == 9) {
+            for (char character : contactNoCharacters) {
                 if (!Character.isDigit(character)) {
                     return false;
                 }
