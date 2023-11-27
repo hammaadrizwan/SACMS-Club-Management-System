@@ -20,4 +20,6 @@ class EventTest {
     public void invalidEventTime() {
         Assertions.assertFalse(this.controller.isEventTimeValid("34:78"));
     }
+    @Test
+    public void invalidEventLocation() {Assertions.assertFalse(this.controller.isEventLocationValid(""));}
 }

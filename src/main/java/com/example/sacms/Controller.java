@@ -2026,4 +2026,10 @@ public class Controller {
         return true;
     }
 
+    public boolean isEventLocationValid(String location) {
+        if (location.isEmpty()){
+            return false;
+        }
+        return true;
+    }
 }
