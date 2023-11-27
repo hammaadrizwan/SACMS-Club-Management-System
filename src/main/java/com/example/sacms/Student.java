@@ -57,25 +57,5 @@ public class Student extends Person { // inherits the behavoirs and attributes f
         return students;
     }
 
-    public void insertToDatabase() {//we save the values into the student database
-        try (Connection connection = Database.getConnection()){
-            String insertEmployeeQuery = "INSERT INTO Student (StudentID, FirstName, LastName, Email, DateOfBirth, Password, ContactNo, Classroom) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(insertEmployeeQuery)) {
-                statement.setString(1, getStudentID());
-                statement.setString(2, getFirstName());
-                statement.setString(3, getLastName());
-                statement.setString(4, getEmail());
-                statement.setString(5, getDateOfBirth());
-                statement.setString(6, getPassword());
-                statement.setString(7, getContactNo());
-                statement.setString(8, getClassroom());
-                statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
 
 }

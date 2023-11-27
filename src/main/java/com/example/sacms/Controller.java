@@ -706,67 +706,6 @@ public class Controller {
             messageLabel.setOpacity(1.0);
         }
     }
-    public void onStudentSignInTwoButtonClicked(ActionEvent event) throws IOException, InterruptedException { //1.7.2.1.1.1.3 mapping from Register to SACMS sequence diagram
-        messageLabel.setOpacity(0.0);
-        boolean firstNameValid;
-        boolean lastNameValid;
-        boolean DOBValid;
-        boolean classValid;
-        boolean emailValid;
-        boolean contactNoValid;
-        boolean passwordValid;
-        boolean studentIDValid;
-        firstNameValid = checkName(firstNameSignInStudentInput, errorFirstNameSignInStudentInput);//validates the first and last names
-        lastNameValid = checkName(lastNameSignInStudentInput, errorLastNameSignInStudentInput);
-        for (Student student : registeredStudents) {
-            if (student.getFirstName().equals(firstNameSignInStudentInput.getText()) && student.getLastName().equals(lastNameSignInStudentInput.getText())) {//checks if the student already exist in the database
-                errorFirstNameSignInStudentInput.setText("Invalid name");
-                errorLastNameSignInStudentInput.setText("Invalid name");
-                firstNameSignInStudentInput.clear();
-                lastNameSignInStudentInput.clear();
-                firstNameValid = false;
-                lastNameValid = false;
-                break;
-            }
-        }
-        DOBValid = checkDate(dateSignInStudentInput, errorDateSignInStudentInput);//checks DOB, class, email, contact number, password and id are valid
-        classValid = checkClass(classSignInStudentInput, errorClassSignInStudentInput);
-        emailValid = checkEmail(emailSignInStudentInput, errorEmailSignInStudentInput);
-        contactNoValid = checkContactNo(contactNoSignInStudentInput, errorContactNoSignInStudentInput);
-        passwordValid = checkPassword(passwordSignInStudentInput, errorPasswordSignInStudentInput);
-        studentIDValid = checkID(studentIDSignInStudentInput, errorStudentIDSignInStudentInput);
-        if (studentIDValid) {
-            if (!sessionUser.equals("Student")) {//checks whether the id starts with an "s" indicating student
-                messageLabel.setText("Duplicate record exists".toUpperCase());
-                messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                messageLabel.setOpacity(1.0);
-                errorStudentIDSignInStudentInput.setText("Invalid ID");
-                studentIDSignInStudentInput.clear();
-                studentIDValid = false;
-            }
-            String newStudentID = studentIDSignInStudentInput.getText();
-            for (Student student:registeredStudents){
-                if (student.getStudentID().equals(newStudentID)){//To check whether the user has entered a stuedent id which is there in the database
-                    messageLabel.setText("Duplicate record exists".toUpperCase());
-                    messageLabel.setStyle("-fx-background-color: #ff7f7f;-fx-background-radius: 10;-fx-alignment: center");
-                    messageLabel.setOpacity(1.0);
-                    errorStudentIDSignInStudentInput.setText("Invalid ID");
-                    studentIDSignInStudentInput.clear();
-                    studentIDValid=false;
-                    break;
-                }
-            }
-        }
-        if (firstNameValid && lastNameValid && DOBValid && classValid && emailValid && contactNoValid && passwordValid && studentIDValid) {//if the above inputs done by the user is valid the data will be stored
-            Student student = new Student(firstNameSignInStudentInput.getText(),lastNameSignInStudentInput.getText(),emailSignInStudentInput.getText(), passwordSignInStudentInput.getText(), dateSignInStudentInput.getText(), contactNoSignInStudentInput.getText(), studentIDSignInStudentInput.getText(),classSignInStudentInput.getText());
-            student.insertToDatabase();//creates a student object and then inserts into the database, and redirects to the home screen
-            messageLabel.setText(student.greetUser().toUpperCase());
-            messageLabel.setStyle("-fx-background-color: #a3d563;-fx-background-radius: 10;-fx-alignment: center");
-            messageLabel.setOpacity(1.0);
-
-            onDashboardStudentsAndTeachersScreenButtonClicked(event);
-        }
-    }
 
     public void onTeacherSignInTwoButtonClicked(ActionEvent event) throws IOException, SQLException, InterruptedException {
         messageLabel.setOpacity(0.0);
