@@ -141,5 +141,6 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
+        <Button layoutX="16.0" layoutY="13.0" mnemonicParsing="false" onAction="#onSignInButtonClicked" opacity="0.0" prefHeight="44.0" prefWidth="123.0" text="Button" />
     </children>
 </AnchorPane>
