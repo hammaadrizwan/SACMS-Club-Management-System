@@ -1972,4 +1972,57 @@ public class Controller {
         return true;
     }
 
+    public boolean isClubNameValid(String clubName) {
+        char[] ch = clubName.toCharArray();
+        StringBuilder clubNameBuild = new StringBuilder();
+        for (char c : ch) {
+            if (Character.isDigit(c)) {
+                return false;
+            }
+        }
+        if (clubName.isEmpty()) {
+            return false;
+        }
+
+        return clubName.matches("[a-zA-Z]+");
+    }
+
+    public boolean isClubIDValid(String clubID) {
+        if (clubID.isEmpty()){
+            return false;
+        }
+        if (clubID.toCharArray().length != 5){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isEventDateValid(String eventDate) {
+        if (eventDate.isEmpty()) {
+            return false;
+        }
+        String[] dateComponents = eventDate.split("-");
+        int year = Integer.parseInt(dateComponents[0]);
+        int month = Integer.parseInt(dateComponents[1]);
+        int day = Integer.parseInt(dateComponents[2]);
+
+        if (year < 1970 || year > 2030 || month < 1 || month > 12 || day < 1 || day > LocalDate.of(year, month, 1).lengthOfMonth()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isEventTimeValid(String eventTime) {
+        if (eventTime.isEmpty()) {
+            return false;
+        } else {
+            try {
+                LocalTime.parse(eventTime);//checks if the time is in the correct format
+            } catch (DateTimeParseException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
