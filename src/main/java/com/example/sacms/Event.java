@@ -88,7 +88,7 @@ public class Event {
         return stringBuilder.toString();
     }
 
-    public void insertEvent(){
+    public void insertEvent(){ //1.5.4.1 mapping from create event sequence diagram
         String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
@@ -154,7 +154,7 @@ public class Event {
             e.printStackTrace();
         }
     }
-    public static ArrayList<Event> loadEventsFromDatabase()  {//Load data from the event database
+    public static ArrayList<Event> loadEventsFromDatabase()  {//Load data from the event database, 4 mapping from download attendance sequence diagram, 1.5.4 mapping from create event sequence diagram, 1.5.2 mapping from check into an event sequence diagram
         createEventTableOnDatabase();
         ArrayList<Event> events = new ArrayList<>();
         try (Connection connection = Database.getConnection();
@@ -171,7 +171,7 @@ public class Event {
         }
         return events;
     }
-    public void addStudent(Student student){
+    public void addStudent(Student student){ //1.5.2.1 mapping from check into an event sequence diagram
         students.add(student);//add the studetn to tthe list of students
         String attendanceID;
         do {

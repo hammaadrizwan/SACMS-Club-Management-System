@@ -29,7 +29,7 @@ public class Student extends Person { // inherits the behavoirs and attributes f
 
     //Database methods
     public static void createStudentTableOnDatabase() {//Create a table on the database
-        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
+        try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method, 1.2.2 view club sequence diagram
             String query ="CREATE TABLE IF NOT EXISTS Student (StudentID VARCHAR(5) PRIMARY KEY,FirstName VARCHAR(25),LastName VARCHAR(25),Email VARCHAR(30),DateOfBirth VARCHAR(10),Password VARCHAR(255),ContactNo VARCHAR(9),Classroom VARCHAR(6));";// same SQL query is given here as string
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {//this is then converted to a prerpare statment
                 preparedStatement.executeUpdate();// finaly its then executed on the database
@@ -39,7 +39,7 @@ public class Student extends Person { // inherits the behavoirs and attributes f
         }
     }
 
-    public static ArrayList<Student> loadStudentsFromDatabase() {//Load data from the student database
+    public static ArrayList<Student> loadStudentsFromDatabase() {//Load data from the student database, 1.4.3 mapping from Approval of club advisor sequence diagram
         createStudentTableOnDatabase();//creates it if not available
         ArrayList<Student> students = new ArrayList<>();
         try (Connection connection = Database.getConnection();

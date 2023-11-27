@@ -122,7 +122,7 @@ public class Club implements Report {//implements the method of the report
         }
     }
 
-    public static ArrayList<Club> loadClubsFromDatabase()  {//Load data from the student database
+    public static ArrayList<Club> loadClubsFromDatabase()  {//Load data from the student database, 1.4.2 mapping from view clubs sequence diagram, 3 mapping from download attendance sequence diagram, 1.4.5 mapping from Approval of club advisor sequence diagram
         createClubTableOnDatabase();
         ArrayList<Club> clubs = new ArrayList<>();
         try (Connection connection = Database.getConnection();
@@ -387,7 +387,7 @@ public class Club implements Report {//implements the method of the report
             e.printStackTrace();
         }
     }
-    public static ArrayList<String[]> loadRequestsOfClub(String teacherID) {
+    public static ArrayList<String[]> loadRequestsOfClub(String teacherID) { //1.4.2.1 mapping from Approval of club advisor sequence diagram
         createRequestTableOnDatabase();//creates the table if not exists
         ArrayList<String[]> result = new ArrayList<String[]>();
 

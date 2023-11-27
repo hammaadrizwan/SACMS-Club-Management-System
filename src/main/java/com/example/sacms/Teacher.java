@@ -35,7 +35,7 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
         }
     }//create the teacher table
 
-    public static ArrayList<Teacher> loadTeachersFromDatabase()  {//Load data from the teacher from database
+    public static ArrayList<Teacher> loadTeachersFromDatabase()  {//Load data from the teacher from database 1.7.2.1.1.1.3.2 mapping from Register to SACMS sequence diagram
         createTeacherTableOnDatabase();
         ArrayList<Teacher> teachers = new ArrayList<>();
         try (Connection connection = Database.getConnection();

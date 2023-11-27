@@ -52,7 +52,7 @@ public class ClubAdvisor{
         }
     }
     //1.2.2 mapping from create club sequence diagram
-    public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the clubAdvisor database
+    public static ArrayList<ClubAdvisor> loadClubAdvisorsFromDatabase()  {//Load data from the clubAdvisor database, 1.4.5.1.1.2 mapping from Approval of club advisor sequence diagram
         createClubAdvisorTableOnDatabase();
         ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();
         try (Connection connection = Database.getConnection();
@@ -82,7 +82,7 @@ public class ClubAdvisor{
         return stringBuilder.toString();
     }
     //1.5.2.2.1 mapping from create club sequence diagram
-    public void insertIntoClubAdvisorTable(){
+    public void insertIntoClubAdvisorTable(){ //1.4.5.1.1.2.1 mapping from Approval of club advisor sequence diagram
         String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";//inserts the values into the database
         try (Connection connection = Database.getConnection();//insert into CA table
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubAdvisorQuery)) {

@@ -183,7 +183,7 @@ public class Controller {
         this.stage.setResizable(false);
     }
     @FXML
-    public void onClubsViewStudentsAndTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+    public void onClubsViewStudentsAndTeacherScreenButtonClicked(ActionEvent event) throws IOException {//1.3 View clubs Sequence diagram
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("clubsViewStudentsAndTeachers.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -224,7 +224,7 @@ public class Controller {
     }
 
     @FXML
-    public void onScheduleEventButtonOneClicked(ActionEvent event) throws IOException {
+    public void onScheduleEventButtonOneClicked(ActionEvent event) throws IOException { //1.4 mapping from create event sequence diagram
         messageLabel.setOpacity(0.0);
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("eventCreation.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -286,7 +286,7 @@ public class Controller {
         this.stage.show();
         this.stage.setResizable(false);
     }
-    public void onTeacherSignInOneButtonClicked(ActionEvent event) throws IOException {
+    public void onTeacherSignInOneButtonClicked(ActionEvent event) throws IOException {//1.7.4.1.1.2 mapping from Register to SACMS sequence diagram
         Parent root = (Parent) FXMLLoader.load(this.getClass().getResource("signInTeacher.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         this.scene = new Scene(root);
@@ -521,7 +521,7 @@ public class Controller {
             errorClubAdvisorIDInputClubCreationScreen.setText("");
         }
     }
-    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException {
+    public void onScheduleEventButtonTwoClicked (ActionEvent event) throws IOException { //1.5 mapping from create event sequence diagram
         messageLabel.setOpacity(0.0);
         boolean eventNameValid;
         boolean eventDateValid;
@@ -706,7 +706,7 @@ public class Controller {
             messageLabel.setOpacity(1.0);
         }
     }
-    public void onStudentSignInTwoButtonClicked(ActionEvent event) throws IOException, InterruptedException {
+    public void onStudentSignInTwoButtonClicked(ActionEvent event) throws IOException, InterruptedException { //1.7.2.1.1.1.3 mapping from Register to SACMS sequence diagram
         messageLabel.setOpacity(0.0);
         boolean firstNameValid;
         boolean lastNameValid;
@@ -924,7 +924,7 @@ public class Controller {
         }
     }
     public void onTeacherPopUpCloseButtonClicked(ActionEvent event) throws IOException { onDashboardStudentsAndTeachersScreenButtonClicked(event);}
-    public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException {
+    public void onRefreshTeacherScreenButtonClicked(ActionEvent event) throws IOException { //1.4 mapping from Approval of club advisor sequence diagram
         refreshButtonTeacherPopUp.setOpacity(0.00);
         refreshButtonTeacherPopUp.setDisable(true);
         Controller controller = Controller.getInstance(); // Get the singleton instance
@@ -965,7 +965,7 @@ public class Controller {
             clubNameTeacherPopUpScreen.setStyle("-fx-alignment: center");
         }
     }
-    public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException {
+    public void onApproveButtonTeacherScreenClicked(ActionEvent event) throws IOException { //1.4.5.1.1 mapping from Approval of club advisor sequence diagram
         Controller controller = Controller.getInstance(); // Get the singleton instance
         String loggedInTeacherID = controller.getSessionID();
         ArrayList<String[]> requests = Club.loadRequestsOfClub(loggedInTeacherID);
@@ -1160,7 +1160,7 @@ public class Controller {
             }
         }
     }
-    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException {
+    public void onRefreshClubsViewButtonClicked(ActionEvent event) throws IOException { //1.4 mapping from view clubs sequence diagram
         refreshClubsViewButton.setDisable(true);
         refreshClubsViewButton.setOpacity(0.0);
         ObservableList<Club> registeredClubsToTable = FXCollections.observableArrayList(registeredClubs);
@@ -1195,7 +1195,7 @@ public class Controller {
         checkOutEventsPane.setOpacity(1.0);
         checkInEventsPane.setOpacity(0.0);
     }
-    public void onCheckInEventClicked(ActionEvent event) throws IOException {
+    public void onCheckInEventClicked(ActionEvent event) throws IOException { //1.5 mapping from check into an event sequence diagram
         messageLabel.setOpacity(0.0);
         String studentID=studentIdInputEventsScreen.getText();
         String eventID = eventIDCheckIn.getText();
@@ -1595,7 +1595,7 @@ public class Controller {
 
     }
 
-    public void onDownloadReportClicked(ActionEvent event) {
+    public void onDownloadReportClicked(ActionEvent event) { //1.4 mapping from download attendance sequence diagram
         // Assuming you have already initialized registeredClubs and registeredEvents
         ArrayList<Club> existingClubs = registeredClubs;
 
@@ -1642,7 +1642,7 @@ public class Controller {
         saveReportToFile(reportContent);
     }
 
-    private void saveReportToFile( String content) {
+    private void saveReportToFile( String content) { //4.1.1 mapping from download attendance sequence diagram
         String fileName = "report.txt"; // Adjust the file name as needed
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(content);
