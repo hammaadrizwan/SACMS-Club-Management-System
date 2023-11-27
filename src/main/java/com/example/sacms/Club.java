@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Club implements Report {
+public class Club implements Report {//implements the method of the report
     private String clubName;
     private String clubDescription;
     private String clubID;
@@ -23,7 +23,7 @@ public class Club implements Report {
         this.clubName=clubName;
         this.teacherID = teacherIncharge;
         this.students=loadStudentsOfClub(getClubID());
-        this.clubAdvisors=loadClubAdvisorsOfClub(getClubID());
+        this.clubAdvisors=loadClubAdvisorsOfClub(getClubID());//sets the clubadvisors,students and teachers of that club
         this.teacher = loadTeacherOfClub(teacherIncharge);
     }
 
@@ -45,6 +45,9 @@ public class Club implements Report {
         this.events=loadEventsOfClub(clubID);
     }
     //1.5.2.1 mapping from create club sequence diagram
+
+
+    //DATABASE METHODS FOR CLUB
     public void insertIntoClubs(){
         String insertClubQuery = "INSERT INTO club VALUES (?, ?,?,?)";
         try (Connection connection = Database.getConnection();
@@ -60,9 +63,7 @@ public class Club implements Report {
             throw new RuntimeException(e);
         }
     }
-
-    //DATABASE METHODS FOR CLUB
-    public static String generateClubID() {
+    public static String generateClubID() {//randomlt generate a clubID
         int idLength = 4;//club ID of 5 digits
         StringBuilder stringBuilder = new StringBuilder("C");
         Random random = new Random();
@@ -223,7 +224,7 @@ public class Club implements Report {
         return students; // return the list of students
     }
     public static ArrayList<Event> loadEventsOfClub(String clubID) {
-        ArrayList<Event> events = new ArrayList<>();//Loads all the students from the database who are the members of that club
+        ArrayList<Event> events = new ArrayList<>();//Loads all the events from the database of that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "SELECT Events.EventID, Events.EventName, Events.Date, Events.Time, Events.Location, Events.ClubID, Events.EventDescription FROM Events JOIN Club ON club.ClubID = Events.ClubID WHERE club.ClubID =?")) {
@@ -240,24 +241,23 @@ public class Club implements Report {
                             results.getString("Location"),
                             results.getString("ClubID"),
                             results.getString("EventDescription")
-                    );//finally creates an object of the student class
-                    events.add(event);//adds to the students list
+                    );
+                    events.add(event);
                 }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return events; // return the list of students
+        return events;
     }
     public ArrayList<ClubAdvisor> loadClubAdvisorsOfClub(String clubID) {
-        ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();//Loads all the students from the database who are the members of that club
+        ArrayList<ClubAdvisor> clubAdvisors = new ArrayList<>();//Loads all the CA from the database who are the boardMembers of that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "SELECT ClubAdvisor.ClubAdvisorID, ClubAdvisor.StudentID, ClubAdvisor.ClubID, ClubAdvisor.Position FROM ClubAdvisor JOIN Club ON club.ClubID = ClubAdvisor.ClubID WHERE club.ClubID =?")) {
 
-            preparedStatement.setString(1, clubID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
-
+            preparedStatement.setString(1, clubID);
             try (ResultSet results = preparedStatement.executeQuery()) {
                 while (results.next()) {
                     ClubAdvisor clubAdvisor = new ClubAdvisor(
@@ -265,8 +265,8 @@ public class Club implements Report {
                             results.getString("StudentID"),
                             results.getString("ClubID"),
                             results.getString("Position")
-                    );//finally creates an object of the student class
-                    clubAdvisors.add(clubAdvisor);//adds to the students list
+                    );
+                    clubAdvisors.add(clubAdvisor);
                 }
             }
 
@@ -342,7 +342,7 @@ public class Club implements Report {
         }
     }
 
-    public static String generateRequestID() {
+    public static String generateRequestID() {//to store the request of becoming a CA
         int idLength = 9;
         StringBuilder stringBuilder = new StringBuilder("R");
         Random random = new Random();
@@ -388,11 +388,11 @@ public class Club implements Report {
         }
     }
     public static ArrayList<String[]> loadRequestsOfClub(String teacherID) {
-        createRequestTableOnDatabase();
+        createRequestTableOnDatabase();//creates the table if not exists
         ArrayList<String[]> result = new ArrayList<String[]>();
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from Request where Request.TeacherID=?;")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from Request where Request.TeacherID=?;")) {//reads all the request of that teacher id
 
             preparedStatement.setString(1, teacherID);
 
@@ -444,7 +444,7 @@ public class Club implements Report {
         return existingRequestsIds;
     }
     @Override
-    public String displayReport(){
+    public String displayReport(){//method implementatio for the report Class
         String studentCount = "Total number of students: ";
         ArrayList<Student> student = loadStudentsOfClub(getClubID());
         studentCount+= String.valueOf(student.size());

@@ -71,7 +71,7 @@ public class ClubAdvisor{
     }
 
     public static String generateClubAdvisorID() {
-        int idLength = 3;//Membreshoip ID of 10 digits
+        int idLength = 3;//CA ID of 5 digits
         StringBuilder stringBuilder = new StringBuilder("CA");
         Random random = new Random();
         for (int i = 0; i < idLength; i++) {
@@ -84,7 +84,7 @@ public class ClubAdvisor{
     //1.5.2.2.1 mapping from create club sequence diagram
     public void insertIntoClubAdvisorTable(){
         String insertClubAdvisorQuery = "INSERT INTO ClubAdvisor VALUES (?, ?,?,?)";//inserts the values into the database
-        try (Connection connection = Database.getConnection();
+        try (Connection connection = Database.getConnection();//insert into CA table
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubAdvisorQuery)) {
             preparedStatement.setString(1,getClubAdvisorID());
             preparedStatement.setString(2,getStudentID());

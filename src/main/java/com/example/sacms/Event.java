@@ -77,7 +77,7 @@ public class Event {
     }
 
     public static String generateEventID() {
-        int idLength = 4;//Mmebreshoip ID of 10 digits
+        int idLength = 4;//event ID of 5 digits
         StringBuilder stringBuilder = new StringBuilder("E");
         Random random = new Random();
         for (int i = 0; i < idLength; i++) {
@@ -92,7 +92,7 @@ public class Event {
         String insertClubQuery = "INSERT INTO Events VALUES (?, ?,?,?,?,?,?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubQuery)) {
-            preparedStatement.setString(1,getEventID());//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(1,getEventID());//inserts the Event object to the database
             preparedStatement.setString(2,getEventName());
             preparedStatement.setString(3,getEventDate());
             preparedStatement.setString(4,getEventTime());
@@ -109,7 +109,7 @@ public class Event {
 
     public String generateAttendanceID() {
 
-        int idLength = 9;//Mmebreshoip ID of 10 digits
+        int idLength = 9;//Token for attending the event. ID of 10 digits
         StringBuilder stringBuilder = new StringBuilder("A");
         Random random = new Random();
         for (int i = 0; i < idLength; i++) {
@@ -138,7 +138,7 @@ public class Event {
             e.printStackTrace();
         }
     }
-    public static void createEventAttendanceTableOnDatabase() {//to store students and club ID
+    public static void createEventAttendanceTableOnDatabase() {
         try (Connection connection = Database.getConnection()) {//gets the connection from the database using the Database class getConnection method
             String query ="CREATE TABLE IF NOT EXISTS EventAttendance (" +
                     "    AttendanceID VARCHAR(10) PRIMARY KEY," +
@@ -154,7 +154,7 @@ public class Event {
             e.printStackTrace();
         }
     }
-    public static ArrayList<Event> loadEventsFromDatabase()  {//Load data from the student database
+    public static ArrayList<Event> loadEventsFromDatabase()  {//Load data from the event database
         createEventTableOnDatabase();
         ArrayList<Event> events = new ArrayList<>();
         try (Connection connection = Database.getConnection();
@@ -175,12 +175,12 @@ public class Event {
         students.add(student);//add the studetn to tthe list of students
         String attendanceID;
         do {
-            attendanceID = generateAttendanceID();//generate a membership ID for each student
+            attendanceID = generateAttendanceID();//generate a Attendance ID for each student
         } while (loadExsistingAttendanceID().contains(attendanceID));//until its unique we generate a new ID
         String insertClubMembershipQuery = "INSERT INTO EventAttendance VALUES (?, ?,?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertClubMembershipQuery)) {
-            preparedStatement.setString(1, attendanceID);//inserts the Membership ID,student ID and the club ID to the table
+            preparedStatement.setString(1, attendanceID);//inserts the Membership ID,student ID and the event ID to the table
             preparedStatement.setString(2, getEventID());
             preparedStatement.setString(3, student.getStudentID());
             preparedStatement.executeUpdate();//push
@@ -190,7 +190,7 @@ public class Event {
         }
     }
     public void removeStudent(Student student){
-        students.remove(student);//add the studetn to tthe list of students
+        students.remove(student);//remove the studetn from tthe list of students
         try (Connection connection = Database.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM EventAttendance WHERE StudentID = ? AND EventID = ?")) {// deketes the row where the student ID is equal to the on e entered
 
@@ -202,8 +202,8 @@ public class Event {
         }
     }
     public ArrayList<Student> loadStudentsOfEvent(String eventID){
-        createEventAttendanceTableOnDatabase();//create teh membership table if not exsist
-        ArrayList<Student> students = new ArrayList<>();//Loads all the students from the database who are the members of that club
+        createEventAttendanceTableOnDatabase();//create teh attendance table if not exsist
+        ArrayList<Student> students = new ArrayList<>();//Loads all the students from the database who are checkedIn to that club
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "SELECT Student.StudentID, Student.FirstName, Student.LastName, Student.Email, Student.DateOfBirth, Student.Password, Student.ContactNo, Student.Classroom " +
@@ -211,7 +211,7 @@ public class Event {
                              "JOIN EventAttendance ON Student.StudentID = EventAttendance.StudentID " +
                              "WHERE EventAttendance.EventID = ?")) {
 
-            preparedStatement.setString(1, eventID);// returns all the students for that specific club by joingin the studentID FK from the clubmembership table to the student Table
+            preparedStatement.setString(1, eventID);// returns all the students for that specific event
 
             try (ResultSet results = preparedStatement.executeQuery()) {
                 while (results.next()) {
@@ -224,8 +224,8 @@ public class Event {
                             results.getString("ContactNo"),
                             results.getString("StudentID"),
                             results.getString("Classroom")
-                    );//finally creates an object of the student class
-                    students.add(student);//adds to the students list
+                    );
+                    students.add(student);
                 }
             }
 
@@ -270,7 +270,7 @@ public class Event {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return club; // return the list of students
+        return club; // return the the club that hosted the event
     }
 
 
@@ -310,7 +310,7 @@ public class Event {
             preparedStatementToEdit.setString(5,getClubID());
             preparedStatementToEdit.setString(6,getEventDescription());
             preparedStatementToEdit.setString(7,getEventID());
-            preparedStatementToEdit.executeUpdate();
+            preparedStatementToEdit.executeUpdate();//update the event basd on the new details
 
             connection.commit();
 

@@ -35,7 +35,7 @@ public class Teacher extends Person{ // inherits the behavoirs and attributes fr
         }
     }//create the teacher table
 
-    public static ArrayList<Teacher> loadTeachersFromDatabase()  {//Load data from the student database
+    public static ArrayList<Teacher> loadTeachersFromDatabase()  {//Load data from the teacher from database
         createTeacherTableOnDatabase();
         ArrayList<Teacher> teachers = new ArrayList<>();
         try (Connection connection = Database.getConnection();
